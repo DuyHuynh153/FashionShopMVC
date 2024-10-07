@@ -6,4 +6,17 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Content Include="wwwroot\assets\admin\libs\ckeditor\.npm\assets\ckeditor4.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\assets\admin\libs\ckeditor\.github\ISSUE_TEMPLATE" />
+    <None Include="wwwroot\assets\admin\libs\ckeditor\.npm\README.md" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\assets\admin\libs\bootbox\" />
+  </ItemGroup>
+
 </Project>
