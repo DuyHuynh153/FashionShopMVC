@@ -1,4 +1,4 @@
-namespace FashionShopMVC.Models
+﻿namespace FashionShopMVC.Models
 {
     public class ErrorViewModel
     {
