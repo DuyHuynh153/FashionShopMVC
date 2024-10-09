@@ -1,0 +1,83 @@
+﻿@{
+    ViewData["Title"] = "SearchProductByName";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="full-banner" style="height: 135px">
+</div>
+
+<div class="main-content">
+    <div class="container">
+        <ul class="breadcrumb">
+            <li><a href="~/Home"><i class="fa fa-home"></i></a></li>
+            <li><a>Kết quả tìm kiếm</a></li>
+        </ul>
+
+        <div class="row featured-block">
+            <div class="main-head-block" style="margin-top: 0">
+                <h2>Tìm kiếm</h2>
+                <p style="margin-top: 8px"><i>Kết quả tìm kiếm của: "Từ Khóa Tìm Kiếm" (2 sản phẩm)</i></p>
+            </div>
+
+            <div class="col-md-2 col-sm-6 col-xs-6 mb-30 width-100">
+                <div class="product-thumb effect-shadow">
+                    <div class="product-view-block">
+                        <div class="button-block">
+                            <a class="btnAddProductFavorite" data-id="1"> <i class="fa fa-heart"></i></a>
+                            <a href="javascript:void(0);" class="btnAddToCart" data-id="1"><i class="fa fa-shopping-cart"></i></a>
+                        </div>
+                        <div class="price-view-block">
+                            <span class="price-left">20%</span>
+                        </div>
+
+                        <div class="image-block">
+                            <a href="single-product.html" style="cursor: pointer">
+                                <img class="img-responsive" alt="i" src="/images/product1.jpg">
+                            </a>
+                        </div>
+
+                        <div style="margin: 0px 5px;text-align: center;">
+                            <p class="m-0">Tên sản phẩm 1</p>
+
+                            <span style="text-decoration: line-through; font-size: 80%; margin-right: 5px">
+                                1,000,000đ
+                            </span>
+
+                            <span>
+                                800,000đ
+                            </span>
+                        </div>
+                        <div class="effect-shadow">
+                            <a href="~/Product/Detail/1" style="display: block; width: 100%; height: 100%;"></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-2 col-sm-6 col-xs-6 mb-30 width-100">
+                <div class="product-thumb effect-shadow">
+                    <div class="product-view-block">
+                        <div class="button-block">
+                            <a class="btnAddProductFavorite" data-id="2"> <i class="fa fa-heart"></i></a>
+                            <a href="javascript:void(0);" class="btnAddToCart" data-id="2"><i class="fa fa-shopping-cart"></i></a>
+                        </div>
+                        <div class="image-block">
+                            <a href="single-product.html" style="cursor: pointer">
+                                <img class="img-responsive" alt="i" src="/images/product2.jpg">
+                            </a>
+                        </div>
+                        <div style="margin: 0px 5px;text-align: center;">
+                            <p class="m-0">Tên sản phẩm 2</p>
+                            <span>1,000,000đ</span>
+                        </div>
+                        <div class="effect-shadow">
+                            <a href="~/Product/Detail/2" style="display: block; width: 100%; height: 100%;"></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <h3 style="text-align: center; color: red">Không tìm thấy sản phẩm nào chứa từ khóa: Từ Khóa Tìm Kiếm</h3>
+        </div>
+    </div>
+</div>

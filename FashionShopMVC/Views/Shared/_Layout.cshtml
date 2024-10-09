@@ -1,49 +1,205 @@
 ﻿<!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - FashionShopMVC</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/FashionShopMVC.styles.css" asp-append-version="true" />
+    <title>Fashion Shop</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="images/favicon.png" />
+    <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link href="~/assets/admin/libs/fontawesome-free-6.4.2-web/css/all.css" rel="stylesheet" />
+
+    <!--custom css-->
+    <link href="~/assets/customer/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/assets/customer/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/assets/customer/css/style.css" rel="stylesheet" type="text/css" />
+    <link href="~/assets/customer/css/responsive.css" rel="stylesheet" type="text/css" />
+
+    <!--jquery-ui css-->
+    <link href="~/assets/customer/lib/jquery-ui/themes/smoothness/jquery-ui.css" rel="stylesheet" />
+
+    <!--sweetalert2-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/11.7.32/sweetalert2.min.css" integrity="sha512-IScV5kvJo+TIPbxENerxZcEpu9VrLUGh1qYWv6Z9aylhxWE4k4Fch3CHl0IYYmN+jrnWQBPlpoTVoWfSMakoKA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 <body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">FashionShopMVC</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                    </ul>
+    <a href="javascript:void(0);" id="scroll" style="display: none;">
+        <span>
+            <i class="fa fa-chevron-circle-up"></i>
+        </span>
+    </a>
+    <div id="page">
+        <header class="header-container">
+            <div class="container">
+                <div class="top-row">
+                    <div class="row">
+                        <div class="col-md-2 col-sm-2 col-xs-12">
+                            <div id="logo">
+                                <a href="~/Home">BlvckShop</a>
+                            </div>
+                        </div>
+                        <div class="col-md-2 col-sm-3 col-xs-12" style="color: blue">
+                            <div class="social-icon-block">
+                                <ul class="social-list">
+                                    <li><a><i class="fa fa-facebook fa-lg"></i></a></li>
+                                    <li><a><i class="fa fa-twitter fa-lg"></i> </a></li>
+                                    <li><a><i class="fa fa-google-plus fa-lg"></i></a></li>
+                                    <li><a><i class="fa fa-linkedin fa-lg"></i></a></li>
+
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="col-md-2 col-sm-3 col-xs-12">
+                            <div class="contact">
+                                <span>
+                                    <i class="fa fa-phone" aria-hidden="true"></i>
+                                    <a href="tel:+0123456789">0123456789</a>
+                                </span>
+                            </div>
+                        </div>
+                        @using (Html.BeginForm("SearchProductByName", "Home", FormMethod.Post))
+                        {
+                            <div class="col-md-offset-0 col-md-4 col-sm-offset-0 col-sm-3 col-xs-offset-3 col-xs-6">
+                                <div id="search" class="input-group">
+                                        <input type="text" id="txtKeyword" name="keyword" value="@ViewBag.keyword" placeholder="Nhập tên sản phẩm" class="form-control input-lg search-box">
+                                        <span class="input-group-btn">
+                                            <button type="submit" id="btnSearch" class="btn-lg search-button">
+                                                <i class="fa fa-search"></i>
+                                            </button>
+                                        </span>
+                                </div>
+                            </div>
+                         }
+                        <div class="col-md-2 col-sm-1 col-xs-12" style="padding-top: 3px; text-align: end">
+                            <div class="shopping-cart">
+                                <a href="~/ShoppingCart">
+                                    <i class="fa-solid fa-cart-shopping fa-2xl" aria-hidden="true">
+                                        <span class="cartLength" style="margin-left: 3px"></span>
+                                    </i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </nav>
-    </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
+            <!--navigation--->
+            <section class="main-nav-block">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-2 col-sm-5 col-xs-3 logo-fix">
+                            <div id="logo">
+                                <a href="~/Home">FashionShop</a>
+                            </div>
+                        </div>
+                        <div class="col-md-9 col-sm-6 col-xs-6">
+                            <nav class="menu-bar">
+                                <div class="container-fluid">
+                                    <div class="navbar-header">
+                                        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                                            <i class="fa fa-bars"></i>
+                                        </button>
+                                    </div>
+                                    <div class="collapse navbar-collapse" id="myNavbar">
+                                        <ul class="nav navbar-nav">
+                                            <li><a href="~/Home">Trang chủ</a></li>
+                                            <li class="product_menu">
+                                                <a href="javascript:void(0)">
+                                                    Sản phẩm<span class="fa fa-angle-down"></span>
+                                                </a>
+                                                <!-- Thay thế với partial category -->
+                                            </li>
+                                            <li><a href="~/Post">Bài viết</a></li>
+                                            <li><a href="~/Contact">Liên hệ</a></li>
+                                            @* Quản lý tài khoản *@
+                                            <li><a href="~/Account/Login">Đăng nhập</a></li>
+                                            <li><a href="~/Account/Register">Đăng ký</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </nav>
+                        </div>
+                        <div class="col-md-1 col-sm-1 col-xs-3">
+                            <a href="~/ShoppingCart">
+                                <span class="cart-fix">
+                                    <i class="fa-solid fa-cart-shopping fa-2xl" aria-hidden="true">
+                                        <span class="cartLength" style="margin-left: 3px"></span>
+                                    </i>
+                                </span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!--end--->
+        </header>
+       
+        <!--main content--->
+        @RenderBody()
+        
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2024 - FashionShopMVC - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-        </div>
-    </footer>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
-    @await RenderSectionAsync("Scripts", required: false)
+        <div class="divider"></div>
+        <!--footer--->
+        <footer>
+            <div class="container">
+                <div class="row footer-main-block">
+                    <div class="col-sm-3">
+                        <div class="footer-block">
+                            <h4>Information <i class="fa fa-angle-up"></i></h4>
+                            <ul class="list-unstyled">
+                                <li><a>About Us</a></li>
+                                <li><a>Delivery Information</a></li>
+                                <li><a>Privacy Policy</a></li>
+                                <li><a>Terms &amp; Conditions</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-sm-3">
+                        <div class="footer-block">
+                            <h4>Extras <i class="fa fa-angle-up"></i></h4>
+                            <ul class="list-unstyled">
+                                <li><a>Contact Us</a></li>
+                                <li><a>Returns</a></li>
+                                <li><a>Site Map</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-sm-3">
+                        <div class="footer-block">
+                            <h4>Service <i class="fa fa-angle-up"></i></h4>
+                            <ul class="list-unstyled">
+                                <li><a>Brands</a></li>
+                                <li><a>Gift Vouchers</a></li>
+                                <li><a>Affiliates</a></li>
+                                <li><a>Specials</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-sm-3">
+                        <div class="footer-block">
+                            <h4>My Account<i class="fa fa-angle-up"></i></h4>
+                            <ul class="list-unstyled">
+                                <li><a>My Account</a></li>
+                                <li><a>Order History</a></li>
+                                <li><a>Wish List</a></li>
+                                <li><a>Newsletter</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom-block">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <p>
+                                &copy; 2023 <strong>FashionShop</strong>. All Rights Reserved.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
 </body>
 </html>

@@ -1,32 +1,44 @@
-﻿using FashionShopMVC.Models;
+﻿using FashionShopMVC.Repositories;
 using Microsoft.AspNetCore.Mvc;
-using System.Diagnostics;
 
 namespace FashionShopMVC.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly IProductRepository _productRepository;
+        private readonly ICategoryRepository _categoryRepository;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(IProductRepository productRepository, ICategoryRepository categoryRepository)
         {
-            _logger = logger;
+            _productRepository = productRepository;
+            _categoryRepository = categoryRepository;
         }
-
+        [HttpGet]
         public IActionResult Index()
         {
-            return View();
+            var product = _productRepository.GetAll();
+
+            return View(product);
         }
 
-        public IActionResult Privacy()
+        public JsonResult GetListProductByName(string keyword)
         {
-            return View();
+            var listProductByName = _productRepository.GetAllByName(keyword);
+
+            return Json(new
+            {
+                data = listProductByName,
+            });
         }
 
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
+        [HttpPost]
+        public IActionResult SearchProductByName(string keyword)
         {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            ViewBag.keyword = keyword;
+
+            var listProductByName = _productRepository.GetAll(keyword);
+
+            return View(listProductByName);
         }
     }
 }
