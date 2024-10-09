@@ -1,10 +1,13 @@
-﻿@{
+﻿@using FashionShopMVC.Models.DTO.ProductDTO;
+@using System.Globalization;
+@model List<GetProductDTO>
+@{
     ViewData["Title"] = "Trang chủ";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <div class="full-banner">
-    <img src="~/assets/customer/images/imgTrangChu.jpg" style="max-width: 100%" />
+    <img src="~/assets/customer/images/imgTrangChu2.jpg" style="max-width: 100%" />
 </div>
 
 <div class="main-content">
@@ -14,62 +17,87 @@
                 <h2>Danh sách sản phẩm</h2>
             </div>
 
-            <!-- Sản phẩm có giảm giá -->
-            <div class="col-md-2 col-sm-6 col-xs-6 mb-30 width-100">
-                <div class="product-thumb effect-shadow">
-                    <div class="product-view-block">
-                        <div class="button-block">
-                            <a class="btnAddProductFavorite" data-id="1"> <i class="fa fa-heart"></i></a>
-                            <a href="javascript:void(0);" class="btnAddToCart" data-id="1"><i class="fa fa-shopping-cart"></i></a>
-                        </div>
-                        <div class="price-view-block">
-                            <span class="price-left">20%</span>
-                        </div>
+            @foreach (var pro in Model)
+            {
+                decimal price = Convert.ToDecimal(@pro.Price);
+                decimal discount = Convert.ToDecimal(@pro.Discount);
+                decimal discountedPrice = price - (price * discount / 100);
+                string formattedPrice = price.ToString("N0") + "đ";
+                string formattedPriceHasDiscount = discountedPrice.ToString("N0") + "đ";
 
-                        <div class="image-block">
-                            <a href="single-product.html" style="cursor: pointer">
-                                <img class="img-responsive" alt="i" src="/images/product1.jpg">
-                            </a>
-                        </div>
+                if(pro.Discount > 0)
+                {
+                    <div class="col-md-2 col-sm-6 col-xs-6 mb-30 width-100">
+                        <div class="product-thumb effect-shadow">
+                            <div class="product-view-block">
+                                <div class="button-block">
+                                    <a class="btnAddProductFavorite" data-id="@pro.ID"> <i class="fa fa-heart"></i></a>
+                                    @*<a><i class="fa fa-random" aria-hidden="true"></i></a>*@
+                                    <a href="javascript:void(0);" class="btnAddToCart" data-id="@pro.ID"><i class="fa fa-shopping-cart"></i></a>
+                                </div>
+                                <div class="price-view-block">
+                                    <span class="price-left">@pro.Discount%</span>
+                                </div>
 
-                        <div style="margin: 0px 5px;text-align: center;">
-                            <p class="m-0 product-name-limit-line">Tên sản phẩm 1</p>
-                            <span style="text-decoration: line-through; font-size: 80%; margin-right: 5px">1,000,000đ</span>
-                            <span>800,000đ</span>
-                        </div>
-                        <div class="effect-shadow">
-                            <a href="~/Product/Detail/1" style="display: block; width: 100%; height: 100%;"></a>
+                                <div class="image-block">
+                                    <a href="single-product.html" style="cursor: pointer">
+                                        <img class="img-responsive" alt="i" src="@pro.Image">
+                                    </a>
+                                </div>
+
+
+                                <div style="margin: 0px 5px;text-align: center;">
+                                    <p class="m-0 product-name-limit-line">
+                                        @pro.Name
+                                    </p>
+
+                                    <span style="text-decoration: line-through; font-size: 80%; margin-right: 5px">
+                                        @formattedPrice
+                                    </span>
+
+                                    <span>
+                                        @formattedPriceHasDiscount
+                                    </span>
+                                </div>
+                                <div class="effect-shadow">
+                                    <a href="~/Product/Detail/@pro.ID" style="display: block; width: 100%; height: 100%;"></a>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </div>
-
-            <!-- Sản phẩm không giảm giá -->
-            <div class="col-md-2 col-sm-6 col-xs-6 mb-30 width-100">
-                <div class="product-thumb effect-shadow">
-                    <div class="product-view-block">
-                        <div class="button-block">
-                            <a class="btnAddProductFavorite" data-id="2"> <i class="fa fa-heart"></i></a>
-                            <a href="javascript:void(0);" class="btnAddToCart" data-id="2"><i class="fa fa-shopping-cart"></i></a>
-                        </div>
-                        <div class="image-block">
-                            <a href="single-product.html" style="cursor: pointer">
-                                <img class="img-responsive" alt="i" src="/images/product2.jpg">
-                            </a>
-                        </div>
-                        <div style="margin: 0px 5px;text-align: center;">
-                            <p class="m-0 product-name-limit-line">Tên sản phẩm 2</p>
-                            <span>1,000,000đ</span>
-                        </div>
-                        <div class="effect-shadow">
-                            <a href="~/Product/Detail/2" style="display: block; width: 100%; height: 100%;"></a>
+                }
+                else
+                {
+                    <div class="col-md-2 col-sm-6 col-xs-6 mb-30 width-100">
+                        <div class="product-thumb effect-shadow">
+                            <div class="product-view-block">
+                                <div class="button-block">
+                                    <a class="btnAddProductFavorite" data-id="@pro.ID"> <i class="fa fa-heart"></i></a>
+                                    @*<a><i class="fa fa-random" aria-hidden="true"></i></a>*@
+                                    <a href="javascript:void(0);" class="btnAddToCart" data-id="@pro.ID"><i class="fa fa-shopping-cart"></i></a>
+                                </div>
+                                <div class="image-block">
+                                    <a href="single-product.html" style="cursor: pointer">
+                                        <img class="img-responsive" alt="i" src="@pro.Image">
+                                    </a>
+                                </div>
+                                <div style="margin: 0px 5px;text-align: center;">
+                                    <p class="m-0 product-name-limit-line">
+                                        @pro.Name
+                                    </p>
+                                    <span>
+                                        @formattedPrice
+                                    </span>
+                                </div>
+                                <div class="effect-shadow">
+                                    <a href="~/Product/Detail/@pro.ID" style="display: block; width: 100%; height: 100%;"></a>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </div>
-
-            <!-- Thông báo không tìm thấy sản phẩm -->
-            <h3 style="text-align: center; color: red">Không tìm thấy sản phẩm nào.</h3>
+                }
+            }
         </div>
+
     </div>
 </div>
