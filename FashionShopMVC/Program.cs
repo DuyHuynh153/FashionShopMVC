@@ -10,6 +10,7 @@ using System.Text;
 using Microsoft.Extensions.FileProviders;
 using AspNetCoreHero.ToastNotification;
 using AspNetCoreHero.ToastNotification.Extensions;
+using sportMVC.Models.Seed;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -29,6 +30,9 @@ builder.Services.AddDbContext<FashionShopDBContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 
+builder.Services.AddIdentity<User,  IdentityRole>(options => options.SignIn.RequireConfirmedAccount = false)
+    .AddEntityFrameworkStores<FashionShopDBContext>()
+    .AddDefaultTokenProviders();
 // Register Controller
 //builder.Services.AddScoped<IUserRepository, UserRepository>();
 //builder.Services.AddScoped<ITokenRepository, TokenRepository>();
@@ -126,6 +130,13 @@ app.UseStaticFiles(new StaticFileOptions
     RequestPath = "/UploadFiles"
 });
 
+
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    await SampleData.Initialize(services);
+}
+
 app.UseSession();
 app.UseRouting();
 //app.MapControllerRoute(
@@ -134,6 +145,12 @@ app.UseRouting();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Vouchers}/{action=VoucherListView}");
+
+app.MapAreaControllerRoute(
+    name:"adminService",
+    areaName:"Admin",
+    pattern: "{area:exists}/{controller=AdminHome}/{action=Index}/{id?}");
+
 
 app.UseHttpsRedirection();
 

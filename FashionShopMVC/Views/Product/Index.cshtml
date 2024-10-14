@@ -1,0 +1,101 @@
+﻿@model List<FashionShopMVC.Models.DTO.ProductDTO.GetProductByIdDTO>
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="full-banner" style="height: 135px">
+    </div>
+
+    <div class="main-content">
+        <div class="container">
+            <ul class="breadcrumb">
+                <li><a href="~/Home"><i class="fa fa-home"></i></a></li>
+                <li><a>Danh mục Tên Danh Mục</a></li> <!-- Thay "TênDanhMục" bằng tên thực tế -->
+            </ul>
+
+            <div class="row featured-block">
+                <div class="main-head-block" style="margin-top: 0">
+                    <h2>Danh sách Tên Danh Mục</h2> <!-- Thay "TênDanhMục" bằng tên thực tế -->
+                </div>
+
+                <div style="padding: 0 0 25px 15px;">
+                    <select id="orderBy" data-id="IdDanhMuc"> <!-- Thay "IdDanhMuc" bằng id thực tế -->
+                        <option value="">Sắp xếp</option>
+                        <option value="1">Giá: Tăng dần</option>
+                        <option value="2">Giá: Giảm dần</option>
+                        <option value="3">Tên: A-Z</option>
+                        <option value="4">Tên: Z-A</option>
+                        <option value="5">Mới nhất</option>
+                        <option value="6">Cũ nhất</option>
+                    </select>
+                </div>
+
+                <div class="col-md-2 col-sm-6 col-xs-6 mb-30 width-100">
+                    <div class="product-thumb effect-shadow">
+                        <div class="product-view-block">
+                            <div class="button-block">
+                                <a class="btnAddProductFavorite" data-id="1"> <i class="fa fa-heart"></i></a>
+                                <a href="javascript:void(0);" class="btnAddToCart" data-id="1"><i class="fa fa-shopping-cart"></i></a>
+                            </div>
+                            <div class="price-view-block">
+                                <span class="price-left">20%</span>
+                            </div>
+
+                            <div class="image-block">
+                                <a href="single-product.html" style="cursor: pointer">
+                                    <img class="img-responsive" alt="Sản phẩm 1" src="/path/to/image1.jpg"> <!-- Thay bằng đường dẫn hình ảnh thực tế -->
+                                </a>
+                            </div>
+
+                            <div style="margin: 0px 5px;text-align: center;">
+                                <p class="m-0 product-name-limit-line">
+                                    Tên sản phẩm 1
+                                </p>
+
+                                <span style="text-decoration: line-through; font-size: 80%; margin-right: 5px">
+                                    1,000,000đ
+                                </span>
+
+                                <span>
+                                    800,000đ
+                                </span>
+                            </div>
+                            <div class="effect-shadow">
+                                <a href="~/Product/Detail/1" style="display: block; width: 100%; height: 100%;"></a> <!-- Thay "1" bằng id thực tế -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-2 col-sm-6 col-xs-6 mb-30 width-100">
+                    <div class="product-thumb effect-shadow">
+                        <div class="product-view-block">
+                            <div class="button-block">
+                                <a class="btnAddProductFavorite" data-id="2"> <i class="fa fa-heart"></i></a>
+                                <a href="javascript:void(0);" class="btnAddToCart" data-id="2"><i class="fa fa-shopping-cart"></i></a>
+                            </div>
+                            <div class="image-block">
+                                <a href="single-product.html" style="cursor: pointer">
+                                    <img class="img-responsive" alt="Sản phẩm 2" src="/path/to/image2.jpg"> <!-- Thay bằng đường dẫn hình ảnh thực tế -->
+                                </a>
+                            </div>
+                            <div style="margin: 0px 5px;text-align: center;">
+                                <p class="m-0 product-name-limit-line">
+                                    Tên sản phẩm 2
+                                </p>
+                                <span>
+                                    1,200,000đ
+                                </span>
+                            </div>
+                            <div class="effect-shadow">
+                                <a href="~/Product/Detail/2" style="display: block; width: 100%; height: 100%;"></a> <!-- Thay "2" bằng id thực tế -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <h3 style="text-align: center; color: red">Hiện tại chưa có sản phẩm nào thuộc danh mục TênDanhMục</h3> <!-- Thay "TênDanhMục" bằng tên thực tế -->
+            </div>
+        </div>
+    </div>
