@@ -1,5 +1,4 @@
-﻿using FashionShop.Models.Domain;
-using FashionShopMVC.Models.Domain;
+﻿using FashionShopMVC.Models.Domain;
 
 namespace FashionShop.Models.DTO.OrderDTO
 {

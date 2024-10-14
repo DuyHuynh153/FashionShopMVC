@@ -1,4 +1,4 @@
-﻿using FashionShop.Models.ViewModel;
+﻿using FashionShopMVC.Models.ViewModel;
 using System.ComponentModel.DataAnnotations;
 
 

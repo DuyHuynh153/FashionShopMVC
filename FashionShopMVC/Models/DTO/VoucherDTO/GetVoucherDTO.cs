@@ -2,20 +2,20 @@
 {
     public class GetVoucherDTO
     {
-        public int ID { get; set; }
-        public string DiscountCode { get; set; }
-        public bool DiscountAmount { get; set; }
-        public bool DiscountPercentage { get; set; }
-        public double DiscountValue { get; set; }
-        public double MinimumValue { get; set; }
-        public int Quantity { get; set; }
-        public DateTime? StartDate { get; set; }
-        public DateTime? EndDate { get; set; }
-        public string? Describe { get; set; }
-        public bool Status { get; set; }
-        public DateTime CreatedDate { get; set; }
-        public string CreatedBy { get; set; }
-        public DateTime? UpdatedDate { get; set; }
-        public string? UpdatedBy { get; set; }
+        public int id { get; set; }
+        public string discountCode { get; set; }
+        public bool discountAmount { get; set; }
+        public bool discountPercentage { get; set; }
+        public double discountValue { get; set; }
+        public double minimumValue { get; set; }
+        public int quantity { get; set; }
+        public DateTime? startDate { get; set; }
+        public DateTime? endDate { get; set; }
+        public string? describe { get; set; }
+        public bool status { get; set; }
+        public DateTime createdDate { get; set; }
+        public string createdBy { get; set; }
+        public DateTime? updatedDate { get; set; }
+        public string? updatedBy { get; set; }
     }
 }

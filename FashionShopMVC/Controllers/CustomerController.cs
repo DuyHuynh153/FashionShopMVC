@@ -12,7 +12,6 @@ namespace FashionShopMVC.Controllers
         {
             _customerRepository = customerRepository;
         }
-        }
 
     }
 }

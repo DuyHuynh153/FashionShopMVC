@@ -37,7 +37,7 @@ builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 //builder.Services.AddScoped<IContactRepository, ContactRepository>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 //builder.Services.AddScoped<IRoleRepository, RoleRepository>();
-//builder.Services.AddScoped<IVoucherRepository, VoucherRepository>();
+builder.Services.AddScoped<IVoucherRepository, VoucherRepository>();
 //builder.Services.AddScoped<IFavoriteProductRepository, FavoriteProductRepository>();
 //builder.Services.AddScoped<ICommentRepository, CommentRepository>();
 //builder.Services.AddScoped<IProvinceRepository, ProvinceRepository>();
@@ -128,9 +128,12 @@ app.UseStaticFiles(new StaticFileOptions
 
 app.UseSession();
 app.UseRouting();
+//app.MapControllerRoute(
+//    name: "default",
+//    pattern: "{controller=Home}/{action=Index}/{id?}");
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller=Vouchers}/{action=VoucherListView}");
 
 app.UseHttpsRedirection();
 
