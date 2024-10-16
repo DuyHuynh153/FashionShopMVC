@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using FashionShopMVC.Models.ViewModel;
+using FashionShopMVC.Areas.Admin.Models.RolesDTO;
 
 namespace FashionShopMVC.Data
 {
@@ -113,6 +114,15 @@ namespace FashionShopMVC.Data
 
             modelBuilder.Entity<IdentityRole>().HasData(roles);
         }
+        // public DbSet<RevenueStatisticViewModel> RevenueStatisticViewModel { get; set; }
+
+        public DbSet<FashionShopMVC.Areas.Admin.Models.RolesDTO.GetRoleDTO>? GetRoleDTO { get; set; }
+        // public DbSet<RevenueStatisticViewModel> RevenueStatisticViewModel { get; set; }
+
+        public DbSet<FashionShopMVC.Areas.Admin.Models.RolesDTO.CreateRoleDTO>? CreateRoleDTO { get; set; }
+        // public DbSet<RevenueStatisticViewModel> RevenueStatisticViewModel { get; set; }
+
+        public DbSet<FashionShopMVC.Areas.Admin.Models.RolesDTO.EditRoleDTO>? EditRoleDTO { get; set; }
 
     }
 }

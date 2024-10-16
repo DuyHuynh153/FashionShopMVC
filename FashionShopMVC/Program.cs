@@ -10,6 +10,7 @@ using System.Text;
 using Microsoft.Extensions.FileProviders;
 using AspNetCoreHero.ToastNotification;
 using AspNetCoreHero.ToastNotification.Extensions;
+using sportMVC.Models.Seed;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -36,7 +37,7 @@ builder.Services.AddDbContext<FashionShopDBContext>(options =>
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 //builder.Services.AddScoped<IContactRepository, ContactRepository>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
-//builder.Services.AddScoped<IRoleRepository, RoleRepository>();
+builder.Services.AddScoped<IRoleRepository, RoleRepository>();
 //builder.Services.AddScoped<IVoucherRepository, VoucherRepository>();
 //builder.Services.AddScoped<IFavoriteProductRepository, FavoriteProductRepository>();
 //builder.Services.AddScoped<ICommentRepository, CommentRepository>();
