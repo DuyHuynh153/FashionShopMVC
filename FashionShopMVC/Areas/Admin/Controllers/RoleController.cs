@@ -65,7 +65,7 @@ namespace FashionShopMVC.Areas.Admin.Controllers
             return View(role);
         }
 
-        [HttpPost]
+        [HttpPut]
         [Route("Edit/{id}")]
         public async Task<IActionResult> Edit(string id, EditRoleDTO role)
         {
