@@ -1,0 +1,44 @@
+﻿@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<h2>Quản Lí Vai Trò</h2>
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title" style="font-size:30px">Danh sách vai trò</h3>
+
+        <a type="button" class="btn btn-info float-right" asp-action="Create" asp-controller="Role" asp-area="Admin">
+            Thêm Vai Trò
+        </a>
+    </div>
+    <!-- /.card-header -->
+    <div class="card-body">
+        <table class="table table-bordered table-striped text-center">
+            <thead>
+                <tr>
+                    <th style="width: 30%">ID</th>
+                    <th style="width: 50%">Tên</th>
+                    <th style="width: 20%">Thao tác</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var role in Model)
+                {
+                    <tr>
+                        <td>@role.ID</td>
+                        <td>@role.Name</td>
+                        <td>
+                            <a class="btn btn-sm btn-primary mr-3" asp-action="Edit" asp-controller="Role" asp-area="Admin" asp-route-id="@role.ID">
+                                <i class="fas fa-edit"></i> Edit
+                            </a>
+                            <a class="btn btn-sm btn-danger" asp-action="Delete" asp-controller="Role" asp-area="Admin" asp-route-id="@role.ID">
+                                <i class="fas fa-trash"></i> Delete
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
