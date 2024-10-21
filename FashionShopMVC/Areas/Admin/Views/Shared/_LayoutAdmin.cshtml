@@ -110,7 +110,7 @@
                         </li>
 
                         <li class="nav-item">
-                            <a href="/Admin/AdminHome/Member" class="nav-link">
+                            <a asp-action="Index" asp-controller="Role" asp-area="Admin" class="nav-link">
                                 <i class="nav-icon fas fa-user"></i>
                                 <p>
                                     Quản lí Vai trò
@@ -118,36 +118,15 @@
                             </a>
                         </li>
 
-
-                        
-
                         <li class="nav-item">
-                            <a ui-sref="Index" class="nav-link">
-                                <i class="nav-icon fas fa-home"></i>
-                                <p>
-                                    Bảng Điều Khiển
-                                </p>
-                            </a>
-                        </li>
-
-                        <li class="nav-item">
-                            <a ui-sref="member-list" class="nav-link">
-                                <i class="nav-icon fas fa-user-gear"></i>
-                                <p>
-                                    Quản lý vai trò
-                                </p>
-                            </a>
-                        </li>
-
-                        <li class="nav-item">
-                            <a ui-sref="admin_list" class="nav-link">
+                            <a asp-action="Index" asp-controller="User" asp-area="Admin" class="nav-link">
                                 <i class="nav-icon fas fa-user"></i>
                                 <p>Quản lý quản trị viên</p>
                             </a>
                         </li>
 
                         <li class="nav-item">
-                            <a ui-sref="member_list" class="nav-link">
+                            <a asp-action="Index" asp-controller="Employee" asp-area="Admin" class="nav-link">
                                 <i class="nav-icon fas fa-users"></i>
                                 <p>Quản lý nhân viên</p>
                             </a>
@@ -170,7 +149,7 @@
                         </li>
 
                         <li class="nav-item">
-                            <a ui-sref="category_list" class="nav-link">
+                            <a asp-action="Index" asp-controller="Categories" asp-area="Admin" class="nav-link">
                                 <i class="nav-icon fas fa-tags"></i>
                                 <p>
                                     Quản lý danh mục
@@ -272,5 +251,7 @@
 
     <!-- Custom Scripts (Optional) -->
     <script src="~/js/site.js"></script>
+    <!-- Render the Scripts section -->
+    @RenderSection("Scripts", required: false)
 </body>
 </html>

@@ -1,4 +1,4 @@
-﻿using FashionShopMVC.Repositories;
+using FashionShopMVC.Repositories;
 using FashionShopMVC.Data;
 using FashionShopMVC.Models.Domain;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -11,6 +11,10 @@ using Microsoft.Extensions.FileProviders;
 using AspNetCoreHero.ToastNotification;
 using AspNetCoreHero.ToastNotification.Extensions;
 using sportMVC.Models.Seed;
+using FashionShopMVC.Repositories.@interface;
+using FashionShop.Repositories;
+using Service;
+using Service.implement;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -30,11 +34,14 @@ builder.Services.AddDbContext<FashionShopDBContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 
+/*builder.Services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = true)
+    .AddEntityFrameworkStores<FashionShopDBContext>();*/
+
 builder.Services.AddIdentity<User,  IdentityRole>(options => options.SignIn.RequireConfirmedAccount = false)
     .AddEntityFrameworkStores<FashionShopDBContext>()
     .AddDefaultTokenProviders();
 // Register Controller
-//builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
 //builder.Services.AddScoped<ITokenRepository, TokenRepository>();
 //builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
@@ -55,7 +62,23 @@ builder.Services.AddNotyf(
         config.IsDismissable = true;
         config.Position = NotyfPosition.TopRight;
     });
+// config service authentication - lam duy
 
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("RequireAdminRole", policy => policy.RequireRole("Admin"));
+    options.AddPolicy("RequireCustomerRole", policy => policy.RequireRole("Customer"));
+});
+
+// config sessions
+
+builder.Services.AddSession(options =>
+{
+
+    options.IdleTimeout = TimeSpan.FromMinutes(30);
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
 
 //Register service authentication
 //builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(option =>

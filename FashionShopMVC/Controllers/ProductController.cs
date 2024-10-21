@@ -1,5 +1,6 @@
 ﻿using FashionShopMVC.Data;
 using FashionShopMVC.Repositories;
+using FashionShopMVC.Repositories.@interface;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;

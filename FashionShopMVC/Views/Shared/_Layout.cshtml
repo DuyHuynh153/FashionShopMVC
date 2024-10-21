@@ -29,7 +29,7 @@
                 .Options;
 
     FashionShopDBContext fashionShopDbContext = new FashionShopDBContext(options);
-    ICategoryRepository _categoryRepository = new CategoryRepository(fashionShopDbContext);
+    FashionShopMVC.Repositories.@interface.ICategoryRepository _categoryRepository = new CategoryRepository(fashionShopDbContext);
 
     var allCategory = _categoryRepository.GetAllCategory();
 }

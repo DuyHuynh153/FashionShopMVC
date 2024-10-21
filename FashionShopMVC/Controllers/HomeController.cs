@@ -1,4 +1,5 @@
 ﻿using FashionShopMVC.Repositories;
+using FashionShopMVC.Repositories.@interface;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FashionShopMVC.Controllers
