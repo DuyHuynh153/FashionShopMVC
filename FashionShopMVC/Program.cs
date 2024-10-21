@@ -36,9 +36,9 @@ builder.Services.AddIdentity<User,  IdentityRole>(options => options.SignIn.Requ
 // Register Controller
 //builder.Services.AddScoped<IUserRepository, UserRepository>();
 //builder.Services.AddScoped<ITokenRepository, TokenRepository>();
-//builder.Services.AddScoped<IOrderRepository, OrderRepository>();
+builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
-//builder.Services.AddScoped<IContactRepository, ContactRepository>();
+builder.Services.AddScoped<IContactRepository, ContactRepository>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 //builder.Services.AddScoped<IRoleRepository, RoleRepository>();
 builder.Services.AddScoped<IVoucherRepository, VoucherRepository>();
@@ -144,13 +144,12 @@ app.UseRouting();
 //    pattern: "{controller=Home}/{action=Index}/{id?}");
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Vouchers}/{action=VoucherListView}");
+    pattern: "{controller=Home}/{action=Index}");
 
 app.MapAreaControllerRoute(
-    name:"adminService",
+    name:"Admin",
     areaName:"Admin",
-    pattern: "{area:exists}/{controller=AdminHome}/{action=Index}/{id?}");
-
+    pattern: "Admin/{controller=AdminHome}/{action=Index}/{id?}");
 
 app.UseHttpsRedirection();
 
