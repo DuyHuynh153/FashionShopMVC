@@ -1,4 +1,4 @@
-﻿using FashionShop.Models.DTO.UserDTO;
+﻿using FashionShopMVC.Models.DTO.UserDTO;
 
 
 namespace Service

@@ -1,4 +1,4 @@
-﻿using FashionShop.Models.DTO.UserDTO;
+﻿using FashionShopMVC.Models.DTO.UserDTO;
 using FashionShopMVC.Data;
 using FashionShopMVC.Models.Domain;
 using Microsoft.AspNetCore.Identity;
