@@ -1,6 +1,6 @@
 ﻿using FashionShopMVC.Models.ViewModel;
 
-namespace FashionShop.Models.DTO.OrderDTO
+namespace FashionShopMVC.Models.DTO.OrderDTO
 {
     public class GetOrderDTO
     {

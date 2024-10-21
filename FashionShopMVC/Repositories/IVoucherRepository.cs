@@ -7,7 +7,7 @@ namespace FashionShopMVC.Repositories
 {
     public interface IVoucherRepository
     {
-        public Task<List<GetVoucherDTO>> GetAll();
+        public Task<IEnumerable<GetVoucherDTO>> GetAll();
         public Task<GetVoucherDTO> GetById(int id);
         public Task<GetVoucherDTO> GetByDiscountCode(string discountCode);
         public Task<CreateVoucherDTO> Create(CreateVoucherDTO createVoucherDTO);
@@ -26,7 +26,7 @@ namespace FashionShopMVC.Repositories
             _fashionShopDBContext = fashionShopDBContext;
         }
 
-        public async Task<List<GetVoucherDTO>> GetAll()
+        public async Task<IEnumerable<GetVoucherDTO>> GetAll()
         {
             var listVoucherDTO = await _fashionShopDBContext.Vouchers.Select(voucher => new GetVoucherDTO
             {

@@ -1,13 +1,16 @@
-﻿@using FashionShopMVC.Models.DTO.VoucherDTO;
-@using System.Globalization;
-@model List<GetVoucherDTO>
+﻿@model IEnumerable<FashionShopMVC.Models.DTO.VoucherDTO.GetVoucherDTO>
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 @{
-    ViewData["Title"] = "VoucherListView"; 
+    ViewData["Title"] = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
 }
+
 <div class="card">
     <div class="card-header">
         <h3 class="card-title" style="font-size:30px">Danh sách mã giảm giá</h3>
-        <button type="button" class="btn btn-info float-right" ui-sref="voucher_add">Thêm mã giảm giá</button>
+        <a asp-area="Admin" asp-controller="Vouchers" asp-action="VoucherListView" class="btn btn-info">
+            Xem danh sách mã giảm giá
+        </a>
     </div>
     <!-- /.card-header -->
     <div class="card-body">
@@ -38,11 +41,9 @@
                                 <i class="fa-solid fa-check btn-sm bg-success"></i>
                             </td>
                         }
-                        @if (voucher.discountAmount == false)
+                        else
                         {
-                            <td>
-                                
-                            </td>
+                            <td></td>
                         }
                         @if (voucher.discountPercentage == true)
                         {
@@ -50,10 +51,9 @@
                                 <i class="fa-solid fa-check btn-sm bg-success"></i>
                             </td>
                         }
-                        @if (voucher.discountPercentage == false)
+                        else
                         {
                             <td>
-
                             </td>
                         }
                         @if (voucher.discountAmount == true)
@@ -62,17 +62,20 @@
                         }
                         @if (voucher.discountPercentage == true)
                         {
-                            <td>@String.Format("%", @voucher.discountPercentage)</td>
+                            <td>@String.Format("{0}%", @voucher.discountValue)</td>
                         }
-                        
+
                         <td>@voucher.quantity</td>
-                        <td>@String.Format("dd/MM/yy HH:mm", @voucher.startDate)</td>
-                        <td>@voucher.endDate</td>
+                        <td>@String.Format("{0:HH:mm dd/MM/yy}", @voucher.startDate)</td>
+                        <td>@String.Format("{0:HH:mm dd/MM/yy}", @voucher.endDate)</td>
                         <td>
-                            <span ng-class="{'badge bg-gradient-green': @voucher.status == true, 'badge bg-gradient-red': @voucher.status == false}" style="font-size: 14px">{{@voucher.status | lockFilter}}</span>
+                            <span class="badge @(voucher.status ? "bg-gradient-green" : "bg-gradient-red")" style="font-size: 14px">
+                                @voucher.status
+                            </span>
                         </td>
                         <td>
-                             
+                            <a href="/Admin/Vouchers/Edit/@voucher.id" class="btn btn-primary" role="button">Edit</a> |
+                            <a href="/Admin/Vouchers/Delete/@voucher.id" class="btn btn-danger" role="button">Delete</a>
                         </td>
                     </tr>
                 }

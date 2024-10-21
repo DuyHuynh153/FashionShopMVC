@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 
 
-namespace FashionShop.Models.DTO.OrderDTO
+namespace FashionShopMVC.Models.DTO.OrderDTO
 {
     public class CreateOrderDTO
     {

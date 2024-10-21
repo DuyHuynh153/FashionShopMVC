@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8">
@@ -17,6 +18,8 @@
 
     <!-- Toast css -->
     <link href="~/assets/admin/libs/toastr/build/toastr.css" rel="stylesheet" />
+
+    <script src="~/assets/admin/js/AdminContent.js"></script>
 </head>
 <body class="hold-transition sidebar-mini">
     @* @RenderBody() *@
@@ -167,7 +170,7 @@
                         </li>
 
                         <li class="nav-item">
-                            <a ui-sref="voucher_list" class="nav-link">
+                            <a class="nav-link" asp-area="Admin" asp-controller="Vouchers">
                                 <i class="nav-icon fas fa-ticket-simple"></i>
                                 <p>
                                     Quản lý mã giảm giá
@@ -177,7 +180,7 @@
 
 
                         <li class="nav-item">
-                            <a ui-sref="order_list" class="nav-link">
+                            <a asp-area="Admin" asp-controller="Orders" class="nav-link">
                                 <i class="nav-icon fas fa-cart-shopping"></i>
                                 <p>
                                     Quản lý đơn hàng
@@ -251,7 +254,7 @@
 
     <!-- Custom Scripts (Optional) -->
     <script src="~/js/site.js"></script>
-    <!-- Render the Scripts section -->
-    @RenderSection("Scripts", required: false)
+
+    
 </body>
 </html>
