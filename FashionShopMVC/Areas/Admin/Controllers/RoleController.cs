@@ -1,4 +1,4 @@
-﻿using FashionShop.Repositories;
+﻿using FashionShopMVC.Repositories;
 using FashionShopMVC.Areas.Admin.Models.RolesDTO;
 using FashionShopMVC.Data;
 using FashionShopMVC.Repositories.@interface;

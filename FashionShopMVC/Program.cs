@@ -50,7 +50,7 @@ builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<IRoleRepository, RoleRepository>();
 //builder.Services.AddScoped<IVoucherRepository, VoucherRepository>();
 //builder.Services.AddScoped<IFavoriteProductRepository, FavoriteProductRepository>();
-//builder.Services.AddScoped<ICommentRepository, CommentRepository>();
+builder.Services.AddScoped<ICommentRepository, CommentRepository>();
 //builder.Services.AddScoped<IProvinceRepository, ProvinceRepository>();
 //builder.Services.AddScoped<IDistrictRepository, DistrictRepository>();
 //builder.Services.AddScoped<IWardRepository, WardRepository>();
@@ -99,11 +99,11 @@ builder.Services.AddSession(options =>
 //});
 
 // Config identity user
-//builder.Services.AddIdentityCore<User>()
-//    .AddRoles<IdentityRole>()
-//    .AddTokenProvider<DataProtectorTokenProvider<User>>("FashionShop")
-//    .AddEntityFrameworkStores<FashionShopDBContext>()
-//    .AddDefaultTokenProviders();
+builder.Services.AddIdentityCore<User>()
+    .AddRoles<IdentityRole>()
+    .AddTokenProvider<DataProtectorTokenProvider<User>>("FashionShop")
+    .AddEntityFrameworkStores<FashionShopDBContext>()
+    .AddDefaultTokenProviders();
 
 
 // Config password register

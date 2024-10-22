@@ -1,9 +1,10 @@
 ﻿using FashionShopMVC.Data;
 using FashionShopMVC.Repositories;
-using FashionShopMVC.Repositories.@interface;
+using FashionShopMVC.Models.DTO.CommentDTO;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
+using FashionShopMVC.Repositories.@interface;
 
 namespace FashionShopMVC.Controllers
 {
@@ -12,14 +13,15 @@ namespace FashionShopMVC.Controllers
         public readonly IProductRepository _productRepository;
         public readonly ICategoryRepository _categoryRepository;
         public readonly FashionShopDBContext _context;
-        //public readonly ICommentRepository _commentRepository;
+        public readonly ICommentRepository _commentRepository;
 
-        public ProductController(IProductRepository productRepository, ICategoryRepository categoryRepository, FashionShopDBContext context)
+        public ProductController(IProductRepository productRepository, ICategoryRepository categoryRepository, FashionShopDBContext context, ICommentRepository commentRepository)
         {
             _productRepository = productRepository;
             _categoryRepository = categoryRepository;
             _context = context;
-            //_commentRepository = commentRepository;
+            _commentRepository = commentRepository;
+            _commentRepository = commentRepository;
         }
         public async Task<IActionResult> Index(int idCategory, int? idOrderProduct = null)
         {
@@ -44,33 +46,33 @@ namespace FashionShopMVC.Controllers
             @ViewBag.SanPham = lsprodcut;
 
             // Comment
-            //ViewBag.ListComment = _commentRepository.GetListComment(0, id);
-            //ViewBag.SumComment = _commentRepository.GetCountAll(id);
+            ViewBag.ListComment = _commentRepository.GetListComment(0, id);
+            ViewBag.SumComment = _commentRepository.GetCountAll(id);
 
             return View(product);
         }
 
-        //[HttpPost]
-        //public JsonResult AddNewComment(CreateCommentDTO createCommentDTO)
-        //{
-        //    try
-        //    {
-        //        var commentNew = _commentRepository.Create(createCommentDTO);
+        [HttpPost]
+        public JsonResult AddNewComment(CreateCommentDTO createCommentDTO)
+        {
+            try
+            {
+                var commentNew = _commentRepository.Create(createCommentDTO);
 
-        //        if (commentNew != null)
-        //        {
-        //            return Json(new { status = true });
-        //        }
-        //        else
-        //        {
-        //            return Json(new { status = false });
-        //        }
-        //    }
-        //    catch
-        //    {
-        //        return Json(new { status = false });
-        //    }
-        //}
+                if (commentNew != null)
+                {
+                    return Json(new { status = true });
+                }
+                else
+                {
+                    return Json(new { status = false });
+                }
+            }
+            catch
+            {
+                return Json(new { status = false });
+            }
+        }
 
         [HttpPost]
         public JsonResult GetQuantityProductById(int id)
