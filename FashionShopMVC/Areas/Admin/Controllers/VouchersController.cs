@@ -16,7 +16,8 @@ namespace FashionShopMVC.Areas.Admin.Controllers
         }
 
         // GET: VouchersController
-        [HttpGet("")]
+        [HttpGet]
+        [Route("")]
         public async Task<ActionResult> Index()
         {
             var ListVoucher = await  _voucherRepository.GetAll();
@@ -35,14 +36,14 @@ namespace FashionShopMVC.Areas.Admin.Controllers
         // GET: VouchersController/Create
         [HttpGet]
         [Route("Create")]
-        public ActionResult Create()
+        public IActionResult Create()
         {
             return View();
         }
 
         // POST: VouchersController/Create
         [HttpPost]
-        [ValidateAntiForgeryToken]
+        //[ValidateAntiForgeryToken]
         [Route("Create")]
         public ActionResult Create(CreateVoucherDTO createVoucherDTO)
         {

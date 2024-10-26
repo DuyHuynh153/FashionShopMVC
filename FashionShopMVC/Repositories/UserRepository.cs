@@ -1,14 +1,11 @@
-﻿using FashionShop.Models.DTO.UserDTO;
-using FashionShopMVC.Data;
+﻿using FashionShopMVC.Data;
 using FashionShopMVC.Models.Domain;
+using FashionShopMVC.Models.DTO.UserDTO;
+using FashionShopMVC.Repositories.@interface;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
-namespace Service.implement
+namespace FashionShopMVC.Repositories
 {
     public class UserRepository : IUserRepository
     {

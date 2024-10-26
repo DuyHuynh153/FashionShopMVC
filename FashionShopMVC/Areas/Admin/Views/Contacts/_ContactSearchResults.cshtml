@@ -1,0 +1,67 @@
+﻿@using FashionShopMVC.Helper;
+@using FashionShopMVC.Models.DTO.ContactDTO;
+@using FashionShopMVC.Models.Domain;
+@model AdminPaginationSet<ContactDTO>
+@{
+    ViewData["DefaultContactsPageSize"] = PaginationConfig.DefaultContactsPageSize;
+}
+<div class="card-body">
+    <table class="table table-bordered table-striped text-center">
+        <thead>
+            <tr>
+                <th style="width: 5%">ID</th>
+                <th style="width: 15%">Họ và Tên </th>
+                <th style="width: 10%">Email</th>
+                <th style="width: 10%">Số điện thoại</th>
+                <th style="width: 40%">Nội dung</th>
+                <th style="width: 10%">Trạng thái</th>
+                <th style="width: 10%">Thao tác</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null && Model.List != null && Model.List.Any())
+            {
+                @foreach (var contact in Model.List)
+                {
+                    <tr>
+                        <td>@contact.ID</td>
+                        <td>@contact.FullName</td>
+                        <td>@contact.Email</td>
+                        <td>@contact.PhoneNumber</td>
+                        <td>@contact.Content</td>
+                        <td>
+                            <span class="badge @(contact.Status ? "bg-gradient-green" : "bg-gradient-red")" style="font-size: 14px">
+                                @(contact.Status ? "Đã xác nhận" : "Chưa xác nhận")
+                            </span>
+                        </td>
+                        <td>
+                            @if (contact.Status == false)
+                            {
+                                <form asp-area="Admin" asp-controller="Contacts" asp-action="confirmContact" asp-route-id="@contact.ID" method="post" style="display:inline;">
+                                    <button type="submit" class="btn btn-sm btn-success">Xác nhận</button>
+                                </form>
+
+                            }
+                            @if (contact.Status == true)
+                            {
+                                <a class="btn btn-sm btn-success" disabled="disabled" style="pointer-events: none; opacity: 0.6;">
+                                    Xác nhận
+                                </a>
+                            }
+                        </td>
+                        
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="7">Không có dữ liệu để hiển thị.</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+@*
+     <pagination-directive show-to="{{showTo}}" show-from="{{showFrom}}" show-end="{{showEnd}}" page="{{page}}" custom-path="{{customPath}}" pages-count="{{pagesCount}}" total-count="{{totalCount}}" search-func="getListProducts(page)"></pagination-directive>
+*@

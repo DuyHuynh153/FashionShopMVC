@@ -1,0 +1,87 @@
+﻿@using FashionShopMVC.Models.DTO.OrderDTO;
+@model GetOrderByIdDTO;
+@{
+    ViewData["Title"] = "GetOrderById";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+<div class="card-header pt-0">
+    <h3 class="card-title" style="font-size: 30px">Chi tiết đơn hàng</h3>
+    <a class="btn btn-info float-right" asp-area="Admin" asp-controller="Orders" asp-action="index">Quay lại</a>
+</div>
+
+<!-- Default box -->
+<div class="card card-solid">
+    <div class="card-body">
+        <div class="post-item row">
+            <div class="col-md-4">
+                <h3>Thông tin giao hàng</h3>
+                <p>Mã đơn hàng: @Model.ID</p>
+                <p>Tên người nhận: @Model.FullName</p>
+                <p>Số điện thoại: @Model.PhoneNumber</p>
+                <p>Tỉnh/Thành: @Model.ProvinceName</p>
+                <p>Quận/Huyện: @Model.DistrictName</p>
+                <p>Phường/Xã: @Model.WardName</p>
+                <p>Địa chỉ giao hàng: @Model.Address</p>
+                <p>Nội dung đơn hàng: @Model.Note</p>
+
+                <p>@Model.loadTypePayment()</p>
+                <p>@Model.loadStatusOrder()</p>
+            </div>
+
+            <div class="col-md-8">
+                <h3>Thông tin đơn hàng</h3>
+                <table class="table table-bordered table-striped table-hover text-center">
+                    <thead>
+                        <tr style="font-weight: bold">
+                            <td>Hình ảnh</td>
+                            <td>Tên sản phẩm</td>
+                            <td>Giá</td>
+                            <td>Số lượng</td>
+                            <td>Tổng cộng</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.OrderDetails)
+                        {
+                            <tr>
+                                <td><img src="../../../@item.Product.Image" style="height: 80px" /></td>
+                                <td>@item.Product.Name</td>
+                                <td>@string.Format("{0:C}", item.Price)</td>
+                                <td>@item.Quantity</td>
+                                <td>@string.Format("{0:C0}", item.Price * item.Quantity) </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <div class="spacer" style="height: 20px"></div>
+        </div>
+
+        <div class="row" style="display: flex; justify-content: end;">
+            <div class="col-sm-4 col-sm-offset-8">
+                <table class="table">
+                    <tbody>
+                        <tr style="font-size:16px">
+                            <td class="text-left cart-table-total-label"><strong>Tổng tiền hàng: </strong></td>
+                            <td class="text-right cart-table-total">@Model.getVNDPrice(Model.getTotalMoney())</td>
+                        </tr>
+                        <tr style="font-size:16px">
+                            <td class="text-left cart-table-total-label"><strong>Phí vận chuyển: </strong></td>
+                            <td class="text-right cart-table-total">@Model.getVNDPrice(Model.DeliveryFee)</td>
+                        </tr>
+                        <tr style="font-size:16px">
+                            <td class="text-left cart-table-total-label"><strong>Voucher giảm giá: </strong></td>
+                            <td class="text-right cart-table-total">- @Model.getVNDPrice(Model.getVoucherDiscount())</td>
+                        </tr>
+                        <tr style="font-size:16px">
+                            <td class="text-left cart-table-total-label"><strong>Tổng thanh toán: </strong></td>
+                            <td class="text-right cart-table-total">@Model.getVNDPrice(Model.getTotalPayment())</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <!-- /.card-body -->
+</div>
+<!-- /.card -->

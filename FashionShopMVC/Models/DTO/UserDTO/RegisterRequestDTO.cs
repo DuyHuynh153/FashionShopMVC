@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace FashionShop.Models.DTO.UserDTO
+namespace FashionShopMVC.Models.DTO.UserDTO
 {
     public class RegisterRequestDTO
     {

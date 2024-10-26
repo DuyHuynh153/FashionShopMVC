@@ -4,13 +4,12 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace FashionShopMVC.Areas.Admin.Controllers
 {
-    [Area("Admin")]
-    public class VouchersController1 : Controller
+    public class Vouchers11Controller1 : Controller
     {
         private readonly IVoucherRepository _voucherRepositoty;
 
 
-        public VouchersController1(IVoucherRepository voucherRepository)
+        public Vouchers11Controller1(IVoucherRepository voucherRepository)
         {
             _voucherRepositoty = voucherRepository;
         }

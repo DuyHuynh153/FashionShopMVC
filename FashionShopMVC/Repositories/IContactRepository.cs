@@ -9,7 +9,7 @@ namespace FashionShopMVC.Repositories
     public interface IContactRepository
     {
         AdminPaginationSet<ContactDTO> GetAllContact(int page, int pageSize, string? searchByPhoneNumber);
-        bool Cofirm(int id);
+        bool Confirm(int id);
     }
 
     public class ContactRepository : IContactRepository
@@ -53,7 +53,7 @@ namespace FashionShopMVC.Repositories
             return contactPaginationSet;
         }
 
-        public bool Cofirm(int id)
+        public bool Confirm(int id)
         {
             var cofirmContact = _identityDbContext.Contacts.FirstOrDefault(c => c.ID == id);
 

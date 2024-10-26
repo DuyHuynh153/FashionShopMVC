@@ -1,4 +1,5 @@
-﻿@model IEnumerable<FashionShopMVC.Models.DTO.VoucherDTO.GetVoucherDTO>
+﻿@using FashionShopMVC.Models.DTO.VoucherDTO;
+@model IEnumerable<GetVoucherDTO>
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 @{
     ViewData["Title"] = "Index";
@@ -8,9 +9,7 @@
 <div class="card">
     <div class="card-header">
         <h3 class="card-title" style="font-size:30px">Danh sách mã giảm giá</h3>
-        <a asp-area="Admin" asp-controller="Vouchers" asp-action="VoucherListView" class="btn btn-info">
-            Xem danh sách mã giảm giá
-        </a>
+        <a type="button" class="btn btn-info float-right" asp-area="Admin" asp-controller="Vouchers" asp-action="Create">Tạo mã giảm giá</a>
     </div>
     <!-- /.card-header -->
     <div class="card-body">
@@ -74,8 +73,8 @@
                             </span>
                         </td>
                         <td>
-                            <a href="/Admin/Vouchers/Edit/@voucher.id" class="btn btn-primary" role="button">Edit</a> |
-                            <a href="/Admin/Vouchers/Delete/@voucher.id" class="btn btn-danger" role="button">Delete</a>
+                            <a asp-controller="Vouchers" asp-action="Edit" asp-route-id="@voucher.id" class="btn btn-primary" role="button">Edit</a> |
+                            <a asp-controller="Vouchers" asp-action="Delete" asp-route-id="@voucher.id" class="btn btn-danger" role="button">Delete</a>
                         </td>
                     </tr>
                 }

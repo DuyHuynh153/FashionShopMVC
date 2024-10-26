@@ -1,20 +1,13 @@
 using FashionShopMVC.Repositories;
 using FashionShopMVC.Data;
 using FashionShopMVC.Models.Domain;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
-using System.Text;
 using Microsoft.Extensions.FileProviders;
 using AspNetCoreHero.ToastNotification;
-using AspNetCoreHero.ToastNotification.Extensions;
 using sportMVC.Models.Seed;
 using FashionShopMVC.Repositories.@interface;
-using FashionShop.Repositories;
-using Service;
-using Service.implement;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -48,7 +41,7 @@ builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<IContactRepository, ContactRepository>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<IRoleRepository, RoleRepository>();
-//builder.Services.AddScoped<IVoucherRepository, VoucherRepository>();
+builder.Services.AddScoped<IVoucherRepository, VoucherRepository>();
 //builder.Services.AddScoped<IFavoriteProductRepository, FavoriteProductRepository>();
 //builder.Services.AddScoped<ICommentRepository, CommentRepository>();
 //builder.Services.AddScoped<IProvinceRepository, ProvinceRepository>();
@@ -167,7 +160,7 @@ app.UseRouting();
 //    pattern: "{controller=Home}/{action=Index}/{id?}");
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}");
+    pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.MapAreaControllerRoute(
     name:"Admin",

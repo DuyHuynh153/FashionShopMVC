@@ -3,7 +3,6 @@ using FashionShopMVC.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using OfficeOpenXml;
 using OfficeOpenXml.Style;
-using System.ComponentModel;
 using System.Diagnostics;
 using System.Globalization;
 using System.Net.Mime;
@@ -21,10 +20,10 @@ namespace FashionShopMVC.Areas.Admin.Controllers
         {
             _orderRepository = orderRepository;
         }
-
-        [HttpGet("")]
+        [HttpGet]
+        [Route("loadOrdersPartial")]
         //[AuthorizeRoles("Quản trị viên", "Nhân viên")]
-        public IActionResult index(int page = 0, int pageSize = 5, int? typePayment = null, int? searchByID = null, string? searchByName = null, string? searchBySDT = null)
+        public IActionResult loadOrdersPartial(int page = 0, int pageSize = 5, int? typePayment = null, int? searchByID = null, string? searchByName = null, string? searchBySDT = null)
         {
             try
             {
@@ -32,13 +31,21 @@ namespace FashionShopMVC.Areas.Admin.Controllers
                 var listOrders = _orderRepository.GetAll(page, pageSize, typePayment, searchByID, searchByName, searchBySDT);
 
                 // Trả về view và truyền dữ liệu listOrders vào view
-                return View(listOrders);
+                return PartialView("_OrderSearchResults", listOrders);
             }
             catch
             {
                 // Trả về view lỗi nếu có lỗi xảy ra
-                return View("Error", new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+                return PartialView("Error", new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
             }
+        }
+
+        [HttpGet]
+        [Route("")]
+        //[AuthorizeRoles("Quản trị viên", "Nhân viên")]
+        public IActionResult index()
+        {
+            return View();
         }
 
         [HttpGet]
@@ -59,14 +66,14 @@ namespace FashionShopMVC.Areas.Admin.Controllers
         }
 
         [HttpGet]
-        [Route("GetOrderById/{id}")]
+        [Route("Details/{id}")]
         //[AuthorizeRoles("Quản trị viên", "Nhân viên")]
-        public async Task<IActionResult> GetOrderById(int id)
+        public async Task<IActionResult> Details(int id)
         {
             try
             {
                 // Lấy đơn hàng theo ID từ repository
-                var order = await _orderRepository.GetById(id);
+                var order = await _orderRepository.GetOrderById(id);
 
                 if (order != null)
                 {
@@ -76,13 +83,13 @@ namespace FashionShopMVC.Areas.Admin.Controllers
                 else
                 {
                     // Trả về view lỗi nếu không tìm thấy đơn hàng
-                    return View("NotFound", new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+                    return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
                 }
             }
             catch
             {
                 // Trả về view lỗi nếu có lỗi xảy ra
-                return View("Error", new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+                return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
             }
         }
 
@@ -90,7 +97,7 @@ namespace FashionShopMVC.Areas.Admin.Controllers
         [Route("ExportExcel/{id}")]
         public async Task<IActionResult> ExportExcel(int id)
         {
-            var order = await _orderRepository.GetById(id);
+            var order = await _orderRepository.GetOrderById(id);
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
 
             using (var package = new ExcelPackage())

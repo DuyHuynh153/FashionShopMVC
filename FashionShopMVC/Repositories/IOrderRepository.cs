@@ -10,7 +10,7 @@ namespace FashionShopMVC.Repositories
     public interface IOrderRepository
     {
         public AdminPaginationSet<AdminGetOrderDTO> GetAll(int page, int pageSize, int? typePayment, int? searchByID, string? searchByName, string? searchBySDT);
-        public Task<GetOrderByUserIdDTO> GetById(int id);
+        public Task<GetOrderByIdDTO> GetOrderById(int id);
         public Task<List<GetOrderByUserIdDTO>> GetByUserID(string userID);
         public Task<GetOrderByUserIdDTO> GetNewByUserID(string userID);
         public Task<GetOrderDTO> Create(CreateOrderDTO createOrderDTO);
@@ -57,7 +57,7 @@ namespace FashionShopMVC.Repositories
             }
 
             // Chuyển đổi kết quả thành DTO
-            var listOrdersDTO = listOrdersDomain.Select(order => new AdminGetOrderDTO
+            var listOrdersDTO = listOrdersDomain.Select(order => new AdminGetOrderDTO 
             {
                 ID = order.ID,
                 FullName = order.FullName,
@@ -69,10 +69,9 @@ namespace FashionShopMVC.Repositories
                 Status = order.Status,
                 DeliveryFee = order.DeliveryFee,
                 Voucher = order.Voucher,
-                // Tránh lỗi null
-                OrderDetails = order.OrderDetails.ToList() ?? new List<OrderDetail>(),
-                //TotalPayment = AdminTotalPayment(order.ID),
+                TotalPayment = order.OrderDetails.Sum(item => item.Quantity * item.Price)
             }).OrderByDescending(u => u.ID).ToList();
+
 
             var totalCount = listOrdersDTO.Count();
             var listOrderPagination = listOrdersDTO.Skip(page * pageSize).Take(pageSize).ToList();
@@ -117,9 +116,9 @@ namespace FashionShopMVC.Repositories
 
         }
 
-        public async Task<GetOrderByUserIdDTO> GetById(int id)
+        public async Task<GetOrderByIdDTO> GetOrderById(int id)
         {
-            var orderByIdDTO = await _fashionShopDBContext.Orders.Select(order => new GetOrderByUserIdDTO
+            var orderByIdDTO = await _fashionShopDBContext.Orders.Select(order => new GetOrderByIdDTO
             {
                 ID = order.ID,
                 Email = order.Email,
@@ -285,7 +284,7 @@ namespace FashionShopMVC.Repositories
 
             return null;
         }
-
+       
         public double TotalPayment(GetOrderByUserIdDTO getOrderByUserIdDTO)
         {
             double totalMoney = 0;

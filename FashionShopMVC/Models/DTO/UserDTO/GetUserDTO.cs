@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics.Eventing.Reader;
 
-namespace FashionShop.Models.DTO.UserDTO
+namespace FashionShopMVC.Models.DTO.UserDTO
 {
     public class GetUserDTO
     {
