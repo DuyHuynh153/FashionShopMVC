@@ -15,6 +15,8 @@ using FashionShopMVC.Repositories.@interface;
 using FashionShop.Repositories;
 using Service;
 using Service.implement;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -34,15 +36,38 @@ builder.Services.AddDbContext<FashionShopDBContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 
-/*builder.Services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = true)
-    .AddEntityFrameworkStores<FashionShopDBContext>();*/
+
 
 builder.Services.AddIdentity<User,  IdentityRole>(options => options.SignIn.RequireConfirmedAccount = false)
     .AddEntityFrameworkStores<FashionShopDBContext>()
     .AddDefaultTokenProviders();
+
+
+// config cookie authentication
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+    options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+})
+.AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
+{
+    options.LoginPath = "/Admin/Authen/Login";
+    options.AccessDeniedPath = "/Admin/Authen/AccessDenied";
+    options.LogoutPath = "/Admin/Authen/Logout";
+    options.Cookie.Name = "FashionShopAuthCookie";
+    options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
+    options.SlidingExpiration = true;
+});
+
+// add authentication service
+
+
+
+
 // Register Controller
 builder.Services.AddScoped<IUserRepository, UserRepository>();
-//builder.Services.AddScoped<ITokenRepository, TokenRepository>();
+builder.Services.AddScoped<ITokenRepository, TokenRepository>();
 //builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 //builder.Services.AddScoped<IContactRepository, ContactRepository>();
@@ -99,11 +124,11 @@ builder.Services.AddSession(options =>
 //});
 
 // Config identity user
-builder.Services.AddIdentityCore<User>()
+/*builder.Services.AddIdentityCore<User>()
     .AddRoles<IdentityRole>()
     .AddTokenProvider<DataProtectorTokenProvider<User>>("FashionShop")
     .AddEntityFrameworkStores<FashionShopDBContext>()
-    .AddDefaultTokenProviders();
+    .AddDefaultTokenProviders();*/
 
 
 // Config password register
@@ -122,6 +147,8 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.AddSession();
 
 var app = builder.Build();
+
+
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -154,6 +181,18 @@ app.UseStaticFiles(new StaticFileOptions
 });
 
 
+/*app.Use(async (context, next) =>
+{
+    if (context.Request.Path.StartsWithSegments("/Admin") && !context.User.Identity.IsAuthenticated)
+    {
+        context.Response.Redirect("/Admin/User/Login");
+        return;
+    }
+    await next();
+});*/
+
+
+
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
@@ -169,7 +208,7 @@ app.MapControllerRoute(
 app.MapAreaControllerRoute(
     name:"adminService",
     areaName:"Admin",
-    pattern: "{area:exists}/{controller=AdminHome}/{action=Index}/{id?}");
+    pattern: "Admin/{controller=AdminHome}/{action=Index}/{id?}");
 
 
 app.UseHttpsRedirection();

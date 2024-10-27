@@ -1,5 +1,5 @@
-﻿using FashionShopMVC.Models.DTO.UserDTO;
-using FashionShopMVC.Models.Domain;
+﻿using FashionShopMVC.Models.Domain;
+using FashionShopMVC.Models.DTO.UserDTO;
 using FashionShopMVC.Repositories.@interface;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;

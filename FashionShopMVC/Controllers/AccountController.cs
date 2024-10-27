@@ -1,6 +1,4 @@
 ﻿using FashionShopMVC.Models.Domain;
-using FashionShopMVC.Models.DTO.UserDTO;
-using FashionShopMVC.Repositories;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -14,6 +12,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis;
 using AspNetCoreHero.ToastNotification.Abstractions;
 using Service;
+using FashionShopMVC.Models.DTO.UserDTO;
 
 namespace FashionShopMVC.Controllers
 {

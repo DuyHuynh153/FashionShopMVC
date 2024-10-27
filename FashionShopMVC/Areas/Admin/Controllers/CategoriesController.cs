@@ -1,6 +1,7 @@
 ﻿
 using FashionShopMVC.Models.DTO.CategoriesDTO;
 using FashionShopMVC.Repositories.@interface;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FashionShopMVC.Areas.Admin.Controllers
@@ -8,6 +9,7 @@ namespace FashionShopMVC.Areas.Admin.Controllers
 
     [Area("Admin")]
     [Route("Admin/[controller]")]
+    [Authorize]
     public class CategoriesController : Controller
     {
         private readonly ICategoryRepository _categoryRepository;

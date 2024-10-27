@@ -1,0 +1,98 @@
+﻿@model FashionShopMVC.Models.DTO.UserDTO.LoginRequestDTO
+
+@{
+    ViewBag.Title = "Login";
+    Layout = null ; // Use this if you don't want to use the default layout
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        .login-page {
+            width: 360px;
+            margin: 50px auto;
+        }
+
+        .login-box {
+            width: 100%;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .login-logo a {
+            font-size: 24px;
+            text-align: center;
+            display: block;
+            margin-bottom: 20px;
+        }
+
+        .login-box-msg {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .input-group-text {
+            background-color: #17a2b8;
+            color: #fff;
+        }
+
+        .btn-info {
+            background-color: #17a2b8;
+            border-color: #17a2b8;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-page">
+        <div class="login-box">
+            <div class="login-logo">
+                <a href="#"><b>Đăng nhập</b></a>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <p class="login-box-msg">Đăng nhập để bắt đầu phiên làm việc</p>
+
+                    @using (Html.BeginForm("Login", "Authen", FormMethod.Post, new {area = "Admin"}))
+                    {
+                        @Html.AntiForgeryToken()
+                        <div class="input-group mb-3">
+                            @Html.TextBoxFor(m => m.Email, new { @class = "form-control", placeholder = "Email" })
+                            <div class="input-group-append">
+                                <div class="input-group-text">
+                                    <span class="fas fa-envelope"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="input-group mb-3">
+                            @Html.PasswordFor(m => m.Password, new { @class = "form-control", placeholder = "Password" })
+                            <div class="input-group-append">
+                                <div class="input-group-text">
+                                    <span class="fas fa-lock"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <button type="submit" class="btn btn-info btn-block col-6 m-auto">Đăng nhập</button>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+<script>
+
+    console.log("Heelow Duy");
+
+</script>
+</html>
