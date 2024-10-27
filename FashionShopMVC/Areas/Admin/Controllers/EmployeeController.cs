@@ -3,7 +3,6 @@ using FashionShopMVC.Models.DTO.UserDTO;
 using FashionShopMVC.Repositories.@interface;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Service;
 
 namespace FashionShopMVC.Areas.Admin.Controllers
 {

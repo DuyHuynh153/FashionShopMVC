@@ -9,8 +9,7 @@ using AspNetCoreHero.ToastNotification;
 using sportMVC.Models.Seed;
 using FashionShopMVC.Repositories.@interface;
 using FashionShop.Repositories;
-using Service;
-using Service.implement;
+
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 

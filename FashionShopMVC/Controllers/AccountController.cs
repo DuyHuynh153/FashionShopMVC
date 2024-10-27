@@ -11,8 +11,8 @@ using FashionShopMVC.Models.ViewModel;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis;
 using AspNetCoreHero.ToastNotification.Abstractions;
-using Service;
 using FashionShopMVC.Models.DTO.UserDTO;
+using FashionShopMVC.Repositories.@interface;
 
 namespace FashionShopMVC.Controllers
 {

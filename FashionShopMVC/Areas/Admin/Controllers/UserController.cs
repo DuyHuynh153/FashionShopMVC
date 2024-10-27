@@ -3,11 +3,7 @@ using FashionShopMVC.Models.Domain;
 using FashionShopMVC.Repositories.@interface;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Service;
-using Microsoft.AspNetCore.Authorization;
-using System.Security.Claims;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication;
+
 
 namespace FashionShopMVC.Areas.Admin.Controllers
 {
@@ -173,10 +169,9 @@ namespace FashionShopMVC.Areas.Admin.Controllers
                 ModelState.AddModelError(string.Empty, "Khóa tài khoản không thành công");
                 return RedirectToAction("Index");
             }
+
+
         }
-
-
-        
         
 
 
