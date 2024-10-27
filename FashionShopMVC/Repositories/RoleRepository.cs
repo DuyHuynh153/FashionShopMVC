@@ -4,7 +4,7 @@ using FashionShopMVC.Repositories.@interface;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
-namespace FashionShop.Repositories
+namespace FashionShopMVC.Repositories
 {
 
     public class RoleRepository : IRoleRepository

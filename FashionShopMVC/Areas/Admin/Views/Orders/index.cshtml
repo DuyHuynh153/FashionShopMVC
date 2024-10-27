@@ -1,0 +1,43 @@
+﻿@using FashionShopMVC.Helper;
+@using FashionShopMVC.Models.DTO.OrderDTO;
+@using FashionShopMVC.Models.Domain;
+@model AdminPaginationSet<AdminGetOrderDTO>
+@{
+    ViewData["Title"] = "index";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title" style="font-size:30px">Danh sách đơn hàng</h3>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col col-md-2">
+                <select name="category" class="form-control" id="category">
+                    <option value="">Tất cả hình thức</option>
+                    <option value="1">COD</option>
+                    <option value="2">Chuyển khoản</option>
+                </select>
+            </div>
+
+            <div class="col col-md-10">
+                <div class="input-group mb-3">
+                    <input type="number" class="form-control" id="searchByID" placeholder="Nhập mã đơn hàng..." />
+                    <input type="text" class="form-control" id="searchByName" placeholder="Nhập tên người nhận hàng..." />
+                    <input type="number" class="form-control" id="searchBySDT" placeholder="Nhập số điện thoại..." />
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-secondary" type="button" id="btnOrdersSearch">Tìm kiếm</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="loading" style="display: none;">
+            <img src="~/assets/admin/img/spinner.gif" alt="Đang tải..." />
+            <p>Đang tải dữ liệu...</p>
+        </div>
+        <!-- Khu vực chứa bảng và phân trang -->
+        <div id="searchOrderResults">
+            @await Html.PartialAsync("_OrderSearchResults", Model)
+        </div>
+    </div>
+</div>

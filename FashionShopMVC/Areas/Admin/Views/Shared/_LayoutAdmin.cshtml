@@ -1,7 +1,6 @@
-﻿@using System.Security.Claims
+﻿@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@using System.Security.Claims
 <!DOCTYPE html>
-
-
 <html lang="en">
 <head>
     <meta charset="utf-8">
@@ -17,12 +16,9 @@
     <!-- Theme style -->
     @* <link rel="stylesheet" href="~/assets/admin/css/adminlte.min.css"> *@
     <link rel="stylesheet" href="~/assets/admin/css/adminlte.css">
-
+    <link rel="stylesheet" href="~/assets/admin/css/AdminCustom.css">
     <!-- Toast css -->
     <link href="~/assets/admin/libs/toastr/build/toastr.css" rel="stylesheet" />
-
-    <script src="~/assets/admin/libs/jquery/jquery.min.js"></script>
-
 </head>
 <body class="hold-transition sidebar-mini">
     @* @RenderBody() *@
@@ -179,7 +175,7 @@
                         </li>
 
                         <li class="nav-item">
-                            <a ui-sref="voucher_list" class="nav-link">
+                            <a class="nav-link" asp-area="Admin" asp-controller="Vouchers">
                                 <i class="nav-icon fas fa-ticket-simple"></i>
                                 <p>
                                     Quản lý mã giảm giá
@@ -189,7 +185,7 @@
 
 
                         <li class="nav-item">
-                            <a ui-sref="order_list" class="nav-link">
+                            <a asp-area="Admin" asp-controller="Orders" class="nav-link">
                                 <i class="nav-icon fas fa-cart-shopping"></i>
                                 <p>
                                     Quản lý đơn hàng
@@ -199,7 +195,7 @@
 
 
                         <li class="nav-item">
-                            <a ui-sref="contact_list" class="nav-link">
+                            <a class="nav-link" asp-area="Admin" asp-controller="Contacts">
                                 <i class="nav-icon fas fa-address-card"></i>
                                 <p>
                                     Quản lý liên hệ

@@ -1,11 +1,9 @@
 ﻿@model FashionShopMVC.Areas.Admin.Models.RolesDTO.CreateRoleDTO
 
 @{
-    ViewData["Title"] = "Create Role";
+    ViewData["Title"] = "Create";
     Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
 }
-
-
 
 <div class="card">
     <div class="card-header">
@@ -28,9 +26,3 @@
         <a asp-action="Index">Quay Trở Lại</a>
     </div>  
 </div>
-
-@section Scripts {
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
-}
