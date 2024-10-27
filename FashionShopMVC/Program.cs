@@ -167,8 +167,8 @@ app.MapControllerRoute(
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.MapAreaControllerRoute(
-    name:"adminService",
-    areaName:"Admin",
+    name: "adminService",
+    areaName: "Admin",
     pattern: "{area:exists}/{controller=AdminHome}/{action=Index}/{id?}");
 
 

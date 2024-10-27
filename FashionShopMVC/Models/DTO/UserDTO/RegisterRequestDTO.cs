@@ -21,6 +21,7 @@ namespace FashionShopMVC.Models.DTO.UserDTO
 
 
         [Required(ErrorMessage = "Vui lòng nhập lại mật khẩu")]
+        [Compare("Password", ErrorMessage = "Mật khẩu và xác nhận mật khẩu không khớp")]
         public string RePassword { get; set; }
     }
 }

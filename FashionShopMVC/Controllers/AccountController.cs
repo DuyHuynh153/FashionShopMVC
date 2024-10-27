@@ -78,5 +78,56 @@ namespace FashionShopMVC.Controllers
             HttpContext.Session.Remove(CommonConstants.SessionUser);
             return RedirectToAction("Index", "Home");
         }
+        public IActionResult Register()
+        {
+            string referrerUrl = HttpContext.Request.Headers["Referer"].ToString();
+
+            ViewBag.ReturnUrl = referrerUrl;
+            return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> Register(RegisterRequestDTO registerRequestDTO, string returnUrl)
+        {
+            if (ModelState.IsValid)
+            {
+                // Tạo đối tượng User mới từ thông tin trong RegisterRequestDTO
+                var user = new User
+                {
+                    FullName = registerRequestDTO.FullName,
+                    UserName = registerRequestDTO.Email,
+                    Email = registerRequestDTO.Email,
+                    PhoneNumber = registerRequestDTO.PhoneNumber,
+                    PasswordHash = registerRequestDTO.Password,
+
+                    // Các thuộc tính khác, nếu có
+                };
+
+                // Tạo tài khoản người dùng với mật khẩu
+                var result = await _userManager.CreateAsync(user, registerRequestDTO.Password);
+
+                if (result.Succeeded)
+                {
+                    // Nếu tài khoản được tạo thành công, lưu thông tin vào session
+                    string userJson = JsonConvert.SerializeObject(user);
+                    HttpContext.Session.SetString(CommonConstants.SessionUser, userJson);
+
+                    _notyfService.Success("Đăng ký thành công", 2);
+
+                    return Redirect(returnUrl);
+                }
+                else
+                {
+                    // Nếu đăng ký không thành công, hiển thị lỗi
+                    foreach (var error in result.Errors)
+                    {
+                        ModelState.AddModelError("", error.Description);
+                    }
+                }
+            }
+
+            ViewBag.ReturnUrl = returnUrl;
+            return View();
+        }
+
     }
 }
