@@ -20,7 +20,7 @@
 
 
 
-    string connectionString = "Data Source=DESKTOP-D3AL9U3\\DUYHUYNH;Initial Catalog=FashionShopDB;Integrated Security=True;Encrypt=True;Trust Server Certificate=True";
+    string connectionString = "Data Source=localhost;Initial Catalog=FashionShopDB;Integrated Security=True;Encrypt=True;Trust Server Certificate=True";
 
 
     DbContextOptions<FashionShopDBContext> options;
@@ -65,6 +65,7 @@
         </span>
     </a>
     <div id="page">
+        <a href="@Url.Action("Checkout", "Cart")">Đi đến trang Details</a>
         <header class="header-container">
             <div class="container">
                 <div class="top-row">
@@ -147,6 +148,9 @@
                                                 <a href="javascript:void(0)">
                                                     Sản phẩm<span class="fa fa-angle-down"></span>
                                                 </a>
+
+                                                
+                                                
 
                                                 @Html.Partial("_PartialViewCategory", allCategory)
 
