@@ -1,7 +1,7 @@
 ﻿using FashionShopMVC.Models.Domain;
 using FashionShopMVC.Models.DTO.CartDTO;
 using FashionShopMVC.Repositories.@interface;
-using VNPAY_CS_ASPX;
+using  FashionShopMVC.Helper;
 // VnPayservice.cs
 namespace FashionShopMVC.Repositories
 {
@@ -17,9 +17,9 @@ namespace FashionShopMVC.Repositories
         {
             var tick = DateTime.Now.Ticks.ToString();
             var vnpay = new VnPayLibrary();
-            vnpay.AddRequestData("vnp_Version", _config["Vnpay.Version"]);
-            vnpay.AddRequestData("vnp_Command", _config["Vnpay.Conmmand"]);
-            vnpay.AddRequestData("vnp_TmnCode", _config["Vnpay.TmnCode"]);
+            vnpay.AddRequestData("vnp_Version", _config["Vnpay:Version"]);
+            vnpay.AddRequestData("vnp_Command", _config["Vnpay:Conmmand"]);
+            vnpay.AddRequestData("vnp_TmnCode", _config["Vnpay:TmnCode"]);
             vnpay.AddRequestData("vnp_Amount", (model.Amount * 100).ToString()); 
             /*Số tiền thanh toán. Số tiền không 
             mang các ký tự phân tách thập phân, phần nghìn, ký tự tiền tệ. Để gửi số tiền thanh toán là 100,000 VND
@@ -27,13 +27,13 @@ namespace FashionShopMVC.Repositories
             là: 10000000*/
                
             vnpay.AddRequestData("vnp_CreateDate", model.CreatedDate.ToString("yyyyMMddHHmmss"));
-            vnpay.AddRequestData("vnp_CurrCode", _config["Vnpay.CurrCode"]);
+            vnpay.AddRequestData("vnp_CurrCode", _config["Vnpay:CurrCode"]);
             vnpay.AddRequestData("vnp_IpAddr", Utils.GetIpAddress(context));
             //viet them ca quoc gia khac
-            vnpay.AddRequestData("vnp_Locale", _config["Vnpay.Locate"]);
+            vnpay.AddRequestData("vnp_Locale", _config["Vnpay:Locate"]);
             vnpay.AddRequestData("vnp_OrderInfo", "Thanh toán cho đơn hàng :" + model.OrderId);
             vnpay.AddRequestData("vnp_OrderType", "other"); //default value: other
-            vnpay.AddRequestData("vnp_ReturnUrl", _config["Vnpay.PaymentBackReturnUrl"]);
+            vnpay.AddRequestData("vnp_ReturnUrl", _config["Vnpay:PaymentBackReturnUrl"]);
             vnpay.AddRequestData("vnp_TxnRef",tick);
             var paymentUrl = vnpay.CreateRequestUrl(_config["Vnpay:BaseUrl"], _config["Vnpay:HashSercret"]);
             return paymentUrl ;

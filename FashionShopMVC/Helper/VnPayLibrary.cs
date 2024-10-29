@@ -7,7 +7,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Web;
 
-namespace VNPAY_CS_ASPX
+namespace FashionShopMVC.Helper
 {
     public class VnPayLibrary
     {

@@ -15,8 +15,7 @@ namespace FashionShopMVC.Controllers
 
         private readonly IVnpayRespository _vnpayrespository;
 
-        public CartController(/*FashionShopContext context, PaypalClient paypalclient,*/
-            IVnpayRespository vnpayrespository)
+        public CartController(/*FashionShopContext context*/ IVnpayRespository vnpayrespository)
         {
             //_paypalclient = paypalclient;
 
@@ -25,12 +24,12 @@ namespace FashionShopMVC.Controllers
         }
 
        
-        [HttpPost]
+        [HttpGet]
         public IActionResult Checkout(/*checkoutVM model*/ string payment = "Thanh toán VNPay") 
         {
-            if (ModelState.IsValid)
+            if (true )
             {
-                if (payment == "Thanh toán VNPay")
+                if (true)
                 {
                     var vnPaymodel = new VnpayMentRequestModel
                     {
@@ -65,6 +64,8 @@ namespace FashionShopMVC.Controllers
             TempData["Messgae"] = $"VNpay successfully";
             return RedirectToAction("PaymentSuccess");
         }
+
+
 
     }
 }
