@@ -16,7 +16,7 @@ namespace sportMVC.Models.Seed
                 var userManager = scope.ServiceProvider.GetRequiredService<UserManager<User>>();
                 var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
 
-                string[] roles = new string[] {  "Administrator", "Manager",  "Seller", "Customer" };
+                string[] roles = new string[] {  "Administrator", "Quản Trị Viên", "Khách Hàng" };
 
                 foreach (string role in roles)
                 {
@@ -44,7 +44,7 @@ namespace sportMVC.Models.Seed
                     var result = await userManager.CreateAsync(user, "secret");
                     if (result.Succeeded)
                     {
-                        await AssignRoles(scope.ServiceProvider, user.Email, new[] { "Owner" });
+                        await AssignRoles(scope.ServiceProvider, user.Email, new[] { "Quản Trị Viên" });
                     }
                 }await userManager.CreateAsync(user);
 

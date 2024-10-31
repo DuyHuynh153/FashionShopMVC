@@ -5,33 +5,32 @@
     Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
 }
 
-<h1>Edit</h1>
+<div class="card card-default">
+    <div class="card-header">
+        <h3 class="card-title" style="font-size: 30px">Chỉnh sửa danh mục sản phẩm</h3>
+    </div>
 
-<h4>GetCategoryDTO</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
+    <form asp-action="Edit" novalidate>
+        <div class="card-body">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="ID" />
             <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
+                <label asp-for="Name" class="control-label">Name</label>
+                <input asp-for="Name" class="form-control" placeholder="Enter name" required />
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
+        </div>
+        <!-- /.card-body -->
+        <div class="card-footer">
+            <button type="submit" class="btn btn-success">Lưu</button>
+            <a asp-action="Index" class="btn btn-default float-right">Hủy</a>
+        </div>
+    </form>
 </div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
+<!-- /.card -->
 @section Scripts {
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
 }
+

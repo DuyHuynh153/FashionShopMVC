@@ -1,4 +1,6 @@
-﻿<!DOCTYPE html>
+﻿@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@using System.Security.Claims
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8">
@@ -14,7 +16,7 @@
     <!-- Theme style -->
     @* <link rel="stylesheet" href="~/assets/admin/css/adminlte.min.css"> *@
     <link rel="stylesheet" href="~/assets/admin/css/adminlte.css">
-
+    <link rel="stylesheet" href="~/assets/admin/css/AdminCustom.css">
     <!-- Toast css -->
     <link href="~/assets/admin/libs/toastr/build/toastr.css" rel="stylesheet" />
 </head>
@@ -87,7 +89,7 @@
                         <img src="/Assets/Admin/img/avatar5.png" class="img-circle elevation-2" alt="User Image">
                     </div>
                     <div class="info">
-                        <a href="javasript:void(0)" class="d-block">{{authentication.email}}</a>
+                        <a href="javasript:void(0)" class="d-block">@User.FindFirstValue(ClaimTypes.Email)</a>
                     </div>
                 </div>
 
@@ -101,7 +103,7 @@
                         with font-awesome or any other icon font library -->
                         
                         <li class="nav-item">
-                            <a href="/Admin/AdminHome/Index" class="nav-link">
+                            <a asp-action="Index" asp-controller="AdminHome" asp-area="Admin" class="nav-link">
                                 <i class="nav-icon fas fa-home"></i>
                                 <p>
                                     Bảng điều Khiển
@@ -119,11 +121,17 @@
                         </li>
 
                         <li class="nav-item">
-                            <a asp-action="Index" asp-controller="User" asp-area="Admin" class="nav-link">
+                            <a class="nav-link" asp-action="Index" asp-controller="User" asp-area="Admin">
                                 <i class="nav-icon fas fa-user"></i>
                                 <p>Quản lý quản trị viên</p>
                             </a>
                         </li>
+                        @* <li class="nav-item">
+                            <a  asp-action="Index" asp-controller="User" asp-area="Admin" class="nav-link">
+                                <i class="nav-icon fas fa-user"></i>
+                                <p>Quản lý quản trị viên</p>
+                            </a>
+                        </li> *@
 
                         <li class="nav-item">
                             <a asp-action="Index" asp-controller="Employee" asp-area="Admin" class="nav-link">
@@ -167,7 +175,7 @@
                         </li>
 
                         <li class="nav-item">
-                            <a ui-sref="voucher_list" class="nav-link">
+                            <a class="nav-link" asp-area="Admin" asp-controller="Vouchers">
                                 <i class="nav-icon fas fa-ticket-simple"></i>
                                 <p>
                                     Quản lý mã giảm giá
@@ -177,7 +185,7 @@
 
 
                         <li class="nav-item">
-                            <a ui-sref="order_list" class="nav-link">
+                            <a asp-area="Admin" asp-controller="Orders"  class="nav-link">
                                 <i class="nav-icon fas fa-cart-shopping"></i>
                                 <p>
                                     Quản lý đơn hàng
@@ -187,22 +195,23 @@
 
 
                         <li class="nav-item">
-                            <a ui-sref="contact_list" class="nav-link">
+                            <a class="nav-link" asp-area="Admin" asp-controller="Contacts">
                                 <i class="nav-icon fas fa-address-card"></i>
                                 <p>
                                     Quản lý liên hệ
                                 </p>
                             </a>
                         </li>
-
-                        <li class="nav-item" ng-click="logOut()">
-                            <a class="nav-link" style="cursor: pointer">
+                        <li class="nav-item">
+                            <a class="nav-link" asp-action="Logout" asp-controller="Authen" asp-area="Admin">
                                 <i class="nav-icon fas fa-arrow-right-from-bracket"></i>
                                 <p>
-                                    Đăng xuất
-                                </p>
+                                    Đăng Xuất
+                                </p>    
                             </a>
                         </li>
+
+                        
                     </ul>
                 </nav>
                 <!-- /.sidebar-menu -->
@@ -215,10 +224,9 @@
             <section class="content">
                 <div class="container-fluid">
                     <div class="row">
-                        <div class="col-md-12 mt-4">
-                            <!-- hiển thị tất cả view con-->
+                        <div class="col-md-12 mt-4" id="ajax-content">
                             @RenderBody()
-
+                            
                         </div>
                     </div>
                 </div>
@@ -228,9 +236,10 @@
       
     </div>
 
+
+    
     <!-- jQuery -->
     <script src="~/assets/admin/libs/jquery/jquery.min.js"></script>
-
     <!-- Bootstrap 4 -->
     <script src="~/assets/admin/libs/bootstrap/js/bootstrap.bundle.min.js"></script>
 
@@ -249,9 +258,54 @@
     <!-- Chart.js (standalone) -->
     <script src="~/assets/admin/libs/chart.js/chart.js"></script>
 
+
+    <script src="~/assets/admin/js/AdminContent.js"></script>
     <!-- Custom Scripts (Optional) -->
-    <script src="~/js/site.js"></script>
+    @* <script src="~/js/site.js"></script> *@
+
+        @* <script>
+
+
+            $(document).ready(function () {
+                if (typeof jQuery !== 'undefined') {
+                    console.log("jQuery is loaded and ready.");
+                } else {
+                    console.error("jQuery is not loaded.");
+                }
+
+                // Intercept clicks on sidebar links
+                $('.nav-sidebar a.nav-link').on('click', function (e) {
+                    e.preventDefault(); // Prevent default link behavior
+
+                    var url = $(this).attr('href'); // Get the URL of the clicked link
+
+                    console.log("you click: " + url);
+                    // Load the content via AJAX
+                    $.ajax({
+                        url: url,
+                        type: 'GET',
+                        success: function (data) {
+                            $('#ajax-content').html($(data).find('#ajax-content').html()); // Load data into target div
+                            window.history.pushState(null, '', url); // Update URL in the browser
+                        },
+                        error: function () {
+                            toastr.error("Failed to load content.");
+                        }
+                    });
+                });
+            });
+        </script> *@
+    
+
+
+
+
     <!-- Render the Scripts section -->
     @RenderSection("Scripts", required: false)
+
+
+    
+
+    
 </body>
 </html>

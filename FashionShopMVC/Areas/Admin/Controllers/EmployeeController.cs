@@ -1,9 +1,8 @@
-﻿using FashionShopMVC.Models.DTO.UserDTO;
-using FashionShopMVC.Models.Domain;
+﻿using FashionShopMVC.Models.Domain;
+using FashionShopMVC.Models.DTO.UserDTO;
 using FashionShopMVC.Repositories.@interface;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Service;
 
 namespace FashionShopMVC.Areas.Admin.Controllers
 {
@@ -97,7 +96,7 @@ namespace FashionShopMVC.Areas.Admin.Controllers
             var user = await _userRepository.GetUserByIdAsync(id);
             if (user == null)
             {
-                return NotFound();
+                return NotFound();  
             }
             return View(user);
         }

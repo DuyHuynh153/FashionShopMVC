@@ -3,9 +3,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using FashionShopMVC.Models.ViewModel;
-using FashionShopMVC.Areas.Admin.Models.RolesDTO;
-using FashionShopMVC.Models.DTO.UserDTO;
-using FashionShopMVC.Models.DTO.CategoriesDTO;
 
 namespace FashionShopMVC.Data
 {

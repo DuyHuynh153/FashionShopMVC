@@ -474,6 +474,29 @@ namespace FashionShopMVC.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("Roles", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "25d9875c-878d-414e-8e6f-b4c28815f739",
+                            ConcurrencyStamp = "25d9875c-878d-414e-8e6f-b4c28815f739",
+                            Name = "Quản trị viên",
+                            NormalizedName = "QUẢN TRỊ VIÊN"
+                        },
+                        new
+                        {
+                            Id = "3195156e-ef20-4c3d-9406-7bc7e87fd6f6",
+                            ConcurrencyStamp = "3195156e-ef20-4c3d-9406-7bc7e87fd6f6",
+                            Name = "Nhân viên",
+                            NormalizedName = "NHÂN VIÊN"
+                        },
+                        new
+                        {
+                            Id = "9cd0f7a2-741d-405a-a8a3-a34b22da200c",
+                            ConcurrencyStamp = "9cd0f7a2-741d-405a-a8a3-a34b22da200c",
+                            Name = "Khách hàng",
+                            NormalizedName = "KHÁCH HÀNG"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

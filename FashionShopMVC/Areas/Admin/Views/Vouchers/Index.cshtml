@@ -1,0 +1,84 @@
+﻿@using FashionShopMVC.Models.DTO.VoucherDTO;
+@model IEnumerable<GetVoucherDTO>
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title" style="font-size:30px">Danh sách mã giảm giá</h3>
+        <a type="button" class="btn btn-info float-right" asp-area="Admin" asp-controller="Vouchers" asp-action="Create">Tạo mã giảm giá</a>
+    </div>
+    <!-- /.card-header -->
+    <div class="card-body">
+        <table class="table table-bordered table-striped text-center">
+            <thead>
+                <tr>
+                    <th style="width: 2%">ID</th>
+                    <th style="width: 15%">Mã giảm giá</th>
+                    <th style="width: 10%">Giảm theo ₫</th>
+                    <th style="width: 10%">Giảm theo %</th>
+                    <th style="width: 10%">Giá trị giảm</th>
+                    <th style="width: 2%">SL</th>
+                    <th style="width: 13%">Ngày bắt đầu</th>
+                    <th style="width: 13%">Ngày kết thúc</th>
+                    <th style="width: 10%">Hiệu lực</th>
+                    <th style="width: 15%">Thao tác</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var voucher in Model)
+                {
+                    <tr>
+                        <td>@voucher.id</td>
+                        <td>@voucher.discountCode</td>
+                        @if (voucher.discountAmount == true)
+                        {
+                            <td>
+                                <i class="fa-solid fa-check btn-sm bg-success"></i>
+                            </td>
+                        }
+                        else
+                        {
+                            <td></td>
+                        }
+                        @if (voucher.discountPercentage == true)
+                        {
+                            <td>
+                                <i class="fa-solid fa-check btn-sm bg-success"></i>
+                            </td>
+                        }
+                        else
+                        {
+                            <td>
+                            </td>
+                        }
+                        @if (voucher.discountAmount == true)
+                        {
+                            <td>@String.Format("{0:C0}", @voucher.discountValue)</td>
+                        }
+                        @if (voucher.discountPercentage == true)
+                        {
+                            <td>@String.Format("{0}%", @voucher.discountValue)</td>
+                        }
+
+                        <td>@voucher.quantity</td>
+                        <td>@String.Format("{0:HH:mm dd/MM/yy}", @voucher.startDate)</td>
+                        <td>@String.Format("{0:HH:mm dd/MM/yy}", @voucher.endDate)</td>
+                        <td>
+                            <span class="badge @(voucher.status ? "bg-gradient-green" : "bg-gradient-red")" style="font-size: 14px">
+                                @voucher.status
+                            </span>
+                        </td>
+                        <td>
+                            <a asp-controller="Vouchers" asp-action="Edit" asp-route-id="@voucher.id" class="btn btn-primary" role="button">Edit</a> |
+                            <a asp-controller="Vouchers" asp-action="Delete" asp-route-id="@voucher.id" class="btn btn-danger" role="button">Delete</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

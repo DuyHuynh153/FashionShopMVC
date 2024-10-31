@@ -1,14 +1,15 @@
-﻿using FashionShopMVC.Repositories;
+﻿using FashionShop.Repositories;
 using FashionShopMVC.Areas.Admin.Models.RolesDTO;
-using FashionShopMVC.Data;
 using FashionShopMVC.Repositories.@interface;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 
 namespace FashionShopMVC.Areas.Admin.Controllers
 {
 
     [Area("Admin")]
     [Route("Admin/[controller]")]
+    [Authorize]
     public class RoleController : Controller
     {
         private IRoleRepository _roleService;

@@ -3,13 +3,12 @@ using FashionShopMVC.Models.Domain;
 using FashionShopMVC.Repositories.@interface;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Service;
+
 
 namespace FashionShopMVC.Areas.Admin.Controllers
 {
     [Area("Admin")]
     [Route("Admin/[controller]")]
-
     public class UserController : Controller
     {
 
@@ -17,12 +16,16 @@ namespace FashionShopMVC.Areas.Admin.Controllers
         private readonly IRoleRepository _roleRepository;
         private UserManager<User> _userManager;
 
-        public UserController(IUserRepository userRepository, UserManager<User> userManager, IRoleRepository roleRepository)
+        private readonly ITokenRepository _tokenRepository;
+
+        public UserController(IUserRepository userRepository, UserManager<User> userManager, IRoleRepository roleRepository, ITokenRepository tokenRepository)
         {
             _userManager = userManager;
             _userRepository = userRepository;
             _roleRepository = roleRepository;
+            _tokenRepository = tokenRepository;
         }
+
 
         [HttpGet("")]
         public async Task< IActionResult> Index()
@@ -35,10 +38,15 @@ namespace FashionShopMVC.Areas.Admin.Controllers
 
 
             return View(listUserAdmin);
+
+            // using ajax
+
+            // return PartialView("_UserListPartial", listUserAdmin);
         }
 
         [HttpGet]
         [Route("Create")]
+
         public IActionResult Create()
         {
             return View();
@@ -46,6 +54,7 @@ namespace FashionShopMVC.Areas.Admin.Controllers
 
         [HttpPost]
         [Route("Create")]
+
         public async Task<IActionResult> Create(RegisterRequestDTO registerRequestDTO)
         {
             if (ModelState.IsValid)
@@ -80,6 +89,7 @@ namespace FashionShopMVC.Areas.Admin.Controllers
 
         [HttpGet]
         [Route("Edit/{id}")]
+
         public async Task< IActionResult> Edit(string id)
         {
 
@@ -93,6 +103,7 @@ namespace FashionShopMVC.Areas.Admin.Controllers
 
         [HttpPost]
         [Route("Edit/{id}")]
+
         public async Task<IActionResult> Edit(UpdateUserDTO updateUserDTO, string id)
         {
             if (ModelState.IsValid)
@@ -113,6 +124,7 @@ namespace FashionShopMVC.Areas.Admin.Controllers
 
         [HttpGet]
         [Route("Delete/{id}")]
+
         public async Task<IActionResult> Delete(string id)
         {
             var user = await _userRepository.GetUserByIdAsync(id);
@@ -124,6 +136,7 @@ namespace FashionShopMVC.Areas.Admin.Controllers
         }
         [HttpPost]
         [Route("Delete/{id}")]
+
         public async Task<IActionResult> DeleteConfirmed(string id)
         {
             var result = await _userRepository.Delete(id);
@@ -139,6 +152,7 @@ namespace FashionShopMVC.Areas.Admin.Controllers
         }
 
         [HttpPost]
+
         public async Task<IActionResult> ToggleLockingAccount(string id)
         {
             if (string.IsNullOrEmpty(id))

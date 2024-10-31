@@ -1,20 +1,7 @@
 ﻿using FashionShopMVC.Data;
 using FashionShopMVC.Helper;
-using FashionShopMVC.Models.Domain;
 using FashionShopMVC.Models.DTO.ProductDTO;
-using FashionShopMVC.Models.ViewModel;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
-using System;
-using System.Collections.Generic;
-using System.Drawing.Printing;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Threading.Tasks;
-using static System.Net.Mime.MediaTypeNames;
 
 public interface IProductRepository
 {
@@ -33,7 +20,6 @@ public interface IProductRepository
     //public Task<bool> IncreaseQuantityOrder(List<ShoppingCartViewModel> listOrder);
     public Task<int> Count();
 }
-
 public class ProductRepository : IProductRepository
 {
     private readonly FashionShopDBContext _fashionShopDBContext;

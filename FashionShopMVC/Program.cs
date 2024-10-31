@@ -1,25 +1,26 @@
 using FashionShopMVC.Repositories;
 using FashionShopMVC.Data;
 using FashionShopMVC.Models.Domain;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
-using System.Text;
 using Microsoft.Extensions.FileProviders;
 using AspNetCoreHero.ToastNotification;
-using AspNetCoreHero.ToastNotification.Extensions;
 using sportMVC.Models.Seed;
 using FashionShopMVC.Repositories.@interface;
 using FashionShop.Repositories;
-using Service;
-using Service.implement;
+
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
+using FashionShop.Service.Service;
+using FashionShop.Service.Model;
 
 var builder = WebApplication.CreateBuilder(args);
 
+var configuration = builder.Configuration;
 // Add services to the container.
 builder.Services.AddControllers();
+builder.Services.AddTransient<FashionShopMVC.Services.IEmailSender, FashionShopMVC.Services.EmailSender>();
 builder.Services.AddControllersWithViews();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -34,27 +35,56 @@ builder.Services.AddDbContext<FashionShopDBContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 
-/*builder.Services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = true)
-    .AddEntityFrameworkStores<FashionShopDBContext>();*/
 
-builder.Services.AddIdentity<User,  IdentityRole>(options => options.SignIn.RequireConfirmedAccount = false)
+
+builder.Services.AddIdentity<User,  IdentityRole>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddEntityFrameworkStores<FashionShopDBContext>()
     .AddDefaultTokenProviders();
+
+
+// config cookie authentication
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+    options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+})
+.AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
+{
+    options.LoginPath = "/Admin/Authen/Login";
+    options.AccessDeniedPath = "/Admin/Authen/AccessDenied";
+    options.LogoutPath = "/Admin/Authen/Logout";
+    options.Cookie.Name = "FashionShopAuthCookie";
+    options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
+    options.SlidingExpiration = true;
+});
+
+// add authentication service
+
+
+
+
 // Register Controller
 builder.Services.AddScoped<IUserRepository, UserRepository>();
-//builder.Services.AddScoped<ITokenRepository, TokenRepository>();
-//builder.Services.AddScoped<IOrderRepository, OrderRepository>();
+builder.Services.AddScoped<ITokenRepository, TokenRepository>();
+builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
-//builder.Services.AddScoped<IContactRepository, ContactRepository>();
+builder.Services.AddScoped<IContactRepository, ContactRepository>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<IRoleRepository, RoleRepository>();
-//builder.Services.AddScoped<IVoucherRepository, VoucherRepository>();
+builder.Services.AddScoped<IVoucherRepository, VoucherRepository>();
 //builder.Services.AddScoped<IFavoriteProductRepository, FavoriteProductRepository>();
 builder.Services.AddScoped<ICommentRepository, CommentRepository>();
 //builder.Services.AddScoped<IProvinceRepository, ProvinceRepository>();
 //builder.Services.AddScoped<IDistrictRepository, DistrictRepository>();
 //builder.Services.AddScoped<IWardRepository, WardRepository>();
 //builder.Services.AddScoped<IStatisticRepository, StatisticRepository>();
+
+// adding email service
+
+var emailConfig = configuration.GetSection("EmailConfiguration").Get<EmailConfig>();
+builder.Services.AddSingleton(emailConfig);
+builder.Services.AddScoped<IEmailAuthService, EmailAuthService>();
 
 builder.Services.AddNotyf(
     config => {
@@ -74,7 +104,6 @@ builder.Services.AddAuthorization(options =>
 
 builder.Services.AddSession(options =>
 {
-
     options.IdleTimeout = TimeSpan.FromMinutes(30);
     options.Cookie.HttpOnly = true;
     options.Cookie.IsEssential = true;
@@ -99,11 +128,11 @@ builder.Services.AddSession(options =>
 //});
 
 // Config identity user
-builder.Services.AddIdentityCore<User>()
+/*builder.Services.AddIdentityCore<User>()
     .AddRoles<IdentityRole>()
     .AddTokenProvider<DataProtectorTokenProvider<User>>("FashionShop")
     .AddEntityFrameworkStores<FashionShopDBContext>()
-    .AddDefaultTokenProviders();
+    .AddDefaultTokenProviders();*/
 
 
 // Config password register
@@ -154,6 +183,18 @@ app.UseStaticFiles(new StaticFileOptions
 });
 
 
+/*app.Use(async (context, next) =>
+{
+    if (context.Request.Path.StartsWithSegments("/Admin") && !context.User.Identity.IsAuthenticated)
+    {
+        context.Response.Redirect("/Admin/User/Login");
+        return;
+    }
+    await next();
+});*/
+
+
+
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
@@ -162,14 +203,17 @@ using (var scope = app.Services.CreateScope())
 
 app.UseSession();
 app.UseRouting();
+//app.MapControllerRoute(
+//    name: "default",
+//    pattern: "{controller=Home}/{action=Index}/{id?}");
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.MapAreaControllerRoute(
-    name:"adminService",
+    name:"Admin",
     areaName:"Admin",
-    pattern: "{area:exists}/{controller=AdminHome}/{action=Index}/{id?}");
+    pattern: "Admin/{controller=AdminHome}/{action=Index}/{id?}");
 
 
 app.UseHttpsRedirection();

@@ -1,7 +1,7 @@
 ﻿using FashionShopMVC.Models.DTO.UserDTO;
 
 
-namespace Service
+namespace FashionShopMVC.Repositories.@interface
 {
     public interface IUserRepository
     {
