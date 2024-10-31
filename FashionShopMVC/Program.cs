@@ -12,9 +12,12 @@ using FashionShop.Repositories;
 
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
+using FashionShop.Service.Service;
+using FashionShop.Service.Model;
 
 var builder = WebApplication.CreateBuilder(args);
 
+var configuration = builder.Configuration;
 // Add services to the container.
 builder.Services.AddControllers();
 builder.Services.AddTransient<FashionShopMVC.Services.IEmailSender, FashionShopMVC.Services.EmailSender>();
@@ -34,7 +37,7 @@ builder.Services.AddDbContext<FashionShopDBContext>(options =>
 
 
 
-builder.Services.AddIdentity<User,  IdentityRole>(options => options.SignIn.RequireConfirmedAccount = false)
+builder.Services.AddIdentity<User,  IdentityRole>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddEntityFrameworkStores<FashionShopDBContext>()
     .AddDefaultTokenProviders();
 
@@ -76,6 +79,12 @@ builder.Services.AddScoped<ICommentRepository, CommentRepository>();
 //builder.Services.AddScoped<IDistrictRepository, DistrictRepository>();
 //builder.Services.AddScoped<IWardRepository, WardRepository>();
 //builder.Services.AddScoped<IStatisticRepository, StatisticRepository>();
+
+// adding email service
+
+var emailConfig = configuration.GetSection("EmailConfiguration").Get<EmailConfig>();
+builder.Services.AddSingleton(emailConfig);
+builder.Services.AddScoped<IEmailAuthService, EmailAuthService>();
 
 builder.Services.AddNotyf(
     config => {

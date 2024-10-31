@@ -96,7 +96,7 @@ namespace FashionShopMVC.Areas.Admin.Controllers
             var user = await _userRepository.GetUserByIdAsync(id);
             if (user == null)
             {
-                return NotFound();
+                return NotFound();  
             }
             return View(user);
         }

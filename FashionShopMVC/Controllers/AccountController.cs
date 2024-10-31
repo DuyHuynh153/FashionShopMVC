@@ -13,6 +13,9 @@ using Microsoft.CodeAnalysis;
 using AspNetCoreHero.ToastNotification.Abstractions;
 using FashionShopMVC.Models.DTO.UserDTO;
 using FashionShopMVC.Repositories.@interface;
+using FashionShopMVC.Services;
+using FashionShop.Service.Model;
+using FashionShop.Service.Service;
 
 namespace FashionShopMVC.Controllers
 {
@@ -22,12 +25,17 @@ namespace FashionShopMVC.Controllers
         private readonly IUserRepository _userRepository;
         private readonly INotyfService _notyfService;
         private readonly IEmailSender _emailSender;
-        public AccountController(UserManager<User> userManager, IUserRepository userRepository, INotyfService notyfService, IEmailSender emailSender)
+
+        // import emailService from class lib fashioShop.Service
+
+        private readonly IEmailAuthService _emailAuthService;
+        public AccountController(UserManager<User> userManager, IUserRepository userRepository, INotyfService notyfService, IEmailSender emailSender,   IEmailAuthService emailAuthService)
         {
             _userManager = userManager;
             _userRepository = userRepository;
             _notyfService = notyfService;
             _emailSender = emailSender;
+            _emailAuthService = emailAuthService;
         }
         public IActionResult Login()
         {
@@ -61,7 +69,7 @@ namespace FashionShopMVC.Controllers
 
                         _notyfService.Success("Đăng nhập thành công", 2);
 
-                        return Redirect(returnUrl);
+                        return RedirectToAction("Index", "Home");
                     }
                 }
                 else
@@ -96,8 +104,8 @@ namespace FashionShopMVC.Controllers
                     FullName = registerRequestDTO.FullName,
                     UserName = registerRequestDTO.Email,
                     Email = registerRequestDTO.Email,
-                    PhoneNumber = registerRequestDTO.PhoneNumber,
-                    PasswordHash = registerRequestDTO.Password,
+                    PhoneNumber = registerRequestDTO.PhoneNumber
+                   
 
                     // Các thuộc tính khác, nếu có
                 };
@@ -107,13 +115,30 @@ namespace FashionShopMVC.Controllers
 
                 if (result.Succeeded)
                 {
+                    await _userManager.AddToRoleAsync(user, "Khách Hàng");
+                    // generate email confirmation token (string type)
+                    
+
+                    // send email confirmation token to user email
+
+                    var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                    var confirmationLink = Url.Action("ConfirmEmail", "Account", new {  token = token, email = user.Email }, Request.Scheme);
+
+                    var message = new Message(new string[] { user.Email }, "Xác thực tài khoản",  confirmationLink);
+                    _emailAuthService.SendAuthEmail(message);
+
+                    _notyfService.Success($"Đăng ký tài khoản: {user.Email}, Vui lòng xác thực tài khoản qua email",5);
+
+                    return RedirectToAction("Index", "Home");
+
+
                     // Nếu tài khoản được tạo thành công, lưu thông tin vào session
-                    string userJson = JsonConvert.SerializeObject(user);
-                    HttpContext.Session.SetString(CommonConstants.SessionUser, userJson);
+                    /* string userJson = JsonConvert.SerializeObject(user);
+                     HttpContext.Session.SetString(CommonConstants.SessionUser, userJson);
 
-                    _notyfService.Success("Đăng ký thành công", 2);
+                     _notyfService.Success("Đăng ký thành công", 2);
 
-                    return Redirect(returnUrl);
+                     return Redirect(returnUrl);*/
                 }
                 else
                 {
@@ -127,6 +152,41 @@ namespace FashionShopMVC.Controllers
             ViewBag.ReturnUrl = returnUrl;
             return View();
         }
+        [HttpGet("ConfirmEmail")]
+        public async Task<IActionResult> ConfirmEmail(string token, string email)
+        {
+            if (string.IsNullOrEmpty(token) || string.IsNullOrEmpty(email))
+            {
+                _notyfService.Error("Invalid token or email.");
+                return RedirectToAction("Login", "Account");
+            }
+
+            var user = await _userManager.FindByEmailAsync(email);
+            if (user != null)
+            {
+                var result = await _userManager.ConfirmEmailAsync(user, token);
+                // unlock the user
+                user.LockoutEnabled = false;
+                await _userManager.UpdateAsync(user);
+                if (result.Succeeded)
+                {
+                    _notyfService.Success("Xác thực email thành công", 5);
+                }
+                else
+                {
+                    foreach (var error in result.Errors)
+                    {
+                        _notyfService.Error(error.Description, 5);
+                    }
+                }
+            }
+            else
+            {
+                _notyfService.Error("Xác thực email không thành công", 5);
+            }
+            return RedirectToAction("Index", "Home");
+        }
+
         public IActionResult Identify()
         {
             return View();
