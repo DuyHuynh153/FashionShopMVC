@@ -12,6 +12,7 @@
 
     <!-- Font Awesome -->
     <link href="~/assets/admin/libs/fontawesome-free-6.4.2-web/css/all.css" rel="stylesheet" />
+    <link href="~/assets/customer/css/style.css" rel="stylesheet" type="text/css" />
 
     <!-- Theme style -->
     @* <link rel="stylesheet" href="~/assets/admin/css/adminlte.min.css"> *@
@@ -103,7 +104,7 @@
                         with font-awesome or any other icon font library -->
                         
                         <li class="nav-item">
-                            <a asp-action="Index" asp-controller="AdminHome" asp-area="Admin" class="nav-link">
+                            <a class="nav-link" href="#"  data-url="@Url.Action("Index", "AdminHome")" data-module ="AdminHome">
                                 <i class="nav-icon fas fa-home"></i>
                                 <p>
                                     Bảng điều Khiển
@@ -121,17 +122,12 @@
                         </li>
 
                         <li class="nav-item">
-                            <a class="nav-link" asp-action="Index" asp-controller="User" asp-area="Admin">
+                            <a class="nav-link" href="#"  data-url="@Url.Action("Index", "User")" data-module="UserModule">
                                 <i class="nav-icon fas fa-user"></i>
                                 <p>Quản lý quản trị viên</p>
                             </a>
                         </li>
-                        @* <li class="nav-item">
-                            <a  asp-action="Index" asp-controller="User" asp-area="Admin" class="nav-link">
-                                <i class="nav-icon fas fa-user"></i>
-                                <p>Quản lý quản trị viên</p>
-                            </a>
-                        </li> *@
+                       
 
                         <li class="nav-item">
                             <a asp-action="Index" asp-controller="Employee" asp-area="Admin" class="nav-link">
@@ -185,7 +181,7 @@
 
 
                         <li class="nav-item">
-                            <a asp-area="Admin" asp-controller="Orders"  class="nav-link">
+                            <a data-url = @Url.Action("Index", "Orders") class="nav-link" href="#">
                                 <i class="nav-icon fas fa-cart-shopping"></i>
                                 <p>
                                     Quản lý đơn hàng
@@ -203,7 +199,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" asp-action="Logout" asp-controller="Authen" asp-area="Admin">
+                            <a class="nav-link" asp-action="Logout" asp-controller="Authen" asp-area="Admin" data-confirm="Are you sure you want to logout?">
                                 <i class="nav-icon fas fa-arrow-right-from-bracket"></i>
                                 <p>
                                     Đăng Xuất
@@ -226,6 +222,7 @@
                     <div class="row">
                         <div class="col-md-12 mt-4" id="ajax-content">
                             @RenderBody()
+                            
                             
                         </div>
                     </div>
@@ -259,42 +256,13 @@
     <script src="~/assets/admin/libs/chart.js/chart.js"></script>
 
 
-    <script src="~/assets/admin/js/AdminContent.js"></script>
+    <script src="~/assets/admin/js/pages/user/UserModule.js"></script>
+
+    @* <script src="~/assets/admin/js/AdminContentv2.js"></script> *@
     <!-- Custom Scripts (Optional) -->
-    @* <script src="~/js/site.js"></script> *@
+     <script src="~/js/site.js"></script> 
 
-        @* <script>
-
-
-            $(document).ready(function () {
-                if (typeof jQuery !== 'undefined') {
-                    console.log("jQuery is loaded and ready.");
-                } else {
-                    console.error("jQuery is not loaded.");
-                }
-
-                // Intercept clicks on sidebar links
-                $('.nav-sidebar a.nav-link').on('click', function (e) {
-                    e.preventDefault(); // Prevent default link behavior
-
-                    var url = $(this).attr('href'); // Get the URL of the clicked link
-
-                    console.log("you click: " + url);
-                    // Load the content via AJAX
-                    $.ajax({
-                        url: url,
-                        type: 'GET',
-                        success: function (data) {
-                            $('#ajax-content').html($(data).find('#ajax-content').html()); // Load data into target div
-                            window.history.pushState(null, '', url); // Update URL in the browser
-                        },
-                        error: function () {
-                            toastr.error("Failed to load content.");
-                        }
-                    });
-                });
-            });
-        </script> *@
+        
     
 
 
@@ -302,7 +270,7 @@
 
     <!-- Render the Scripts section -->
     @RenderSection("Scripts", required: false)
-
+    @await Component.InvokeAsync("Notyf")
 
     
 

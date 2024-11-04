@@ -10,6 +10,7 @@
     if (window.location.href.endsWith("/Admin/Contacts")) {
         loadContacts(); // Tải dữ liệu lần đầu khi trang vừa tải xong
     }
+
     
     // Xử lý phân trang với sự kiện click động
     $(document).on('click', '.pagination a.page-link', function (e) {

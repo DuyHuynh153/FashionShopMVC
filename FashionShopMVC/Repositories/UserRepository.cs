@@ -84,7 +84,7 @@ namespace FashionShopMVC.Repositories
 
             if (!string.IsNullOrEmpty(searchByName))
             {
-                listUserDomain = listUserDomain.Where(user => user.FullName.Contains(searchByName));
+                listUserDomain = listUserDomain.Where(user => user.FullName.ToLower().Contains(searchByName.ToLower()));
             }
 
             if (!string.IsNullOrEmpty(filterRole))
@@ -111,6 +111,50 @@ namespace FashionShopMVC.Repositories
             }).OrderByDescending(user => user.FullName).ToListAsync();
 
             return listUserDTO;
+        }
+
+        public async Task<IEnumerable<GetUserDTO>> GetPagedUsersAdminAsync(string searchQuery, string role, int pageNumber, int pageSize)
+        {
+            // Start with all users
+            var usersQuery = _context.Users.AsQueryable();
+
+            // Apply search filter if provided
+            if (!string.IsNullOrEmpty(searchQuery))
+            {
+                usersQuery = usersQuery.Where(user => user.FullName.Contains(searchQuery));
+            }
+
+            // Apply role filter if provided
+            if (!string.IsNullOrEmpty(role))
+            {
+                var userIdsWithRole = await _context.UserRoles
+                    .Where(ur => ur.RoleId == role)
+                    .Select(ur => ur.UserId)
+                    .ToListAsync();
+
+                usersQuery = usersQuery.Where(user => userIdsWithRole.Contains(user.Id));
+            }
+
+            // Apply pagination
+            var pagedUsers = await usersQuery
+                .OrderBy(user => user.FullName) // Optional: Order by name or any other field
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .Select(user => new GetUserDTO
+                {
+                    ID = user.Id,
+                    FullName = user.FullName,
+                    Email = user.Email,
+                    PhoneNumber = user.PhoneNumber,
+                    LockoutEnabled = user.LockoutEnabled,
+                    Role = _context.UserRoles
+                        .Where(ur => ur.UserId == user.Id)
+                        .Join(_context.Roles, ur => ur.RoleId, r => r.Id, (ur, r) => r.Name)
+                        .FirstOrDefault()
+                })
+                .ToListAsync();
+
+            return pagedUsers;
         }
 
         public async Task<GetUserDTO> GetUserByIdAsync(string id)

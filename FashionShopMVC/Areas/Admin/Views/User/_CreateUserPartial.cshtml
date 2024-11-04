@@ -9,10 +9,8 @@
     <div class="card-header">
         <h3 class="card-title" style="font-size: 30px">Thêm quản trị viên</h3>
     </div>
-    <div>
-        <a asp-action="Index">Quay lại</a>
-    </div>
-    <form asp-action="Create" asp-controller="User" asp-area="Admin" method="post" novalidate>
+    
+    <form id="createUserForm" asp-action="Create" asp-controller="User" asp-area="Admin" method="post" novalidate>
         <div class="card-body">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
@@ -49,7 +47,7 @@
         <!-- /.card-body -->
         <div class="card-footer">
             <button type="submit" class="btn btn-success">Thêm</button>
-            <a class="btn btn-danger" asp-action="Index" asp-controller="User" asp-area="Admin">Hủy</a>
+            <a class="btn btn-danger float-right" asp-action="Index" asp-controller="User" asp-area="Admin">Hủy</a>
         </div>
     </form>
 </div>

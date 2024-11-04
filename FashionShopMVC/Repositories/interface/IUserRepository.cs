@@ -6,6 +6,7 @@ namespace FashionShopMVC.Repositories.@interface
     public interface IUserRepository
     {
         public  Task<IEnumerable<GetUserDTO>> GetAllUserAsync(string? searchByName, string? filterRole);
+        public Task<IEnumerable<GetUserDTO>> GetPagedUsersAdminAsync(string searchQuery,string role, int pageNumber, int pageSize);
         public  Task<GetUserDTO> GetUserByIdAsync(string id);
         public Task<bool> RegisterAccountAdminAsync(RegisterRequestDTO registerRequestDTO);
 
