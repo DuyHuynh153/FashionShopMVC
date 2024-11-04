@@ -203,17 +203,18 @@ using (var scope = app.Services.CreateScope())
 
 app.UseSession();
 app.UseRouting();
-//app.MapControllerRoute(
-//    name: "default",
-//    pattern: "{controller=Home}/{action=Index}/{id?}");
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.MapAreaControllerRoute(
-    name:"Admin",
-    areaName:"Admin",
+    name: "Admin",
+    areaName: "Admin",
     pattern: "Admin/{controller=AdminHome}/{action=Index}/{id?}");
+
+
+
+
 
 
 app.UseHttpsRedirection();

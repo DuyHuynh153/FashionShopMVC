@@ -1,0 +1,128 @@
+﻿@using FashionShopMVC.Helper
+@model AdminPaginationSet<FashionShopMVC.Models.DTO.ProductDTO.GetProductDTO>
+@{
+    ViewData["Title"] = "Danh sách sản phẩm";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title" style="font-size:30px">Danh sách sản phẩm</h3>
+        <a asp-action="Create" class="btn btn-info float-right">Thêm sản phẩm</a>
+    </div>
+    <!-- /.card-header -->
+    <div class="card-body">
+        <div class="row">
+            <div class="col col-md-5">
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" placeholder="Nhập tên sản phẩm..." id="searchByName" aria-label="Recipient's title" aria-describedby="basic-addon2">
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-secondary" id="searchButton" type="button">Tìm kiếm</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <table class="table table-bordered table-striped text-center">
+            <thead>
+                <tr>
+                    <th style="width: 5%">ID</th>
+                    <th style="width: 20%">Tên sản phẩm</th>
+                    <th style="width: 10%">Hình ảnh</th>
+                    <th style="width: 10%">Danh mục</th>
+                    <th style="width: 10%">Giá</th>
+                    <th style="width: 10%">Số lượng</th>
+                    <th style="width: 10%">Ngày tạo</th>
+                    <th style="width: 10%">Trạng thái</th>
+                    <th style="width: 18%">Thao tác</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var product in Model.List)
+                {
+                    <tr>
+                        <td class="align-middle">@product.ID</td>
+                        <td class="align-middle">@product.Name</td>
+                        <td class="align-middle p-0">
+                            <img src="@product.Image" style="height: 100px" alt="Error Image" />
+                        </td>
+                        <td class="align-middle">@product.CategoryName</td>
+                        <td class="align-middle" @(product.Discount > 0 ? "" : "style='display:none;'")>
+                            <span style="text-decoration: line-through; font-size: 80%">@product.Price VND</span>
+                            <span style="margin: 0 5px">@(product.Price - (product.Price * product.Discount / 100)) VND</span>
+                            <span class="badge bg-gradient-warning">Giảm @product.Discount%</span>
+                        </td>
+                        <td class="align-middle">@product.Quantity</td>
+                        <td class="align-middle text-center">@product.CreatedDate.ToString("dd/MM/yyyy HH:mm:ss")</td>
+                        <td class="align-middle text-center">
+                            <span class="badge @(product.Status ? "bg-gradient-green" : "bg-gradient-red")" style="font-size: 14px">
+                                @(product.Status ? "Hoạt động" : "Ngưng hoạt động")
+                            </span>
+                        </td>
+                        <td class="align-middle text-center">
+                            <a asp-action="Edit" asp-route-id="@product.ID" class="btn btn-sm btn-primary mr-2">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                            <button class="btn btn-sm btn-danger mr-2" onclick="deleteProduct(@product.ID)">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <nav aria-label="Page navigation">
+            <ul class="pagination justify-content-center">
+                @for (int i = 0; i < Model.PagesCount; i++)
+                {
+                    <li class="page-item @(i == Model.Page ? "active" : "")">
+                        <a class="page-link" href="@Url.Action("Index", "Product", new { area = "Admin", page = i + 1, pageSize = Model.PageSize, searchByName = ViewData["searchByName"] })">
+                            @((i + 1).ToString())
+                        </a>
+                    </li>
+                }
+            </ul>
+        </nav>
+
+
+
+
+    </div>
+   
+</div>
+
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('#searchButton').click(function () {
+                var searchByName = $('#searchByName').val();
+                // Redirect to the Index action with the search parameter
+                window.location.href = '@Url.Action("Index")?searchByName=' + encodeURIComponent(searchByName);
+            });
+        });
+
+
+        function deleteProduct(id) {
+            if (confirm('Bạn có chắc chắn muốn xóa sản phẩm này?')) {
+                $.ajax({
+                    url: '/Admin/Product/Delete/' + id,
+                    type: 'DELETE',
+                    success: function (response) {
+                        if (response.success) {
+                            alert(response.message);
+                            location.reload();  // Gọi hàm tải lại danh sách sản phẩm
+                        } else {
+                            alert("Có lỗi xảy ra khi xóa sản phẩm.");
+                        }
+                    },
+                    error: function () {
+                        alert("Có lỗi xảy ra khi xóa sản phẩm.");
+                    }
+                });
+            }
+        }
+
+
+    </script>
+}

@@ -1,7 +1,11 @@
-﻿using FashionShopMVC.Data;
+﻿using FashionShop.Models.DTO.ProductDTO;
+using FashionShopMVC.Data;
 using FashionShopMVC.Helper;
+using FashionShopMVC.Models.Domain;
 using FashionShopMVC.Models.DTO.ProductDTO;
+using FashionShopMVC.Models.ViewModel;
 using Microsoft.EntityFrameworkCore;
+using System.Drawing.Printing;
 
 public interface IProductRepository
 {
@@ -13,13 +17,14 @@ public interface IProductRepository
     public Task<List<GetProductByIdDTO>> GetByCategoryId(int idCategory, int? idOrderProduct = null);
     public GetProductByIdDTO GetId(int id);
     public int GetQuantityById(int id);
-    //public Task<CreateProductDTO> Create(CreateProductDTO createProductDTO);
-    //public Task<UpdateProductDTO> Update(UpdateProductDTO updateProductDTO, int id);
+    public Task<CreateProductDTO> Create(CreateProductDTO createProductDTO);
+    public Task<UpdateProductDTO> Update(UpdateProductDTO updateProductDTO, int id);
     public Task<bool> Delete(int id);
-    //public Task<bool> ReduceQuantityOrder(List<ShoppingCartViewModel> listOrder);
-    //public Task<bool> IncreaseQuantityOrder(List<ShoppingCartViewModel> listOrder);
+    public Task<bool> ReduceQuantityOrder(List<ShoppingCartViewModel> listOrder);
+    public Task<bool> IncreaseQuantityOrder(List<ShoppingCartViewModel> listOrder);
     public Task<int> Count();
 }
+
 public class ProductRepository : IProductRepository
 {
     private readonly FashionShopDBContext _fashionShopDBContext;
@@ -68,6 +73,7 @@ public class ProductRepository : IProductRepository
         {
             List = listProductPagination,
             Page = page,
+            PageSize=pageSize,
             TotalCount = totalCount,
             PagesCount = (int)Math.Ceiling((decimal)totalCount / pageSize),
         };
@@ -245,58 +251,58 @@ public class ProductRepository : IProductRepository
         return quantity;
     }
 
-    //public async Task<CreateProductDTO> Create(CreateProductDTO createProductDTO)
-    //{
-    //    var productDomain = new Product
-    //    {
-    //        Name = createProductDTO.Name,
-    //        CategoryID = createProductDTO.CategoryID,
-    //        Quantity = createProductDTO.Quantity,
-    //        Describe = createProductDTO.Describe,
-    //        Image = createProductDTO.Image,
-    //        ListImages = createProductDTO.ListImages,
-    //        Price = createProductDTO.Price,
-    //        PurchasePrice = createProductDTO.PurchasePrice,
-    //        Discount = createProductDTO.Discount,
-    //        Status = createProductDTO.Status,
+    public async Task<CreateProductDTO> Create(CreateProductDTO createProductDTO)
+    {
+        var productDomain = new Product
+        {
+            Name = createProductDTO.Name,
+            CategoryID = createProductDTO.CategoryID,
+            Quantity = createProductDTO.Quantity,
+            Describe = createProductDTO.Describe,
+            Image = createProductDTO.Image,
+            ListImages = createProductDTO.ListImages,
+            Price = createProductDTO.Price,
+            PurchasePrice = createProductDTO.PurchasePrice,
+            Discount = createProductDTO.Discount,
+            Status = createProductDTO.Status,
 
-    //        CreatedDate = DateTime.Now,
-    //        CreatedBy = createProductDTO.CreatedBy,
-    //    };
-    //    await _fashionShopDBContext.Products.AddAsync(productDomain);
-    //    await _fashionShopDBContext.SaveChangesAsync();
+            CreatedDate = DateTime.Now,
+            CreatedBy = createProductDTO.CreatedBy,
+        };
+        await _fashionShopDBContext.Products.AddAsync(productDomain);
+        await _fashionShopDBContext.SaveChangesAsync();
 
-    //    return createProductDTO;
-    //}
+        return createProductDTO;
+    }
 
-    //public async Task<UpdateProductDTO> Update(UpdateProductDTO updateProductDTO, int id)
-    //{
-    //    var productDomain = await _fashionShopDBContext.Products.FirstOrDefaultAsync(p => p.ID == id);
+    public async Task<UpdateProductDTO> Update(UpdateProductDTO updateProductDTO, int id)
+    {
+        var productDomain = await _fashionShopDBContext.Products.FirstOrDefaultAsync(p => p.ID == id);
 
-    //    if (productDomain != null)
-    //    {
-    //        productDomain.Name = updateProductDTO.Name;
-    //        productDomain.CategoryID = updateProductDTO.CategoryID;
-    //        productDomain.Quantity = updateProductDTO.Quantity;
-    //        productDomain.Describe = updateProductDTO.Describe;
-    //        productDomain.Image = updateProductDTO.Image;
-    //        productDomain.ListImages = updateProductDTO.ListImages;
-    //        productDomain.Price = updateProductDTO.Price;
-    //        productDomain.PurchasePrice = updateProductDTO.PurchasePrice;
-    //        productDomain.Discount = updateProductDTO.Discount;
-    //        productDomain.Status = updateProductDTO.Status;
+        if (productDomain != null)
+        {
+            productDomain.Name = updateProductDTO.Name;
+            productDomain.CategoryID = updateProductDTO.CategoryID;
+            productDomain.Quantity = updateProductDTO.Quantity;
+            productDomain.Describe = updateProductDTO.Describe;
+            productDomain.Image = updateProductDTO.Image;
+            productDomain.ListImages = updateProductDTO.ListImages;
+            productDomain.Price = updateProductDTO.Price;
+            productDomain.PurchasePrice = updateProductDTO.PurchasePrice;
+            productDomain.Discount = updateProductDTO.Discount;
+            productDomain.Status = updateProductDTO.Status;
 
-    //        productDomain.UpdatedDate = DateTime.Now;
-    //        productDomain.UpdatedBy = updateProductDTO.UpdatedBy;
+            productDomain.UpdatedDate = DateTime.Now;
+            productDomain.UpdatedBy = updateProductDTO.UpdatedBy;
 
-    //        await _fashionShopDBContext.SaveChangesAsync();
-    //        return updateProductDTO;
-    //    }
-    //    else
-    //    {
-    //        return null!;
-    //    }
-    //}
+            await _fashionShopDBContext.SaveChangesAsync();
+            return updateProductDTO;
+        }
+        else
+        {
+            return null!;
+        }
+    }
 
     public async Task<bool> Delete(int id)
     {
@@ -315,45 +321,45 @@ public class ProductRepository : IProductRepository
         }
     }
 
-    //public async Task<bool> ReduceQuantityOrder(List<ShoppingCartViewModel> listOrder)
-    //{
-    //    foreach (var item in listOrder)
-    //    {
-    //        var productById = await _fashionShopDBContext.Products.SingleOrDefaultAsync(p => p.ID == item.ProductID);
+    public async Task<bool> ReduceQuantityOrder(List<ShoppingCartViewModel> listOrder)
+    {
+        foreach (var item in listOrder)
+        {
+            var productById = await _fashionShopDBContext.Products.SingleOrDefaultAsync(p => p.ID == item.ProductID);
 
-    //        if (productById != null)
-    //        {
-    //            productById.Quantity -= item.Quantity;
-    //            await _fashionShopDBContext.SaveChangesAsync();
-    //        }
-    //        else
-    //        {
-    //            return false;
-    //        }
-    //    }
+            if (productById != null)
+            {
+                productById.Quantity -= item.Quantity;
+                await _fashionShopDBContext.SaveChangesAsync();
+            }
+            else
+            {
+                return false;
+            }
+        }
 
-    //    return true;
-    //}
+        return true;
+    }
 
-    //public async Task<bool> IncreaseQuantityOrder(List<ShoppingCartViewModel> listOrder)
-    //{
-    //    foreach (var item in listOrder)
-    //    {
-    //        var productById = await _fashionShopDBContext.Products.SingleOrDefaultAsync(p => p.ID == item.ProductID);
+    public async Task<bool> IncreaseQuantityOrder(List<ShoppingCartViewModel> listOrder)
+    {
+        foreach (var item in listOrder)
+        {
+            var productById = await _fashionShopDBContext.Products.SingleOrDefaultAsync(p => p.ID == item.ProductID);
 
-    //        if (productById != null)
-    //        {
-    //            productById.Quantity += item.Quantity;
-    //            await _fashionShopDBContext.SaveChangesAsync();
-    //        }
-    //        else
-    //        {
-    //            return false;
-    //        }
-    //    }
+            if (productById != null)
+            {
+                productById.Quantity += item.Quantity;
+                await _fashionShopDBContext.SaveChangesAsync();
+            }
+            else
+            {
+                return false;
+            }
+        }
 
-    //    return true;
-    //}
+        return true;
+    }
 
     public async Task<int> Count()
     {
