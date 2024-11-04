@@ -141,7 +141,7 @@
                         </li>
 
                         <li class="nav-item">
-                            <a ui-sref="customer_list" class="nav-link">
+                            <a asp-area="Admin" asp-controller="User" asp-action="GetListCustomers" class="nav-link">
                                 <i class="nav-icon fas fa-users"></i>
                                 <p>Quản lý khách hàng</p>
                             </a>
@@ -226,18 +226,12 @@
                     <div class="row">
                         <div class="col-md-12 mt-4" id="ajax-content">
                             @RenderBody()
-                            
                         </div>
                     </div>
                 </div>
             </section>
         </div>
-
-      
     </div>
-
-
-    
     <!-- jQuery -->
     <script src="~/assets/admin/libs/jquery/jquery.min.js"></script>
     <!-- Bootstrap 4 -->
@@ -258,8 +252,13 @@
     <!-- Chart.js (standalone) -->
     <script src="~/assets/admin/libs/chart.js/chart.js"></script>
 
+    <script src="~/assets/admin/libs/jquery/toast.min.js"></script>
 
-    <script src="~/assets/admin/js/AdminContent.js"></script>
+    <script src="~/assets/admin/js/pages/Customer/CustomerModel.js"></script>
+
+    <script src="~/assets/admin/js/pages/Order/OrderModel.js"></script>
+
+    <script src="~/assets/admin/js/pages/Contact/ContactModel.js"></script>
     <!-- Custom Scripts (Optional) -->
     @* <script src="~/js/site.js"></script> *@
 
@@ -302,10 +301,5 @@
 
     <!-- Render the Scripts section -->
     @RenderSection("Scripts", required: false)
-
-
-    
-
-    
 </body>
 </html>

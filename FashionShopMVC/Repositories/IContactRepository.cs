@@ -37,7 +37,7 @@ namespace FashionShopMVC.Repositories
                 Content = c.Content,
                 Status = c.Status,
 
-            }).OrderByDescending(c => c.ID).ToList();
+            }).OrderByAscending(c => c.ID).ToList();
 
             var totalCount = allContactDomain.Count();
             var listContactPagination = allContactDomain.Skip(page * pageSize).Take(pageSize);
