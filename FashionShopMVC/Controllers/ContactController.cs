@@ -10,11 +10,11 @@ namespace FashionShopMVC.Controllers
     public class ContactController : Controller
     {
         private readonly FashionShopDBContext _context;
-        public INotyfService _notifyServic { get; }
+        public INotyfService _notifyService { get; }
         public ContactController(FashionShopDBContext context, INotyfService notifyService)
         {
             _context = context;
-            _notifyServic = notifyService;
+            _notifyService = notifyService;
         }
         [HttpGet]
         public IActionResult Index()
@@ -45,7 +45,7 @@ namespace FashionShopMVC.Controllers
                     {
                         _context.Add(contact1);
                         await _context.SaveChangesAsync();
-                        _notifyServic.Success("Gửi thành công");
+                        _notifyService.Success("Gửi thành công");
                         return View(contact);
                     }
                     catch
