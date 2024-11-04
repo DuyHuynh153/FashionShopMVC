@@ -1,5 +1,9 @@
 ﻿using FashionShopMVC.Data;
+<<<<<<< HEAD
 using FashionShopMVC.Models.DTO;
+=======
+using FashionShopMVC.Models.DTO.PostDTO;
+>>>>>>> huyhuynh Post
 using Microsoft.AspNetCore.Mvc;
 
 namespace FashionShopMVC.Controllers

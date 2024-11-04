@@ -19,7 +19,6 @@
     <Folder Include="Areas\Admin\Data\" />
     <Folder Include="Areas\Admin\Models\" />
     <Folder Include="UploadFiles\" />
-    <Folder Include="Views\Contact\" />
     <Folder Include="wwwroot\assets\admin\libs\bootbox\" />
   </ItemGroup>
 
