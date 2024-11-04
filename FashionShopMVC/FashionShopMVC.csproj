@@ -20,6 +20,7 @@
     <Folder Include="Areas\Admin\Models\" />
     <Folder Include="UploadFiles\" />
     <Folder Include="wwwroot\assets\admin\libs\bootbox\" />
+    <Folder Include="wwwroot\img\products\" />
   </ItemGroup>
 
   <ItemGroup>

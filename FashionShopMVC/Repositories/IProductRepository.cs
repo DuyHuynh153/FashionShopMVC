@@ -1,5 +1,4 @@
-﻿using FashionShop.Models.DTO.ProductDTO;
-using FashionShopMVC.Data;
+﻿using FashionShopMVC.Data;
 using FashionShopMVC.Helper;
 using FashionShopMVC.Models.Domain;
 using FashionShopMVC.Models.DTO.ProductDTO;
@@ -251,46 +250,46 @@ public class ProductRepository : IProductRepository
         return quantity;
     }
 
-    public async Task<CreateProductDTO> Create(CreateProductDTO createProductDTO)
-    {
-        var productDomain = new Product
-        {
-            Name = createProductDTO.Name,
-            CategoryID = createProductDTO.CategoryID,
-            Quantity = createProductDTO.Quantity,
-            Describe = createProductDTO.Describe,
-            Image = createProductDTO.Image,
-            ListImages = createProductDTO.ListImages,
-            Price = createProductDTO.Price,
-            PurchasePrice = createProductDTO.PurchasePrice,
-            Discount = createProductDTO.Discount,
-            Status = createProductDTO.Status,
+    //public async Task<CreateProductDTO> Create(CreateProductDTO createProductDTO)
+    //{
+    //    var productDomain = new Product
+    //    {
+    //        Name = createProductDTO.Name,
+    //        CategoryID = createProductDTO.CategoryID,
+    //        Quantity = createProductDTO.Quantity,
+    //        Describe = createProductDTO.Describe,
+    //        Image = createProductDTO.Image,
+    //        ListImages = createProductDTO.ListImages,
+    //        Price = createProductDTO.Price,
+    //        PurchasePrice = createProductDTO.PurchasePrice,
+    //        Discount = createProductDTO.Discount,
+    //        Status = createProductDTO.Status,
 
-            CreatedDate = DateTime.Now,
-            CreatedBy = createProductDTO.CreatedBy,
-        };
-        await _fashionShopDBContext.Products.AddAsync(productDomain);
-        await _fashionShopDBContext.SaveChangesAsync();
+    //        CreatedDate = DateTime.Now,
+    //        CreatedBy = createProductDTO.CreatedBy,
+    //    };
+    //    await _fashionShopDBContext.Products.AddAsync(productDomain);
+    //    await _fashionShopDBContext.SaveChangesAsync();
 
-        return createProductDTO;
-    }
+    //    return createProductDTO;
+    //}
 
-    public async Task<UpdateProductDTO> Update(UpdateProductDTO updateProductDTO, int id)
-    {
-        var productDomain = await _fashionShopDBContext.Products.FirstOrDefaultAsync(p => p.ID == id);
+    //public async Task<UpdateProductDTO> Update(UpdateProductDTO updateProductDTO, int id)
+    //{
+    //    var productDomain = await _fashionShopDBContext.Products.FirstOrDefaultAsync(p => p.ID == id);
 
-        if (productDomain != null)
-        {
-            productDomain.Name = updateProductDTO.Name;
-            productDomain.CategoryID = updateProductDTO.CategoryID;
-            productDomain.Quantity = updateProductDTO.Quantity;
-            productDomain.Describe = updateProductDTO.Describe;
-            productDomain.Image = updateProductDTO.Image;
-            productDomain.ListImages = updateProductDTO.ListImages;
-            productDomain.Price = updateProductDTO.Price;
-            productDomain.PurchasePrice = updateProductDTO.PurchasePrice;
-            productDomain.Discount = updateProductDTO.Discount;
-            productDomain.Status = updateProductDTO.Status;
+    //    if (productDomain != null)
+    //    {
+    //        productDomain.Name = updateProductDTO.Name;
+    //        productDomain.CategoryID = updateProductDTO.CategoryID;
+    //        productDomain.Quantity = updateProductDTO.Quantity;
+    //        productDomain.Describe = updateProductDTO.Describe;
+    //        productDomain.Image = updateProductDTO.Image;
+    //        productDomain.ListImages = updateProductDTO.ListImages;
+    //        productDomain.Price = updateProductDTO.Price;
+    //        productDomain.PurchasePrice = updateProductDTO.PurchasePrice;
+    //        productDomain.Discount = updateProductDTO.Discount;
+    //        productDomain.Status = updateProductDTO.Status;
 
             productDomain.UpdatedDate = DateTime.Now;
             productDomain.UpdatedBy = updateProductDTO.UpdatedBy;

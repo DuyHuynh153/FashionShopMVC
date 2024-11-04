@@ -159,6 +159,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+
+
 //app.UseNotyf();
 app.UseStaticFiles();
 app.UseStaticFiles(new StaticFileOptions
@@ -199,6 +201,7 @@ using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
     await SampleData.Initialize(services);
+
 }
 
 app.UseSession();
