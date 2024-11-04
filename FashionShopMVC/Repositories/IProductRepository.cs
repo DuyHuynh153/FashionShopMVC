@@ -250,20 +250,20 @@ public class ProductRepository : IProductRepository
         return quantity;
     }
 
-    //public async Task<CreateProductDTO> Create(CreateProductDTO createProductDTO)
-    //{
-    //    var productDomain = new Product
-    //    {
-    //        Name = createProductDTO.Name,
-    //        CategoryID = createProductDTO.CategoryID,
-    //        Quantity = createProductDTO.Quantity,
-    //        Describe = createProductDTO.Describe,
-    //        Image = createProductDTO.Image,
-    //        ListImages = createProductDTO.ListImages,
-    //        Price = createProductDTO.Price,
-    //        PurchasePrice = createProductDTO.PurchasePrice,
-    //        Discount = createProductDTO.Discount,
-    //        Status = createProductDTO.Status,
+    public async Task<CreateProductDTO> Create(CreateProductDTO createProductDTO)
+    {
+        var productDomain = new Product
+        {
+            Name = createProductDTO.Name,
+            CategoryID = createProductDTO.CategoryID,
+            Quantity = createProductDTO.Quantity,
+            Describe = createProductDTO.Describe,
+            Image = createProductDTO.ImagePath,
+            ListImages = createProductDTO.ListImagePaths,
+            Price = createProductDTO.Price,
+            PurchasePrice = createProductDTO.PurchasePrice,
+            Discount = createProductDTO.Discount,
+            Status = createProductDTO.Status,
 
     //        CreatedDate = DateTime.Now,
     //        CreatedBy = createProductDTO.CreatedBy,
