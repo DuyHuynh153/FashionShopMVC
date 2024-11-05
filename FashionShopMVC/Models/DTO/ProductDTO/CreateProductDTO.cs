@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 
-namespace FashionShop.Models.DTO.ProductDTO
+namespace FashionShopMVC.Models.DTO.ProductDTO
 {
     public class CreateProductDTO
     {
