@@ -6,7 +6,7 @@
 
 function loadContacts(page = 0) {
     // Lấy giá trị từ các ô tìm kiếm
-    var searchByPhoneNumber = $('#searchBySDT').val();
+    var searchByPhoneNumber = $('#searchByPhoneNumber').val();
 
     $('#loading').show();
     // Gửi yêu cầu AJAX

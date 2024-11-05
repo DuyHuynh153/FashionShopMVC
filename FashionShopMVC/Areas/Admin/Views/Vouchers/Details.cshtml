@@ -1,0 +1,97 @@
+﻿@model FashionShopMVC.Models.DTO.VoucherDTO.GetVoucherDTO
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@{
+    ViewData["Title"] = "Delete";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title" style="font-size:30px">Chi tiết mã giảm giá - ID: @Model.id</h3>
+
+        <a asp-area="Admin" asp-controller="Vouchers" asp-action="Index" class="btn btn-info float-right">Quay lại</a>
+    </div>
+    <!-- /.card-header -->
+    <div class="card-body" style="font-size: 20px">
+        <p>
+            <b>Mã giảm giá: </b>
+            @Model.discountCode
+        </p>
+
+        @if (Model.discountAmount)
+        {
+            <p>
+                <b>Loại giảm giá: </b>
+                Giảm giá theo đ
+            </p>
+            <p>
+                <b>Số tiền giảm: </b>
+                @Model.discountValue.ToString("C0", System.Globalization.CultureInfo.GetCultureInfo("vi-VN"))
+            </p>
+        }
+
+        @if (Model.discountPercentage)
+        {
+            <p>
+                <b>Loại giảm giá: </b>
+                Giảm giá theo %
+            </p>
+            <p>
+                <b>Phần trăm giảm: </b>
+                @Model.discountValue%
+            </p>
+        }
+
+        <p>
+            <b>Đơn hàng tối thiểu: </b>
+            @Model.minimumValue.ToString("C0", System.Globalization.CultureInfo.GetCultureInfo("vi-VN"))
+        </p>
+
+        <p>
+            <b>Số lượng: </b>
+            @Model.quantity
+        </p>
+
+        <p>
+            <b>Ngày bắt đầu: </b>
+            @Model.startDate
+        </p>
+
+        <p>
+            <b>Ngày kết thúc: </b>
+            @Model.endDate
+        </p>
+
+        <p>
+            <b>Mô tả: </b>
+            @Model.describe
+        </p>
+
+        <p>
+            <b>Hiệu lực: </b>
+            <span class="badge @(Model.status ? "bg-gradient-green" : "bg-gradient-red")" style="font-size: 14px">
+                @(Model.status ? "Hiệu lực" : "Không hiệu lực")
+            </span>
+        </p>
+
+        <p>
+            <b>Ngày tạo: </b>
+            @Model.createdDate.ToString("dd/MM/yy HH:mm")
+        </p>
+
+        <p>
+            <b>Tạo bởi: </b>
+            @Model.createdBy
+        </p>
+
+        <p>
+            <b>Ngày chỉnh sửa: </b>
+            @Model.updatedDate
+        </p>
+
+        <p>
+            <b>Chỉnh sửa bởi: </b>
+            @Model.updatedBy
+        </p>
+    </div>
+</div>
+<!-- /.card-body -->

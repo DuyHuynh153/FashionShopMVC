@@ -38,23 +38,48 @@ namespace FashionShopMVC.Areas.Admin.Controllers
         [Route("Create")]
         public IActionResult Create()
         {
-            return View();
+            var model = new CreateVoucherDTO();
+            return View(model);
         }
 
         // POST: VouchersController/Create
         [HttpPost]
         //[ValidateAntiForgeryToken]
         [Route("Create")]
-        public ActionResult Create(CreateVoucherDTO createVoucherDTO)
+        public async Task<IActionResult> Create(CreateVoucherDTO createVoucherDTO)
         {
             try
             {
+                if (createVoucherDTO.DiscountAmount == true && createVoucherDTO.DiscountValue <= 0)
+                {
+                    return BadRequest("Số tiền giảm phải lớn hơn 0");
+                }
 
-                return RedirectToAction(nameof(Index));
+                if (createVoucherDTO.DiscountPercentage == true && (createVoucherDTO.DiscountValue <= 0 || createVoucherDTO.DiscountValue > 100))
+                {
+                    return BadRequest("Phần trăm giảm phải nằm trong khoảng 1 đến 100");
+                }
+
+                if (createVoucherDTO.EndDate <= createVoucherDTO.StartDate)
+                {
+                    return BadRequest("Ngày bắt đầu và kết thúc không hợp lệ");
+                }
+
+                var voucher = await _voucherRepository.Create(createVoucherDTO);
+
+                if (voucher != null)
+                {
+                    return RedirectToAction(nameof(Index));
+                }
+                else
+                {
+                    return BadRequest("Tạo voucher không thành công");
+                }
+
             }
             catch
             {
-                return View();
+                return BadRequest("Mã giảm giá đã tồn tại");
             }
         }
 
