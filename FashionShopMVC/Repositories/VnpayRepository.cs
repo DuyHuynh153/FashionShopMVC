@@ -1,6 +1,8 @@
 ﻿using FashionShopMVC.Helper;
+using FashionShopMVC.Models.Domain;
 using FashionShopMVC.Models.DTO.CartDTO;
 using FashionShopMVC.Repositories.@interface;
+
 // VnPayservice.cs
 namespace FashionShopMVC.Repositories
 {

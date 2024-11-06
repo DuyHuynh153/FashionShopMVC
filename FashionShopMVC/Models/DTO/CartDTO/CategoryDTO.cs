@@ -1,4 +1,4 @@
-﻿namespace FashionShopMVC.Models.DTO
+﻿namespace FashionShopMVC.Models.DTO.CartDTO
 {
     public class CategoryDTO
     {

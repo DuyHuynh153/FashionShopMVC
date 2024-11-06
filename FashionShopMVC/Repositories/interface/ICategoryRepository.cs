@@ -1,5 +1,5 @@
 ﻿using FashionShopMVC.Models.Domain;
-using FashionShopMVC.Models.DTO;
+using FashionShopMVC.Models.DTO.CartDTO;
 using FashionShopMVC.Models.DTO.CategoriesDTO;
 
 namespace FashionShopMVC.Repositories.@interface
