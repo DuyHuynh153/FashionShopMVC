@@ -14,6 +14,9 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using FashionShop.Service.Service;
 using FashionShop.Service.Model;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -102,6 +105,7 @@ builder.Services.AddAuthorization(options =>
 
 // config sessions
 
+
 builder.Services.AddSession(options =>
 {
     options.IdleTimeout = TimeSpan.FromMinutes(30);
@@ -109,30 +113,31 @@ builder.Services.AddSession(options =>
     options.Cookie.IsEssential = true;
 });
 
+builder.Services.AddAuthorization();
 //Register service authentication
-//builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(option =>
-//{
-//    option.TokenValidationParameters = new TokenValidationParameters
-//    {
-//        ValidateIssuer = true,
-//        ValidateAudience = true,
-//        ValidateLifetime = true,
-//        ValidateIssuerSigningKey = true,
-//        ValidIssuer = builder.Configuration["Jwt:Issuer"],
-//        ValidAudience = builder.Configuration["Jwt:Audience"],
-//        ClockSkew = TimeSpan.Zero,
-//        IssuerSigningKey = new SymmetricSecurityKey(
-//            Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]
-//            ))
-//    };
-//});
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(option =>
+{
+    option.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
+        ValidIssuer = builder.Configuration["Jwt:Issuer"],
+        ValidAudience = builder.Configuration["Jwt:Audience"],
+        ClockSkew = TimeSpan.Zero,
+        IssuerSigningKey = new SymmetricSecurityKey(
+            Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]
+            ))
+    };
+});
 
 // Config identity user
-/*builder.Services.AddIdentityCore<User>()
-    .AddRoles<IdentityRole>()
-    .AddTokenProvider<DataProtectorTokenProvider<User>>("FashionShop")
-    .AddEntityFrameworkStores<FashionShopDBContext>()
-    .AddDefaultTokenProviders();*/
+//builder.Services.AddIdentityCore<User>()
+//    .AddRoles<IdentityRole>()
+//    .AddTokenProvider<DataProtectorTokenProvider<User>>("FashionShop")
+//    .AddEntityFrameworkStores<FashionShopDBContext>()
+//    .AddDefaultTokenProviders();
 
 
 // Config password register
@@ -148,80 +153,81 @@ builder.Services.AddSession(options =>
 
 //});
 builder.Services.AddHttpContextAccessor();
-builder.Services.AddSession();
+    builder.Services.AddSession();
 
-var app = builder.Build();
+    var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
-
-//app.UseNotyf();
-app.UseStaticFiles();
-app.UseStaticFiles(new StaticFileOptions
-{
-    FileProvider = new PhysicalFileProvider(
-        Path.Combine(builder.Environment.WebRootPath, "assets")), // Sử dụng WebRootPath để trỏ tới wwwroot
-    RequestPath = "/assets" // Đường dẫn để truy cập tài nguyên tĩnh
-});
-
-//app.UseStaticFiles(new StaticFileOptions
-//{
-//    FileProvider = new PhysicalFileProvider(
-//        Path.Combine(builder.Environment.ContentRootPath, "app")), // Sử dụng ContentRootPath
-//    RequestPath = "/app" // Đường dẫn để truy cập tài nguyên tĩnh
-//});
-
-app.UseStaticFiles(new StaticFileOptions
-{
-    FileProvider = new PhysicalFileProvider(
-        Path.Combine(builder.Environment.ContentRootPath, "UploadFiles")),
-    RequestPath = "/UploadFiles"
-});
-
-
-/*app.Use(async (context, next) =>
-{
-    if (context.Request.Path.StartsWithSegments("/Admin") && !context.User.Identity.IsAuthenticated)
+    // Configure the HTTP request pipeline.
+    if (app.Environment.IsDevelopment())
     {
-        context.Response.Redirect("/Admin/User/Login");
-        return;
+        app.UseSwagger();
+        app.UseSwaggerUI();
     }
-    await next();
-});*/
+
+    //app.UseNotyf();
+    app.UseStaticFiles();
+    app.UseStaticFiles(new StaticFileOptions
+    {
+        FileProvider = new PhysicalFileProvider(
+            Path.Combine(builder.Environment.WebRootPath, "assets")), // Sử dụng WebRootPath để trỏ tới wwwroot
+        RequestPath = "/assets" // Đường dẫn để truy cập tài nguyên tĩnh
+    });
+
+    //app.UseStaticFiles(new StaticFileOptions
+    //{
+    //    FileProvider = new PhysicalFileProvider(
+    //        Path.Combine(builder.Environment.ContentRootPath, "app")), // Sử dụng ContentRootPath
+    //    RequestPath = "/app" // Đường dẫn để truy cập tài nguyên tĩnh
+    //});
+
+    app.UseStaticFiles(new StaticFileOptions
+    {
+        FileProvider = new PhysicalFileProvider(
+            Path.Combine(builder.Environment.ContentRootPath, "UploadFiles")),
+        RequestPath = "/UploadFiles"
+    });
+
+
+    //app.Use(async (context, next) =>
+    //{
+    //    if (context.Request.Path.StartsWithSegments("/Admin") && !context.User.Identity.IsAuthenticated)
+    //    {
+    //        context.Response.Redirect("/Admin/User/Login");
+    //        return;
+    //    }
+    //    await next();
+    //});
 
 
 
-using (var scope = app.Services.CreateScope())
-{
-    var services = scope.ServiceProvider;
-    await SampleData.Initialize(services);
-}
+    //using (var scope = app.Services.CreateScope())
+    //{
+    //    var services = scope.ServiceProvider;
+    //    await SampleData.Initialize(services);
+    //}
 
-app.UseSession();
-app.UseRouting();
-//app.MapControllerRoute(
-//    name: "default",
-//    pattern: "{controller=Home}/{action=Index}/{id?}");
-app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    app.UseHttpMethodOverride();
+    app.UseSession();
+    app.UseRouting();
+    //app.MapControllerRoute(
+    //    name: "default",
+    //    pattern: "{controller=Home}/{action=Index}/{id?}");
+    app.MapControllerRoute(
+        name: "default",
+        pattern: "{controller=Home}/{action=Index}/{id?}");
 
-app.MapAreaControllerRoute(
-    name:"Admin",
-    areaName:"Admin",
-    pattern: "Admin/{controller=AdminHome}/{action=Index}/{id?}");
+    app.MapAreaControllerRoute(
+        name: "Admin",
+        areaName: "Admin",
+        pattern: "Admin/{controller=AdminHome}/{action=Index}/{id?}");
 
 
-app.UseHttpsRedirection();
+    app.UseHttpsRedirection();
 
-app.UseAuthentication();
+    app.UseAuthentication();
 
-app.UseAuthorization();
+    app.UseAuthorization();
 
-app.MapControllers();
+    app.MapControllers();
 
-app.Run();
+    app.Run();

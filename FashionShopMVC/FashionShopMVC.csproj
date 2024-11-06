@@ -21,6 +21,7 @@
     <Folder Include="UploadFiles\" />
     <Folder Include="Views\Contact\" />
     <Folder Include="wwwroot\assets\admin\js\NewFolder\" />
+    <Folder Include="wwwroot\assets\admin\js\pages\Statistic\" />
     <Folder Include="wwwroot\assets\admin\libs\bootbox\" />
   </ItemGroup>
 
@@ -28,6 +29,7 @@
     <PackageReference Include="AspNetCoreHero.ToastNotification" Version="1.0.0" />
     <PackageReference Include="MailKit" Version="4.8.0" />
     <PackageReference Include="EPPlus" Version="7.4.1" />
+    <PackageReference Include="Microsoft.AspNet.Identity.Core" Version="2.2.4" />
     <PackageReference Include="Microsoft.AspNet.Mvc" Version="5.3.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.35" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.35" />

@@ -30,7 +30,7 @@ function loadOrders(page = 0) {
         type: 'GET',
         data: {
             page: page,
-            pageSize: defaultOrdersPageSize,
+            pageSize: 5,
             typePayment: category,
             searchByID: searchByID,
             searchByName: searchByName,

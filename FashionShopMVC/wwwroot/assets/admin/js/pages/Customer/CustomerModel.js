@@ -33,7 +33,7 @@ function loadCustomers(page = 0) {
         },
         success: function (data) {
             $('#searchCustomerResults').html(data); // Thay thế nội dung bảng bằng kết quả mới
-            toastr.success("Tải dữ liệu thành công!", "Thông báo");
+            //toastr.success("Tải dữ liệu thành công!", "Thông báo");
         },
         error: function (xhr, status, error) {
             console.error("Lỗi:", error);
