@@ -1,6 +1,6 @@
 ﻿using FashionShopMVC.Data;
 using FashionShopMVC.Models.Domain;
-using FashionShopMVC.Models.DTO.CartDTO;
+using FashionShopMVC.Models.DTO;
 using FashionShopMVC.Models.DTO.CategoriesDTO;
 using FashionShopMVC.Repositories.@interface;
 using Microsoft.AspNetCore.Mvc;

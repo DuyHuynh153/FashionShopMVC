@@ -7,8 +7,8 @@ namespace FashionShopMVC.Controllers
 {
     public class CartController : Controller
     {
-        
-            public IActionResult Index()
+        [Authorize]
+        public IActionResult Index()
             {
                 return View();
             }
