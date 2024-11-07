@@ -1,6 +1,6 @@
-﻿
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using Microsoft.AspNetCore.Http;
+using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace FashionShopMVC.Models.DTO.ProductDTO
@@ -21,11 +21,10 @@ namespace FashionShopMVC.Models.DTO.ProductDTO
         [Required(ErrorMessage = "Mô tả không được để trống")]
         public string Describe { get; set; }
 
+        [Required(ErrorMessage = "Vui lòng chọn ảnh chính cho sản phẩm")]
+        public IFormFile? ImageFile { get; set; }
 
-        [Required(ErrorMessage = "Vui lòng chọn hình ảnh")]
-        public string Image { get; set; }
-
-        public string? ListImages { get; set; }
+        public List<IFormFile>? ListImageFiles { get; set; }
 
         [Required(ErrorMessage = "Vui lòng điền giá bán")]
         [Range(1, double.MaxValue, ErrorMessage = "Giá bán phải nhiều hơn 0")]
@@ -37,7 +36,12 @@ namespace FashionShopMVC.Models.DTO.ProductDTO
 
         [Range(0, 100, ErrorMessage = "Giảm giá phải nằm từ 0 đến 100")]
         public double Discount { get; set; }
+
         public string CreatedBy { get; set; }
         public bool Status { get; set; }
+        public DateTime CreatedDate { get; internal set; }
+
+        public string? ImagePath { get; set; }
+        public string? ListImagePaths { get; set; }
     }
 }

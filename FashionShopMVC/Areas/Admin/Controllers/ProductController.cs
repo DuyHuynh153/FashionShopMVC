@@ -1,10 +1,16 @@
-﻿using FashionShop.Models.DTO.ProductDTO;
+﻿
 using FashionShopMVC.Models.Domain;
 using FashionShopMVC.Models.DTO.ProductDTO;
 using FashionShopMVC.Repositories;
 using FashionShopMVC.Repositories.@interface;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using System.Diagnostics;
+using System.Drawing;
+using System.Security.Claims;
+
 namespace FashionShopMVC.Areas.Admin.Controllers
 {
     [Area("Admin")]
@@ -13,11 +19,16 @@ namespace FashionShopMVC.Areas.Admin.Controllers
     {
         private readonly IProductRepository _productRepository;
         private readonly ICategoryRepository _categoryRepository;
+       
+
 
         public ProductController(IProductRepository productRepository, ICategoryRepository categoryRepository)
         {
             _productRepository = productRepository;
             _categoryRepository = categoryRepository;
+
+
+
         }
 
         // GET: Admin/Product
@@ -42,44 +53,124 @@ namespace FashionShopMVC.Areas.Admin.Controllers
 
 
 
-        // POST: Admin/Product/Create
+        
+
         [HttpPost]
         [Route("Create")]
-        public async Task<IActionResult> Create(CreateProductDTO createProductDTO)
+        public async Task<IActionResult> Create(CreateProductDTO model)
         {
-            if (ModelState.IsValid)
+            var categories = await _categoryRepository.GetAllCategoryAsync();
+            ViewBag.Categories = categories;
+            model.CreatedBy = "Huy";
+            // Kiểm tra tính hợp lệ của Model
+            /*if (!ModelState.IsValid)
             {
-                var result = await _productRepository.Create(createProductDTO);
-                if (result != null)
+                foreach (var error in ModelState.Values.SelectMany(v => v.Errors))
                 {
-                    return RedirectToAction(nameof(Index));
+                    // Ghi lỗi để kiểm tra chi tiết
+                    Debug.WriteLine(error.ErrorMessage);
+                }
+                TempData["ErrorMessage"] = "Dữ liệu nhập vào không hợp lệ.";
+                return View(model);
+            }*/
+            try
+            {
+                // Xử lý ảnh chính
+                if (model.ImageFile != null && model.ImageFile.Length > 0)
+                {
+                    var fileName = Path.GetFileName(model.ImageFile.FileName);
+                    var fileExtension = Path.GetExtension(fileName);
+                    var newFileName = Guid.NewGuid().ToString() + fileExtension;
+
+                    var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/img/products", newFileName);
+
+                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await model.ImageFile.CopyToAsync(stream);
+                    }
+
+                    model.ImagePath = "/img/products/" + newFileName;  // Đảm bảo rằng đường dẫn được gán
+                }
+
+                // Xử lý danh sách ảnh phụ
+                if (model.ListImageFiles != null && model.ListImageFiles.Any())
+                {
+                    var imagePaths = new List<string>();
+
+                    foreach (var file in model.ListImageFiles)
+                    {
+                        if (file != null && file.Length > 0)
+                        {
+                            var fileName = Path.GetFileName(file.FileName);
+                            var fileExtension = Path.GetExtension(fileName);
+                            var newFileName = Guid.NewGuid().ToString() + fileExtension;
+
+                            var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/img/products", newFileName);
+
+                            using (var stream = new FileStream(filePath, FileMode.Create))
+                            {
+                                await file.CopyToAsync(stream);
+                            }
+
+                            imagePaths.Add("/img/products/" + newFileName);
+                        }
+                    }
+
+                    model.ListImagePaths = JsonConvert.SerializeObject(imagePaths);
+                    
+
+
+
                 }
             }
+            catch (Exception ex)
+            {
+                TempData["ErrorMessage"] = "Đã xảy ra lỗi trong quá trình tạo sản phẩm: " + ex.Message;
+            }
+            
+            // Gọi hàm Create trong Repository để lưu sản phẩm
 
-            // Nếu model không hợp lệ, lấy lại danh sách danh mục
-            var categories = await _categoryRepository.GetAllCategoryAsync();
-            ViewBag.Categories = categories; // Đặt lại danh sách vào ViewBag
-            return View(createProductDTO); // Trả về model đã nhập
+            var result = await _productRepository.Create(model);
+
+                if (result != null)
+                {
+                    TempData["SuccessMessage"] = "Tạo sản phẩm thành công!";
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    TempData["ErrorMessage"] = "Đã xảy ra lỗi trong quá trình tạo sản phẩm.";
+                }
+            
+            
+
+            return View(model);
         }
 
-        /*// GET: Admin/Product/Edit/{id}
+
+
+        // GET: Admin/Product/Edit/{id}
         [HttpGet]
         [Route("Edit/{id}")]
         public async Task<IActionResult> Edit(int id)
         {
+            var categories = await _categoryRepository.GetAllCategoryAsync();
+            ViewBag.Categories = categories;
             var product = await _productRepository.GetById(id);
             if (product == null)
             {
                 return NotFound();
             }
             return View(product);
-        }*/
+        }
 
         // POST: Admin/Product/Edit/{id}
         [HttpPost]
         [Route("Edit/{id}")]
         public async Task<IActionResult> Edit(UpdateProductDTO updateProductDTO, int id)
         {
+            var categories = await _categoryRepository.GetAllCategoryAsync();
+            ViewBag.Categories = categories;
             if (ModelState.IsValid)
             {
                 var result = await _productRepository.Update(updateProductDTO, id);

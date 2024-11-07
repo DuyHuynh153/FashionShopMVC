@@ -1,5 +1,4 @@
-﻿using FashionShop.Models.DTO.ProductDTO;
-using FashionShopMVC.Data;
+﻿using FashionShopMVC.Data;
 using FashionShopMVC.Helper;
 using FashionShopMVC.Models.Domain;
 using FashionShopMVC.Models.DTO.ProductDTO;
@@ -259,13 +258,40 @@ public class ProductRepository : IProductRepository
             CategoryID = createProductDTO.CategoryID,
             Quantity = createProductDTO.Quantity,
             Describe = createProductDTO.Describe,
-            Image = createProductDTO.Image,
-            ListImages = createProductDTO.ListImages,
+            Image = createProductDTO.ImagePath,
+            ListImages = createProductDTO.ListImagePaths,
             Price = createProductDTO.Price,
             PurchasePrice = createProductDTO.PurchasePrice,
             Discount = createProductDTO.Discount,
             Status = createProductDTO.Status,
 
+<<<<<<< HEAD
+    //        CreatedDate = DateTime.Now,
+    //        CreatedBy = createProductDTO.CreatedBy,
+    //    };
+    //    await _fashionShopDBContext.Products.AddAsync(productDomain);
+    //    await _fashionShopDBContext.SaveChangesAsync();
+
+    //    return createProductDTO;
+    //}
+
+    //public async Task<UpdateProductDTO> Update(UpdateProductDTO updateProductDTO, int id)
+    //{
+    //    var productDomain = await _fashionShopDBContext.Products.FirstOrDefaultAsync(p => p.ID == id);
+
+    //    if (productDomain != null)
+    //    {
+    //        productDomain.Name = updateProductDTO.Name;
+    //        productDomain.CategoryID = updateProductDTO.CategoryID;
+    //        productDomain.Quantity = updateProductDTO.Quantity;
+    //        productDomain.Describe = updateProductDTO.Describe;
+    //        productDomain.Image = updateProductDTO.Image;
+    //        productDomain.ListImages = updateProductDTO.ListImages;
+    //        productDomain.Price = updateProductDTO.Price;
+    //        productDomain.PurchasePrice = updateProductDTO.PurchasePrice;
+    //        productDomain.Discount = updateProductDTO.Discount;
+    //        productDomain.Status = updateProductDTO.Status;
+=======
             CreatedDate = DateTime.Now,
             CreatedBy = createProductDTO.CreatedBy,
         };
@@ -291,6 +317,7 @@ public class ProductRepository : IProductRepository
             productDomain.PurchasePrice = updateProductDTO.PurchasePrice;
             productDomain.Discount = updateProductDTO.Discount;
             productDomain.Status = updateProductDTO.Status;
+>>>>>>> huyhuynh CRUD Product
 
             productDomain.UpdatedDate = DateTime.Now;
             productDomain.UpdatedBy = updateProductDTO.UpdatedBy;
