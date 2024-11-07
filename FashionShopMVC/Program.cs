@@ -164,6 +164,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+
+
 //app.UseNotyf();
 app.UseStaticFiles();
 app.UseStaticFiles(new StaticFileOptions
@@ -205,21 +207,23 @@ using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
     await SampleData.Initialize(services);
+
 }
 
 app.UseSession();
 app.UseRouting();
-//app.MapControllerRoute(
-//    name: "default",
-//    pattern: "{controller=Home}/{action=Index}/{id?}");
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.MapAreaControllerRoute(
-    name:"Admin",
-    areaName:"Admin",
+    name: "Admin",
+    areaName: "Admin",
     pattern: "Admin/{controller=AdminHome}/{action=Index}/{id?}");
+
+
+
+
 
 
 app.UseHttpsRedirection();

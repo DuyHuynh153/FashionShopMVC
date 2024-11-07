@@ -10,7 +10,7 @@
                 return (List != null) ? List.Count() : 0;
             }
         }
-
+        public int PageSize { get; set; }  // Kích thước trang
         // Lưu tổng số trang
         public int PagesCount { get; set; }
 

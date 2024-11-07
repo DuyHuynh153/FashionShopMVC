@@ -35,19 +35,19 @@
                     <ul class="thumbnails main-front-image">
                         <li class="product_img">
                             <a class="thumbnail">
-                                <img src="~/@Model.Image" class="changeimg">
+                                <img src="@Model.Image" class="changeimg">
                             </a>
                         </li>
                         <li class="image-additional">
                             <a class="thumbnail">
-                                <img class="galleryimg" src="~/@Model.Image" width="93" height="133">
+                                <img class="galleryimg" src="@Model.Image" width="93" height="133">
                             </a>
                         </li>
                         @foreach (var img in @ViewBag.listImg)
                         {
                             <li class="image-additional">
                                 <a class="thumbnail">
-                                    <img class="galleryimg" src="~/@img" width="93" height="133">
+                                    <img class="galleryimg" src="@img" width="93" height="133">
                                 </a>
                             </li>
 
@@ -232,7 +232,7 @@
 
                             <div class="image-block">
                                 <a href="single-product.html" style="cursor: pointer">
-                                    <img class="img-responsive" alt="i" src="/@pro.Image">
+                                    <img class="img-responsive" alt="i" src=/@pro.Image">
                                 </a>
                             </div>
 
