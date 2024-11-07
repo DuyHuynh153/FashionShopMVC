@@ -92,6 +92,11 @@ builder.Services.AddNotyf(
         config.IsDismissable = true;
         config.Position = NotyfPosition.TopRight;
     });
+// config Vnpay servic -PhuThinh
+builder.Services.AddSingleton<IVnpayRespository, VnpayRepository>();
+
+
+
 // config service authentication - lam duy
 
 builder.Services.AddAuthorization(options =>
@@ -174,6 +179,7 @@ app.UseStaticFiles(new StaticFileOptions
 //        Path.Combine(builder.Environment.ContentRootPath, "app")), // Sử dụng ContentRootPath
 //    RequestPath = "/app" // Đường dẫn để truy cập tài nguyên tĩnh
 //});
+
 
 app.UseStaticFiles(new StaticFileOptions
 {
