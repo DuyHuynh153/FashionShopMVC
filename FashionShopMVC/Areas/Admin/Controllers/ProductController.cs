@@ -48,6 +48,7 @@ namespace FashionShopMVC.Areas.Admin.Controllers
             var categories = await _categoryRepository.GetAllCategoryAsync();
             // Kiểm tra dữ liệu trước khi trả về view
             ViewBag.Categories = categories;
+            ViewBag.CreatedBy = User.Identity.Name;
             return View();
         }
 
@@ -61,21 +62,32 @@ namespace FashionShopMVC.Areas.Admin.Controllers
         {
             var categories = await _categoryRepository.GetAllCategoryAsync();
             ViewBag.Categories = categories;
-            model.CreatedBy = "Huy";
-            // Kiểm tra tính hợp lệ của Model
-            /*if (!ModelState.IsValid)
+            // model.CreatedBy = "Duy";
+
+            // Check if the model state is valid
+            if (!ModelState.IsValid)
             {
                 foreach (var error in ModelState.Values.SelectMany(v => v.Errors))
                 {
-                    // Ghi lỗi để kiểm tra chi tiết
-                    Debug.WriteLine(error.ErrorMessage);
+                    // Log errors for debugging
+                    Console.WriteLine(error.ErrorMessage);
                 }
                 TempData["ErrorMessage"] = "Dữ liệu nhập vào không hợp lệ.";
                 return View(model);
-            }*/
+            }
+
+            // Check if the CategoryID exists
+            var category = await _categoryRepository.GetByIdAsync(model.CategoryID);
+            if (category == null)
+            {
+                ModelState.AddModelError("CategoryID", "Danh mục không hợp lệ.");
+                TempData["ErrorMessage"] = "Danh mục không hợp lệ.";
+                return View(model);
+            }
+
             try
             {
-                // Xử lý ảnh chính
+                // Handle main image
                 if (model.ImageFile != null && model.ImageFile.Length > 0)
                 {
                     var fileName = Path.GetFileName(model.ImageFile.FileName);
@@ -89,10 +101,10 @@ namespace FashionShopMVC.Areas.Admin.Controllers
                         await model.ImageFile.CopyToAsync(stream);
                     }
 
-                    model.ImagePath = "/img/products/" + newFileName;  // Đảm bảo rằng đường dẫn được gán
+                    model.ImagePath = "/img/products/" + newFileName;
                 }
 
-                // Xử lý danh sách ảnh phụ
+                // Handle additional images
                 if (model.ListImageFiles != null && model.ListImageFiles.Any())
                 {
                     var imagePaths = new List<string>();
@@ -117,20 +129,10 @@ namespace FashionShopMVC.Areas.Admin.Controllers
                     }
 
                     model.ListImagePaths = JsonConvert.SerializeObject(imagePaths);
-                    
-
-
-
                 }
-            }
-            catch (Exception ex)
-            {
-                TempData["ErrorMessage"] = "Đã xảy ra lỗi trong quá trình tạo sản phẩm: " + ex.Message;
-            }
-            
-            // Gọi hàm Create trong Repository để lưu sản phẩm
 
-            var result = await _productRepository.Create(model);
+                // Call the Create method in the repository to save the product
+                var result = await _productRepository.Create(model);
 
                 if (result != null)
                 {
@@ -141,8 +143,11 @@ namespace FashionShopMVC.Areas.Admin.Controllers
                 {
                     TempData["ErrorMessage"] = "Đã xảy ra lỗi trong quá trình tạo sản phẩm.";
                 }
-            
-            
+            }
+            catch (Exception ex)
+            {
+                TempData["ErrorMessage"] = "Đã xảy ra lỗi trong quá trình tạo sản phẩm: " + ex.Message;
+            }
 
             return View(model);
         }

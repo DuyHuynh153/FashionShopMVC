@@ -223,9 +223,13 @@
             url: url + "/" + userId,
             type: 'POST',
             success: function (response) {
-                // Update the UI based on response
-
-                loadUserContent("Admin/User");
+                if (response.success) {
+                    // Reload the user list for the current page after deletion
+                    loadUserContent('/Admin/User', 1);
+                } else {
+                    // Handle validation errors or other messages from the server
+                    $('#ajax-content').html(response);
+                }
             },
             error: function (xhr, status, error) {
                 // Handle error
