@@ -202,6 +202,26 @@ namespace FashionShopMVC.Controllers
                     ModelState.AddModelError("", "Email này không tồn tại trong hệ thống.");
                     return View();
                 }
+                var otp = GenerateOtp();
+                var message = new Message(new string[] {user.Email} , "Mã xác thực", $"Mã OTP của bạn là: {otp}");
+
+                _emailAuthService.SendAuthEmail(message);
+
+                _notyfService.Success("Mã OTP đã được gửi đến email của bạn", 5);
+                HttpContext.Session.SetString("Email", user.Email);
+                HttpContext.Session.SetString("OTP", otp);
+
+                return RedirectToAction("confirmOTP", "Account");
+            }
+            return View();
+            /*if (ModelState.IsValid)
+            {
+                var user = await _userManager.FindByEmailAsync(indentifyRequestDTO.Email);
+                if (user == null)
+                {
+                    ModelState.AddModelError("", "Email này không tồn tại trong hệ thống.");
+                    return View();
+                }
 
                 var otp = GenerateOtp();
                 await _emailSender.SendEmailAsync(user.Email, "Mã xác thực của bạn", $"Mã OTP của bạn là: {otp}");
@@ -211,7 +231,7 @@ namespace FashionShopMVC.Controllers
                 //var savedOtp = HttpContext.Session.GetString("OTP");
                 return RedirectToAction("confirmOTP", "Account");
             }
-            return View();
+            return View();*/
         }
         private string GenerateOtp()
         {
@@ -241,6 +261,7 @@ namespace FashionShopMVC.Controllers
                     return View();
                 }
 
+                _notyfService.Success("Mã OTP chính xác", 5);
                 return RedirectToAction("Resetpassword", "Account");
             }
             return View();
@@ -273,10 +294,11 @@ namespace FashionShopMVC.Controllers
                 if (result.Succeeded)
                 {
                     // Nếu tài khoản được tạo thành công, lưu thông tin vào session
-                    string userJson = JsonConvert.SerializeObject(user);
-                    HttpContext.Session.SetString(CommonConstants.SessionUser, userJson);
+                   /* string userJson = JsonConvert.SerializeObject(user);
+                    HttpContext.Session.SetString(CommonConstants.SessionUser, userJson);*/
 
-                    _notyfService.Success("Sửa mật khẩu thành công", 2);
+
+                    _notyfService.Success("Sửa mật khẩu thành công, Vui lòng đăng nhập lại", 2);
 
                     return RedirectToAction("Login", "Account");
                 }
