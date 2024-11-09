@@ -130,7 +130,7 @@
                        
 
                         <li class="nav-item">
-                            <a asp-action="Index" asp-controller="Employee" asp-area="Admin" class="nav-link">
+                            <a class="nav-link" href="#" data-url="@Url.Action("Index", "Employee")" data-module="EmployeeModule">
                                 <i class="nav-icon fas fa-users"></i>
                                 <p>Quản lý nhân viên</p>
                             </a>
@@ -258,6 +258,8 @@
     <script src="~/assets/admin/js/pages/Contact/ContactModel.js"></script>
 
     <script src="~/assets/admin/js/pages/user/UserModule.js"></script>
+    <script src="~/assets/admin/js/pages/Employee/EmployeeModule.js"></script>
+
 
     @* <script src="~/assets/admin/js/AdminContentv2.js"></script> *@
     <!-- Custom Scripts (Optional) -->

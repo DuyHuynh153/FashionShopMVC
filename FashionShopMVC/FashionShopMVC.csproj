@@ -8,9 +8,13 @@
 
   <ItemGroup>
     <Compile Remove="Areas\Admin\Data\**" />
+    <Compile Remove="wwwroot\assets\admin\js\NewFolder\**" />
     <Content Remove="Areas\Admin\Data\**" />
+    <Content Remove="wwwroot\assets\admin\js\NewFolder\**" />
     <EmbeddedResource Remove="Areas\Admin\Data\**" />
+    <EmbeddedResource Remove="wwwroot\assets\admin\js\NewFolder\**" />
     <None Remove="Areas\Admin\Data\**" />
+    <None Remove="wwwroot\assets\admin\js\NewFolder\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -28,7 +32,6 @@
     <Folder Include="Areas\Admin\Models\" />
     <Folder Include="UploadFiles\" />
     <Folder Include="Views\Contact\" />
-    <Folder Include="wwwroot\assets\admin\js\NewFolder\" />
     <Folder Include="wwwroot\assets\admin\js\pages\Statistic\" />
     <Folder Include="wwwroot\assets\admin\libs\bootbox\" />
     <Folder Include="wwwroot\img\products\" />
