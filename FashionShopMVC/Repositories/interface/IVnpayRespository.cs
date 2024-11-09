@@ -3,10 +3,12 @@ using Microsoft.VisualBasic;
 
 namespace FashionShopMVC.Repositories.@interface
 {   //IVnpayservice.cs
-    public interface IVnpayRespository
-    {
+        public interface IVnpayRespository 
+        {
         string CreatPaymentUrl (HttpContext context,VnpayMentRequestModel model);
-        VnpaymentResponseModel PaymentExecute(IQueryCollection Collection);
+            VnpaymentResponseModel PaymentExecute(IQueryCollection Collection);
 
-    }
+        }
+
+  
 }

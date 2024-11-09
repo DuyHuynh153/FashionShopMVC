@@ -1,5 +1,38 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿
 @{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
+
+<h1>Index</h1>
+<div>
+    Cartviewer
+</div>
+<div class="main-content">
+    <div class="container">
+        <div class="row featured-block">
+            <div class="main-head-block">
+                Danh sách order
+                (view danh sách order)
+                <div class="button-block">thanh toán </div>
+                <div class="cart-container">
+                    <div class="cart-items">
+                        <h3>Sản phẩm đã mua</h3>
+                        <ul>
+                            <li>Product 1 - $10.00</li>
+                            <li>Product 2 - $15.00</li>
+                            <li>Product 3 - $20.00</li>
+                        </ul>
+                    </div>
+                    <div class="cart-actions">
+                        <button class="btn pay-btn">Thanh toán</button>
+                        <button class="btn cancel-btn">Hủy đơn</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+

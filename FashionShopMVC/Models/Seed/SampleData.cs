@@ -15,14 +15,19 @@ namespace sportMVC.Models.Seed
                 var userManager = scope.ServiceProvider.GetRequiredService<UserManager<User>>();
                 var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
 
-                string[] roles = new string[] { "Administrator", "Quản Trị Viên", "Khách Hàng" };
-
-                foreach (string role in roles)
+                string[] roles = new string[] {  "Administrator", "Quản Trị Viên", "Khách Hàng" };
+                try
                 {
-                    if (!context.Roles.Any(r => r.Name == role))
+                    foreach (string role in roles)
                     {
-                        await roleManager.CreateAsync(new IdentityRole(role));
+                        if (!context.Roles.Any(r => r.Name == role))
+                        {
+                            await roleManager.CreateAsync(new IdentityRole(role));
+                        }
                     }
+                }
+                catch (Exception) 
+                {
                 }
 
                 // Check if any users exist in the database
