@@ -19,9 +19,6 @@ namespace FashionShopMVC.Areas.Admin.Controllers
         {
             _productRepository = productRepository;
             _categoryRepository = categoryRepository;
-
-
-
         }
 
         // GET: Admin/Product
@@ -29,7 +26,7 @@ namespace FashionShopMVC.Areas.Admin.Controllers
         public async Task<IActionResult> Index(int page = 1, int pageSize = 10, string? searchByName = null)
         {
             var productPaginationSet = await _productRepository.GetAll(page - 1, pageSize, null, searchByName);
-            ViewData["searchByName"] = searchByName ?? "";
+            //ViewData["searchByName"] = searchByName ?? "";
             return View(productPaginationSet);
         }
 
@@ -43,10 +40,6 @@ namespace FashionShopMVC.Areas.Admin.Controllers
             ViewBag.Categories = categories;
             return View();
         }
-
-
-
-
 
         [HttpPost]
         [Route("Create")]

@@ -1,0 +1,53 @@
+﻿@model FashionShopMVC.Models.DTO.PostDTO.UpdatePostDTO
+@{
+    ViewData["Title"] = "Cập nhật bài viết";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">Cập nhật bài viết</h3>
+        <a href="@Url.Action("Index", "Post")" class="btn btn-secondary ml-auto" style="float:right;">Quay lại</a>
+    </div>
+    <div class="card-body">
+        @* Hiển thị thông báo *@
+        @* @if (TempData["SuccessMessage"] != null)
+        {
+        <div class="alert alert-success">
+        @TempData["SuccessMessage"]
+        </div>
+        } *@
+        @if (TempData["ErrorMessage"] != null)
+        {
+            <div class="alert alert-danger">
+                @TempData["ErrorMessage"]
+            </div>
+        }
+        <form asp-action="Edit" method="post" enctype="multipart/form-data">
+            <div class="form-group">
+                <label asp-for="Title" class="control-label"></label>
+                <input asp-for="Title" class="form-control" />
+                <span asp-validation-for="Title" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ImageFile" class="control-label"></label>
+                <input type="file" asp-for="ImageFile" class="form-control" accept="image/*" />
+                <span asp-validation-for="ImageFile" class="text-danger"></span>
+            </div>
+             <div class="form-group">
+                <label asp-for="Content" class="control-label"></label>
+                <textarea asp-for="Content" class="form-control" ></textarea>
+                <span asp-validation-for="Content" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Status" class="control-label"></label>
+                <input asp-for="Status" type="checkbox" />
+                <span asp-validation-for="Status" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary">Cập nhật</button>
+            </div>
+        </form>
+    </div>
+</div>
+

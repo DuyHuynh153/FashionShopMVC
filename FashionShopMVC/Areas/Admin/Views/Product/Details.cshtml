@@ -4,81 +4,97 @@
     ViewData["Title"] = "Chi tiết sản phẩm";
 }
 
-<h2>@Model.Name</h2>
+<div class="container mt-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="text-primary">@Model.Name</h2>
+        <a href="@Url.Action("Index", "Product")" class="btn btn-outline-secondary">Quay lại</a>
+    </div>
 
-<div>
-    <div class="card-header">
-        <h3 class="card-title">Thông tin sản phẩm</h3>
-        <a href="@Url.Action("Index", "Product")" class="btn btn-secondary ml-auto" style="float:right;">Quay lại</a>
-    </div>
-    <hr />
-    <div>
-        <strong>ID:</strong> @Model.ID
-    </div>
-    <div>
-        <strong>Tên sản phẩm:</strong> @Model.Name
-    </div>
-    <div>
-        <strong>Danh mục:</strong> @Model.CategoryName
-    </div>
-    <div>
-        <strong>Số lượng:</strong> @Model.Quantity
-    </div>
-    <div>
-        <strong>Mô tả:</strong>
-        <p>@Model.Describe</p>
-    </div>
-    <div>
-        <strong>Giá bán:</strong>  @(Model.Price - (Model.Price * Model.Discount / 100)) VND
-    </div>
-    <div>
-        <strong>Giá nhập:</strong> @Model.PurchasePrice VND
-    </div>
-    <div>
-        <strong>Giảm giá:</strong> @Model.Discount %
-    </div>
-    <div>
-        <strong>Ngày tạo:</strong> @Model.CreatedDate.ToString("dd/MM/yyyy")
-    </div>
-    <div>
-        <strong>Ngày cập nhật:</strong> @Model.UpdatedDate?.ToString("dd/MM/yyyy")
-    </div>
-    <div>
-        <strong>Trạng thái:</strong> @(Model.Status ? "Kích hoạt" : "Ngừng bán")
-    </div>
+    <div class="card shadow-lg p-4 mb-5">
+        <div class="card-body">
+            <h3 class="text-secondary mb-4">Thông tin sản phẩm</h3>
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <strong>ID:</strong> <span class="text-muted">@Model.ID</span>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <strong>Danh mục:</strong> <span class="badge bg-info text-white">@Model.CategoryName</span>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <strong>Số lượng:</strong> <span class="text-muted">@Model.Quantity</span>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <strong>Giá bán:</strong> <span class="text-success">@((Model.Price - (Model.Price * Model.Discount / 100)).ToString("N0")) VND</span>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <strong>Giá nhập:</strong> <span class="text-danger">@Model.PurchasePrice.ToString("N0") VND</span>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <strong>Giảm giá:</strong> <span class="text-warning">@Model.Discount %</span>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <strong>Trạng thái:</strong>
+                    @if (Model.Status)
+                    {
+                        <span class="badge bg-success">Hoạt động</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-danger">Không hoạt động</span>
+                    }
+                </div>
+                <div class="col-md-6 mb-3">
+                    <strong>Ngày tạo:</strong> <span class="text-muted">@Model.CreatedDate.ToString("dd/MM/yyyy")</span>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <strong>Ngày cập nhật:</strong> <span class="text-muted">@Model.UpdatedDate?.ToString("dd/MM/yyyy")</span>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <strong>Người tạo:</strong> <span class="text-muted">@Model.CreatedBy</span>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <strong>Người cập nhật:</strong> <span class="text-muted">@Model.UpdatedBy</span>
+                </div>
+                <div class="col-12 mb-3">
+                    <strong>Mô tả:</strong>
+                    <p class="text-muted">@Model.Describe</p>
+                </div>
 
     <!-- Hiển thị người tạo và người cập nhật -->
     <div>
         <strong>Người tạo:</strong> @Model.CreatedBy
-    </div>
+            </div>
     <div>
         <strong>Người cập nhật:</strong> @Model.UpdatedBy
+        </div>
+    </div>
+
+    <!-- Ảnh sản phẩm chính -->
+    <div class="text-center mb-4">
+        <h4 class="text-secondary">Ảnh sản phẩm chính</h4>
+        <div class="border p-3 d-inline-block">
+            <img src="/@Model.Image" alt="Ảnh sản phẩm" class="img-fluid rounded" style="max-width: 300px; max-height: 200px;" />
+        </div>
+    </div>
+
+    <!-- Danh sách ảnh khác -->
+    <div class="card shadow-lg p-4">
+        <h4 class="text-secondary mb-4">Danh sách ảnh khác</h4>
+        <div class="d-flex flex-wrap gap-3">
+            @if (ViewBag.ListImages != null && ((List<string>)ViewBag.ListImages).Any())
+            {
+                var listImages = (List<string>)ViewBag.ListImages;
+                foreach (var image in listImages)
+                {
+                    <div class="border p-2">
+                        <img src="~/@image" alt="Ảnh phụ" class="img-thumbnail rounded" style="width: 150px; height: 150px;" />
+                    </div>
+                }
+            }
+            else
+            {
+                <p>Không có ảnh phụ.</p>
+            }
+        </div>
     </div>
 </div>
-
-<!-- Ảnh sản phẩm chính -->
-<h4>Ảnh sản phẩm</h4>
-<div>
-    <img src="/@Model.Image" alt="Ảnh sản phẩm" style="max-width: 300px; max-height: 200px;" />
-</div>
-
-<!-- Danh sách ảnh khác -->
-<h4>Danh sách ảnh khác</h4>
-<div>
-    @if (ViewBag.ListImages != null && ((List<string>)ViewBag.ListImages).Any())
-    {
-        var listImages = (List<string>)ViewBag.ListImages;
-        foreach (var image in listImages)
-        {
-            <img src="~/@image" alt="Ảnh phụ" style="max-width: 150px; max-height: 150px;" />
-        }
-    }
-    else
-    {
-        <p>Không có ảnh phụ.</p>
-    }
-</div>
-
-<hr />
-
-
