@@ -9,7 +9,19 @@
         <h3 class="card-title">Thêm sản phẩm mới</h3>
     </div>
     <div class="card-body">
+        @* Hiển thị thông báo *@
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <div class="alert alert-success"> 
+             @TempData["SuccessMessage"] </div>
+        } 
+        @if (TempData["ErrorMessage"] != null)
+        {
+            <div class="alert alert-danger"> 
+             @TempData["ErrorMessage"] </div>
+        }
         <form asp-action="Create" method="post" enctype="multipart/form-data">
+
             <div class="form-group">
                 <label asp-for="Name"></label>
                 <input asp-for="Name" class="form-control" />
@@ -19,10 +31,17 @@
                 <label asp-for="CategoryID"></label>
                 <select asp-for="CategoryID" class="form-control">
                     <option value="">Chọn danh mục</option>
-                    <!-- Thêm danh sách danh mục ở đây -->
+                    @if (ViewBag.Categories != null)
+                    {
+                        foreach (var category in ViewBag.Categories)
+                        {
+                            <option value="@category.ID">@category.Name</option>
+                        }
+                    }
                 </select>
                 <span asp-validation-for="CategoryID" class="text-danger"></span>
             </div>
+
             <div class="form-group">
                 <label asp-for="Quantity"></label>
                 <input asp-for="Quantity" type="number" class="form-control" />
@@ -34,14 +53,14 @@
                 <span asp-validation-for="Describe" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Image"></label>
-                <input asp-for="Image" type="file" class="form-control" />
-                <span asp-validation-for="Image" class="text-danger"></span>
+                <label asp-for="ImageFile" class="form-label"></label>
+                <input asp-for="ImageFile" type="file" class="form-control" accept="image/*" />
+                <span asp-validation-for="ImageFile" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="ListImages"></label>
-                <input asp-for="ListImages" type="file" multiple class="form-control" />
-                <span asp-validation-for="ListImages" class="text-danger"></span>
+                <label asp-for="ListImageFiles" class="form-label"></label>
+                <input asp-for="ListImageFiles" type="file" multiple class="form-control" accept="image/*" />
+                <span asp-validation-for="ListImageFiles" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Price"></label>

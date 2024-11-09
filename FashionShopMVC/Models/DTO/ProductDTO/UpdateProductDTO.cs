@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace FashionShop.Models.DTO.ProductDTO
+namespace FashionShopMVC.Models.DTO.ProductDTO
 {
     public class UpdateProductDTO
     {
