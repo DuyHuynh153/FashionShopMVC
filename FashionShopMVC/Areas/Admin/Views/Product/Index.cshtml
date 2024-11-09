@@ -44,7 +44,7 @@
                         <td class="align-middle">@product.ID</td>
                         <td class="align-middle">@product.Name</td>
                         <td class="align-middle p-0">
-                            <img src="~/@product.Image" style="height: 100px" alt="Error Image" />
+                            <img src="/@product.Image" style="height: 100px" alt="Error Image" />
                         </td>
                         <td class="align-middle">@product.CategoryName</td>
                         <td class="align-middle" @(product.Discount > 0 ? "" : "style='display:none;'")>
@@ -60,8 +60,11 @@
                             </span>
                         </td>
                         <td class="align-middle text-center">
-                            <a asp-action="Edit" asp-route-id="@product.ID" class="btn btn-sm btn-primary mr-2">
+                            <a asp-area="Admin" asp-controller="Product" asp-action="Edit" asp-route-id="@product.ID" class="btn btn-sm btn-primary mr-2">
                                 <i class="fas fa-edit"></i>
+                            </a>
+                            <a asp-controller="Product" asp-action="Details" asp-route-id="@product.ID" asp-area="Admin" class="btn btn-sm btn-info">
+                                <i class="fas fa-eye"></i>
                             </a>
                             <button class="btn btn-sm btn-danger mr-2" onclick="deleteProduct(@product.ID)">
                                 <i class="fas fa-trash"></i>
@@ -88,7 +91,7 @@
 
 
     </div>
-   
+
 </div>
 
 

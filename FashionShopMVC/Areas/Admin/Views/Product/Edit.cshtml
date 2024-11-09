@@ -1,12 +1,11 @@
-﻿@model FashionShopMVC.Models.DTO.ProductDTO.CreateProductDTO
+﻿@model FashionShopMVC.Models.DTO.ProductDTO.UpdateProductDTO
 @{
-    ViewData["Title"] = "Thêm sản phẩm mới";
+    ViewData["Title"] = "Cập nhật sản phẩm";
     Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
 }
-
 <div class="card">
     <div class="card-header">
-        <h3 class="card-title">Thêm sản phẩm mới</h3>
+        <h3 class="card-title">Cập nhật sản phẩm</h3>
         <a href="@Url.Action("Index", "Product")" class="btn btn-secondary ml-auto" style="float:right;">Quay lại</a>
     </div>
     <div class="card-body">
@@ -14,23 +13,24 @@
         @* @if (TempData["SuccessMessage"] != null)
         {
         <div class="alert alert-success">
-        @TempData["SuccessMessage"] </div>
-        }  *@
+        @TempData["SuccessMessage"]
+        </div>
+        } *@
         @if (TempData["ErrorMessage"] != null)
         {
             <div class="alert alert-danger">
                 @TempData["ErrorMessage"]
             </div>
         }
-        <form asp-action="Create" method="post" enctype="multipart/form-data">
-
+        <form asp-action="Edit" method="post" enctype="multipart/form-data">
             <div class="form-group">
-                <label asp-for="Name"></label>
+                <label asp-for="Name" class="control-label"></label>
                 <input asp-for="Name" class="form-control" />
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
+
             <div class="form-group">
-                <label asp-for="CategoryID"></label>
+                <label asp-for="CategoryID" class="control-label"></label>
                 <select asp-for="CategoryID" class="form-control">
                     <option value="">Chọn danh mục</option>
                     @if (ViewBag.Categories != null)
@@ -45,18 +45,20 @@
             </div>
 
             <div class="form-group">
-                <label asp-for="Quantity"></label>
-                <input asp-for="Quantity" type="number" class="form-control" />
+                <label asp-for="Quantity" class="control-label"></label>
+                <input asp-for="Quantity" class="form-control" />
                 <span asp-validation-for="Quantity" class="text-danger"></span>
             </div>
+
             <div class="form-group">
-                <label asp-for="Describe"></label>
+                <label asp-for="Describe" class="control-label"></label>
                 <textarea asp-for="Describe" class="form-control"></textarea>
                 <span asp-validation-for="Describe" class="text-danger"></span>
             </div>
+
             <div class="form-group">
-                <label asp-for="ImageFile" class="form-label"></label>
-                <input asp-for="ImageFile" type="file" class="form-control" accept="image/*" />
+                <label asp-for="ImageFile" class="control-label"></label>
+                <input type="file" asp-for="ImageFile" class="form-control" accept="image/*" />
                 <span asp-validation-for="ImageFile" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -64,31 +66,37 @@
                 <input asp-for="ListImageFiles" type="file" multiple class="form-control" accept="image/*" />
                 <span asp-validation-for="ListImageFiles" class="text-danger"></span>
             </div>
+
+
             <div class="form-group">
-                <label asp-for="Price"></label>
-                <input asp-for="Price" type="number" class="form-control" />
+                <label asp-for="Price" class="control-label"></label>
+                <input asp-for="Price" class="form-control" />
                 <span asp-validation-for="Price" class="text-danger"></span>
             </div>
+
             <div class="form-group">
-                <label asp-for="PurchasePrice"></label>
-                <input asp-for="PurchasePrice" type="number" class="form-control" />
+                <label asp-for="PurchasePrice" class="control-label"></label>
+                <input asp-for="PurchasePrice" class="form-control" />
                 <span asp-validation-for="PurchasePrice" class="text-danger"></span>
             </div>
+
             <div class="form-group">
-                <label asp-for="Discount"></label>
-                <input asp-for="Discount" type="number" class="form-control" />
+                <label asp-for="Discount" class="control-label"></label>
+                <input asp-for="Discount" class="form-control" />
                 <span asp-validation-for="Discount" class="text-danger"></span>
+
             </div>
+
             <div class="form-group">
-                <label asp-for="Status"></label>
+                <label asp-for="Status" class="control-label"></label>
                 <input asp-for="Status" type="checkbox" />
+                <span asp-validation-for="Status" class="text-danger"></span>
             </div>
-            <button type="submit" class="btn btn-primary">Thêm sản phẩm</button>
+
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary">Cập nhật</button>
+            </div>
         </form>
     </div>
 </div>
 
-@section Scripts {
-    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
-    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
-}

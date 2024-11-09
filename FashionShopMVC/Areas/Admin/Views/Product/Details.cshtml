@@ -1,0 +1,84 @@
+﻿@model FashionShopMVC.Models.DTO.ProductDTO.GetProductByIdDTO
+
+@{
+    ViewData["Title"] = "Chi tiết sản phẩm";
+}
+
+<h2>@Model.Name</h2>
+
+<div>
+    <div class="card-header">
+        <h3 class="card-title">Thông tin sản phẩm</h3>
+        <a href="@Url.Action("Index", "Product")" class="btn btn-secondary ml-auto" style="float:right;">Quay lại</a>
+    </div>
+    <hr />
+    <div>
+        <strong>ID:</strong> @Model.ID
+    </div>
+    <div>
+        <strong>Tên sản phẩm:</strong> @Model.Name
+    </div>
+    <div>
+        <strong>Danh mục:</strong> @Model.CategoryName
+    </div>
+    <div>
+        <strong>Số lượng:</strong> @Model.Quantity
+    </div>
+    <div>
+        <strong>Mô tả:</strong>
+        <p>@Model.Describe</p>
+    </div>
+    <div>
+        <strong>Giá bán:</strong>  @(Model.Price - (Model.Price * Model.Discount / 100)) VND
+    </div>
+    <div>
+        <strong>Giá nhập:</strong> @Model.PurchasePrice VND
+    </div>
+    <div>
+        <strong>Giảm giá:</strong> @Model.Discount %
+    </div>
+    <div>
+        <strong>Ngày tạo:</strong> @Model.CreatedDate.ToString("dd/MM/yyyy")
+    </div>
+    <div>
+        <strong>Ngày cập nhật:</strong> @Model.UpdatedDate?.ToString("dd/MM/yyyy")
+    </div>
+    <div>
+        <strong>Trạng thái:</strong> @(Model.Status ? "Kích hoạt" : "Ngừng bán")
+    </div>
+
+    <!-- Hiển thị người tạo và người cập nhật -->
+    <div>
+        <strong>Người tạo:</strong> @Model.CreatedBy
+    </div>
+    <div>
+        <strong>Người cập nhật:</strong> @Model.UpdatedBy
+    </div>
+</div>
+
+<!-- Ảnh sản phẩm chính -->
+<h4>Ảnh sản phẩm</h4>
+<div>
+    <img src="/@Model.Image" alt="Ảnh sản phẩm" style="max-width: 300px; max-height: 200px;" />
+</div>
+
+<!-- Danh sách ảnh khác -->
+<h4>Danh sách ảnh khác</h4>
+<div>
+    @if (ViewBag.ListImages != null && ((List<string>)ViewBag.ListImages).Any())
+    {
+        var listImages = (List<string>)ViewBag.ListImages;
+        foreach (var image in listImages)
+        {
+            <img src="~/@image" alt="Ảnh phụ" style="max-width: 150px; max-height: 150px;" />
+        }
+    }
+    else
+    {
+        <p>Không có ảnh phụ.</p>
+    }
+</div>
+
+<hr />
+
+

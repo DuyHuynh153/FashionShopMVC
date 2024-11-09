@@ -20,9 +20,9 @@ namespace FashionShopMVC.Models.DTO.ProductDTO
 
 
         [Required(ErrorMessage = "Vui lòng chọn hình ảnh")]
-        public string Image { get; set; }
+        public IFormFile? ImageFile { get; set; }
 
-        public string? ListImages { get; set; }
+        public List<IFormFile>? ListImageFiles { get; set; }
 
         [Required(ErrorMessage = "Vui lòng điền giá tiền")]
         [Range(1, float.MaxValue, ErrorMessage = "Giá tiền phải nhiều hơn 0")]
@@ -34,7 +34,10 @@ namespace FashionShopMVC.Models.DTO.ProductDTO
 
         [Range(0, 100, ErrorMessage = "Giảm giá phải nằm từ 0 đến 100")]
         public double Discount { get; set; }
-        public string UpdatedBy { get; set; }
+        //public string UpdatedBy { get; set; }
         public bool Status { get; set; }
+        public string? Image { get; set; }
+
+        public string? ListImages { get; set; }
     }
 }
