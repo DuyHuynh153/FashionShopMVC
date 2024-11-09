@@ -2,12 +2,13 @@
 using FashionShopMVC.Data;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json.Linq;
 
 namespace FashionShopMVC.Repositories
 {
     public interface IStatisticRepository
     {
-        public List<RevenueStatisticViewModel> GetRevenueStatistic(DateTime fromDate, DateTime toDate);
+        public Task<IEnumerable<RevenueStatisticViewModel>> GetRevenueStatistic(DateTime fromDate, DateTime toDate);
     }
     public class StatisticRepository : IStatisticRepository
     {
@@ -17,14 +18,14 @@ namespace FashionShopMVC.Repositories
         {
             _fashionShopDBContext = fashionShopDBContext;
         }
-        public List<RevenueStatisticViewModel> GetRevenueStatistic(DateTime fromDate, DateTime toDate)
+        public async Task<IEnumerable<RevenueStatisticViewModel>> GetRevenueStatistic(DateTime fromDate, DateTime toDate)
         {
             var query = _fashionShopDBContext.Set<RevenueStatisticViewModel>()
                 .FromSqlRaw("EXEC GetRevenueStatistic @fromDate, @toDate",
                     new SqlParameter("@fromDate", fromDate),
                     new SqlParameter("@toDate", toDate));
-
-            return query.ToList();
+            var statistic = await query.ToListAsync();
+            return statistic;
         }
     }
 }

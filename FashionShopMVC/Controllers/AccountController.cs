@@ -202,16 +202,36 @@ namespace FashionShopMVC.Controllers
                     ModelState.AddModelError("", "Email này không tồn tại trong hệ thống.");
                     return View();
                 }
+                var otp = GenerateOtp();
+                var message = new Message(new string[] {user.Email} , "Mã xác thực", $"Mã OTP của bạn là: {otp}");
+
+                _emailAuthService.SendAuthEmail(message);
+
+                _notyfService.Success("Mã OTP đã được gửi đến email của bạn", 5);
+                HttpContext.Session.SetString("Email", user.Email);
+                HttpContext.Session.SetString("OTP", otp);
+
+                return RedirectToAction("confirmOTP", "Account");
+            }
+            return View();
+            /*if (ModelState.IsValid)
+            {
+                var user = await _userManager.FindByEmailAsync(indentifyRequestDTO.Email);
+                if (user == null)
+                {
+                    ModelState.AddModelError("", "Email này không tồn tại trong hệ thống.");
+                    return View();
+                }
 
                 var otp = GenerateOtp();
                 await _emailSender.SendEmailAsync(user.Email, "Mã xác thực của bạn", $"Mã OTP của bạn là: {otp}");
                 HttpContext.Session.SetString("Email", user.Email);
                 HttpContext.Session.SetString("OTP", otp);
-                var savedEmail = HttpContext.Session.GetString("Email");
-                var savedOtp = HttpContext.Session.GetString("OTP");
+                //var savedEmail = HttpContext.Session.GetString("Email");
+                //var savedOtp = HttpContext.Session.GetString("OTP");
                 return RedirectToAction("confirmOTP", "Account");
             }
-            return View();
+            return View();*/
         }
         private string GenerateOtp()
         {
@@ -241,6 +261,7 @@ namespace FashionShopMVC.Controllers
                     return View();
                 }
 
+                _notyfService.Success("Mã OTP chính xác", 5);
                 return RedirectToAction("Resetpassword", "Account");
             }
             return View();
@@ -273,10 +294,11 @@ namespace FashionShopMVC.Controllers
                 if (result.Succeeded)
                 {
                     // Nếu tài khoản được tạo thành công, lưu thông tin vào session
-                    string userJson = JsonConvert.SerializeObject(user);
-                    HttpContext.Session.SetString(CommonConstants.SessionUser, userJson);
+                   /* string userJson = JsonConvert.SerializeObject(user);
+                    HttpContext.Session.SetString(CommonConstants.SessionUser, userJson);*/
 
-                    _notyfService.Success("Sửa mật khẩu thành công", 2);
+
+                    _notyfService.Success("Sửa mật khẩu thành công, Vui lòng đăng nhập lại", 2);
 
                     return RedirectToAction("Login", "Account");
                 }
@@ -287,6 +309,67 @@ namespace FashionShopMVC.Controllers
                 }
             }
             return View();
+        }
+        public IActionResult Information()
+        {
+            return View();
+        }
+        public IActionResult Updatepassword()
+        {
+            var userJson = HttpContext.Session.GetString(CommonConstants.SessionUser);
+            User user = null;
+
+            if (userJson != null)
+            {
+                user = JsonConvert.DeserializeObject<User>(userJson);
+            }
+            return View(user);
+        }
+        [HttpPost]
+        public async Task<IActionResult> Updatepassword(UpdatepasswordDTO updatepasswordDTO)
+        {
+            var userJson = HttpContext.Session.GetString(CommonConstants.SessionUser);
+            User user = null;
+
+            if (userJson != null)
+            {
+                user = JsonConvert.DeserializeObject<User>(userJson);
+            }
+            // Kiểm tra dữ liệu mật khẩu
+            if (ModelState.IsValid)
+            {
+                if (updatepasswordDTO.Password != updatepasswordDTO.RePassword)
+                {
+                    ModelState.AddModelError("NewPass", "Mật khẩu mới và nhập lại mật khẩu không trùng khớp.");
+                    return View(user);  // Trả về view với lỗi
+                }
+                // làm vậy vì nó đang theo dõi hai thể hiện của đối tượng User cùng một lúc.
+                var dbUser = await _userManager.FindByIdAsync(user.Id.ToString());
+                // Cập nhật mật khẩu cho người dùng
+                if (dbUser != null)
+                {
+                    // Cập nhật mật khẩu cho người dùng
+                    var updateResult = await _userManager.ChangePasswordAsync(dbUser, updatepasswordDTO.OldPass, updatepasswordDTO.Password);
+
+                    if (updateResult.Succeeded)
+                    {
+                        // Mật khẩu được cập nhật thành công
+                        TempData["SuccessMessage"] = "Mật khẩu đã được cập nhật thành công.";
+                        return RedirectToAction("Information", "Account");
+                    }
+                    else
+                    {
+                        // Nếu có lỗi trong quá trình thay đổi mật khẩu
+                        foreach (var error in updateResult.Errors)
+                        {
+                            ModelState.AddModelError("", error.Description);
+                        }
+                        return View(user);  // Trả về view với lỗi
+                    }
+                }
+            }
+
+            return View(user);  // Trả về view nếu model không hợp lệ
         }
     }
 }

@@ -12,7 +12,7 @@ namespace FashionShopMVC.Areas.Admin.Controllers
     {
         [Route("")]
         
-        [Route("Index")]
+        
         public IActionResult Index()
         {
             if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
@@ -22,10 +22,6 @@ namespace FashionShopMVC.Areas.Admin.Controllers
             return View();
         }
 
-        [Route("Member")]
-        public IActionResult Member()
-        {
-            return View();
-        }
+        
     }
 }

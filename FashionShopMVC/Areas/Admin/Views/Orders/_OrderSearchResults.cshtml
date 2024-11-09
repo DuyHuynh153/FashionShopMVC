@@ -4,7 +4,6 @@
 @model AdminPaginationSet<AdminGetOrderDTO>
 
 @{
-    ViewData["DefaultOrdersPageSize"] = PaginationConfig.DefaultOrdersPageSize;
     ViewData["Title"] = "_OrderSearchResults";
 }
 
@@ -70,6 +69,3 @@
         </ul>
     </nav>
 }
-<script>
-    const defaultOrdersPageSize = @ViewData["DefaultOrdersPageSize"];
-</script>

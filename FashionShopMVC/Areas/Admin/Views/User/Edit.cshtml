@@ -1,16 +1,11 @@
 ﻿@model FashionShopMVC.Models.DTO.UserDTO.GetUserDTO
 
-@{
-    ViewData["Title"] = "Edit";
-    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
-}
-
 <div class="card card-default">
     <div class="card-header">
         <h3 class="card-title" style="font-size: 30px">Chỉnh sửa quản trị viên</h3>
     </div>
 
-    <form asp-action="Edit" method="post">
+    <form asp-action="Edit" method="post" id="editForm">
         <div class="card-body">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="ID" />
@@ -56,4 +51,25 @@
 <!-- /.card -->
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+    <script>
+        $('#editForm').submit(function (e) {
+            e.preventDefault(); // Prevent the default form submission
+
+            $.ajax({
+                url: $(this).attr('action'),
+                type: $(this).attr('method'),
+                data: $(this).serialize(), // Serialize form data
+                success: function (response) {
+                    if (response.success) {
+                        // Optionally, refresh the row in the table
+                        $('#editModal').modal('hide');
+                        // You may want to update the row with new data here or refresh the table
+                    } else {
+                        // Handle errors
+                        console.log(response.errors);
+                    }
+                }
+            });
+        });
+    </script>
 }

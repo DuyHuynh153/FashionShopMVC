@@ -44,7 +44,7 @@
                         <td class="align-middle">@product.ID</td>
                         <td class="align-middle">@product.Name</td>
                         <td class="align-middle p-0">
-                            <img src="@product.Image" style="height: 100px" alt="Error Image" />
+                            <img src="~/@product.Image" style="height: 100px" alt="Error Image" />
                         </td>
                         <td class="align-middle">@product.CategoryName</td>
                         <td class="align-middle" @(product.Discount > 0 ? "" : "style='display:none;'")>

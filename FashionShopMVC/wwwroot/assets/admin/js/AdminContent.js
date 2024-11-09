@@ -13,17 +13,9 @@
         loadContacts(); // Tải dữ liệu lần đầu khi trang vừa tải xong
     }
 
-    // Kiểm tra xem URL có kết thúc bằng "/Admin/Product" không
-    if (window.location.href.endsWith("/Admin/Product")) {
-        loadProducts(); // Tải dữ liệu lần đầu khi trang vừa tải xong
-
-        $('#searchButton').click(function () {
-            loadProducts(); // Tải lại dữ liệu khi nhấn nút tìm kiếm
-        });
-    }
-
-    // Xử lý phân trang với sự kiện click động cho đơn hàng
-    $(document).on('click', '.pagination.orders a.page-link', function (e) {
+    
+    // Xử lý phân trang với sự kiện click động
+    $(document).on('click', '.pagination a.page-link', function (e) {
         e.preventDefault(); // Ngăn hành động mặc định của thẻ a
         var page = $(this).text() - 1; // Lấy số trang từ nội dung của thẻ <a>
         loadOrders(page); // Gọi lại hàm loadOrders với trang mới

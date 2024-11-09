@@ -20,7 +20,8 @@
 
 
 
-    string connectionString = "Data Source=LAPTOP-9JQTJS4J\\SQLEXPRESS01;Initial Catalog=FashionShopDB;Integrated Security=True;Encrypt=True;Trust Server Certificate=True";
+    // string connectionString = "Data Source=LAPTOP-9JQTJS4J\\SQLEXPRESS01;Initial Catalog=FashionShopDB;Integrated Security=True;Encrypt=True;Trust Server Certificate=True";
+    string connectionString = "Data Source=DESKTOP-D3AL9U3\\DUYHUYNH;Initial Catalog=FashionShopDB;Integrated Security=True;Encrypt=True;Trust Server Certificate=True";
 
 
     DbContextOptions<FashionShopDBContext> options;
@@ -65,6 +66,7 @@
         </span>
     </a>
     <div id="page">
+        <a href="@Url.Action("Checkout", "Cart")">vnpay</a>
         <header class="header-container">
             <div class="container">
                 <div class="top-row">
@@ -86,14 +88,14 @@
                             </div>
                         </div>
 
-                        <div class="col-md-2 col-sm-3 col-xs-12">
+                        @* <div class="col-md-2 col-sm-3 col-xs-12">
                             <div class="contact">
                                 <span>
                                     <i class="fa fa-phone" aria-hidden="true"></i>
                                     <a href="tel:+0123456789">0123456789</a>
                                 </span>
                             </div>
-                        </div>
+                        </div> *@
                         @using (Html.BeginForm("SearchProductByName", "Home", FormMethod.Post))
                         {
                             <div class="col-md-offset-0 col-md-4 col-sm-offset-0 col-sm-3 col-xs-offset-3 col-xs-6">
@@ -110,7 +112,8 @@
                          }
                         <div class="col-md-2 col-sm-1 col-xs-12" style="padding-top: 3px; text-align: end">
                             <div class="shopping-cart">
-                                <a href="~/ShoppingCart">
+                                <a href="@Url.Action("Index", "Cart")">
+                                  
                                     <i class="fa-solid fa-cart-shopping fa-2xl" aria-hidden="true">
                                         <span class="cartLength" style="margin-left: 3px"></span>
                                     </i>
@@ -147,6 +150,9 @@
                                                 <a href="javascript:void(0)">
                                                     Sản phẩm<span class="fa fa-angle-down"></span>
                                                 </a>
+
+                                                
+                                                
 
                                                 @Html.Partial("_PartialViewCategory", allCategory)
 
@@ -187,7 +193,8 @@
                         </div>
 
                         <div class="col-md-1 col-sm-1 col-xs-3">
-                            <a href="~/ShoppingCart">
+                            <a href="@Url.Action("Index", "CartController")">
+                            
                                 <span class="cart-fix">
                                     <i class="fa-solid fa-cart-shopping fa-2xl" aria-hidden="true">
                                         <span class="cartLength" style="margin-left: 3px"></span>

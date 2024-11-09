@@ -15,6 +15,7 @@
         <div class="row featured-block">
             <div class="main-head-block">
                 <h2>Danh sách sản phẩm</h2>
+              
             </div>
 
             @foreach (var pro in Model)
@@ -74,6 +75,9 @@
                                 <div class="button-block">
                                     <a class="btnAddProductFavorite" data-id="@pro.ID"> <i class="fa fa-heart"></i></a>
                                     @*<a><i class="fa fa-random" aria-hidden="true"></i></a>*@
+                                    
+                                   
+
                                     <a href="javascript:void(0);" class="btnAddToCart" data-id="@pro.ID"><i class="fa fa-shopping-cart"></i></a>
                                 </div>
                                 <div class="image-block">

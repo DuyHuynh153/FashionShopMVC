@@ -1,0 +1,73 @@
+﻿@using FashionShopMVC.Helper;
+@using FashionShopMVC.Models.Domain;
+@using FashionShopMVC.Models.ViewModel;
+@using Newtonsoft.Json;
+@inject IHttpContextAccessor HttpContextAccessor
+@{
+    ViewData["Title"] = "Infomation";
+
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+
+
+    string userJson = HttpContextAccessor.HttpContext.Session.GetString(CommonConstants.SessionUser);
+
+    User user = null;
+
+    if (userJson != null)
+    {
+        user = JsonConvert.DeserializeObject<User>(userJson);
+    }
+    
+
+}
+
+<div class="full-banner" style="height: 135px">
+</div>
+
+<div class="main-content">
+    <div class="container">
+        <ul class="breadcrumb">
+            <li><a href="~/Home"><i class="fa fa-home"></i></a></li>
+            <li><a>Information</a></li>
+        </ul>
+        <div class="row login-page">
+            <div class="col-sm-6" id="content">
+                <div class="row">
+                    <div class="well">
+                        <h3>Information</h3>
+                        @if(user != null)
+                        {
+                            foreach (var property in user.GetType().GetProperties())
+                            {
+                                if (
+                                property.Name != "Orders" &&
+                                property.Name != "Comments" &&
+                                property.Name != "FavoriteProducts" &&
+                                property.Name != "Id" &&
+                                property.Name != "NormalizedUserName" &&
+                                property.Name != "EmailConfirmed" &&
+                                property.Name != "PasswordHash" &&
+                                property.Name != "SecurityStamp" &&
+                                property.Name != "ConcurrencyStamp" &&
+                                property.Name != "PhoneNumberConfirmed" &&
+                                property.Name != "TwoFactorEnabled" &&
+                                property.Name != "LockoutEnd" &&
+                                property.Name != "AccessFailedCount" &&
+                                property.Name != "LockoutEnabled" &&
+                                property.Name != "NormalizedEmail"
+                                )
+                                {
+                                    var value = property.GetValue(user, null);
+                                    <li><strong>@property.Name:</strong> @value</li>
+                                }
+                            }
+                        }
+                    </div>
+                    <a href="~/Account/UpdatePassWord" style="margin:5px 0 0 0;">Cập nhật mật khẩu</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

@@ -128,6 +128,7 @@ namespace FashionShopMVC.Repositories
 
             if (voucherDomain != null)
             {
+                voucherDomain.ID = id;
                 voucherDomain.DiscountCode = updateVoucherDTO.DiscountCode;
                 voucherDomain.DiscountAmount = updateVoucherDTO.DiscountAmount;
                 voucherDomain.DiscountPercentage = updateVoucherDTO.DiscountPercentage;

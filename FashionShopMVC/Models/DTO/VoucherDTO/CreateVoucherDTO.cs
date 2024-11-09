@@ -17,17 +17,13 @@ namespace FashionShopMVC.Models.DTO.VoucherDTO
 
         [Required(ErrorMessage = "Vui lòng nhập số lượng mã giảm giá")]
         public int Quantity { get; set; }
-
+        [Required(ErrorMessage = "Chọn ngày bắt đầu")]
         public DateTime? StartDate { get; set; }
-
+        [Required(ErrorMessage = "Chọn ngày kết thúc")]
         public DateTime? EndDate { get; set; }
-
         public string? Describe { get; set; }
-
-
         [Required(ErrorMessage = "Vui lòng chọn trạng thái của mã giảm giá")]
         public bool Status { get; set; }
-
         public string CreatedBy { get; set; }
     }
 }

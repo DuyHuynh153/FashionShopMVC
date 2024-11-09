@@ -26,7 +26,14 @@ namespace FashionShopMVC.Areas.Admin.Controllers
             string userName = "";
             string role = (await _roleRepository.GetByNameAsync("Nhân Viên")).ID.ToString();
             var listUserEmployee = await _userRepository.GetAllUserAsync(userName, role);
+
+            if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+            {
+                return PartialView("IndexPartial", listUserEmployee);
+            }
             return View(listUserEmployee);
+
+            // return View(listUserEmployee);
         }
 
         [HttpGet]
