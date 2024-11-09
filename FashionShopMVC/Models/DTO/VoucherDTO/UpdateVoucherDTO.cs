@@ -4,6 +4,7 @@ namespace FashionShopMVC.Models.DTO.VoucherDTO
 {
     public class UpdateVoucherDTO
     {
+        public int Id { get; set; }
         [Required(ErrorMessage = "Mã giảm giá không được để trống")]
         public string DiscountCode { get; set; }
         public bool DiscountAmount { get; set; }

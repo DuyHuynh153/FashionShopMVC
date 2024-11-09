@@ -5,7 +5,13 @@
     ViewData["Title"] = "Index";
     Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
 }
-
+@section Scripts{
+    <script>
+        c
+        var index = '@Url.Action("Index", "Vouchers", new { area = "Admin"})'
+    </script>
+    <script src="~/assets/admin/js/pages/Voucher/VoucherDeleteModel.js"></script>
+}
 <div class="card">
     <div class="card-header">
         <h3 class="card-title" style="font-size:30px">Danh sách mã giảm giá</h3>
@@ -69,12 +75,19 @@
                         <td>@String.Format("{0:HH:mm dd/MM/yy}", @voucher.endDate)</td>
                         <td>
                             <span class="badge @(voucher.status ? "bg-gradient-green" : "bg-gradient-red")" style="font-size: 14px">
-                                @voucher.status
+                                @(voucher.status ? "Có" : "Không")
                             </span>
                         </td>
                         <td>
-                            <a asp-controller="Vouchers" asp-action="Edit" asp-route-id="@voucher.id" class="btn btn-primary" role="button">Edit</a> |
-                            <a asp-controller="Vouchers" asp-action="Delete" asp-route-id="@voucher.id" class="btn btn-danger" role="button">Delete</a>
+                            <a asp-controller="Vouchers" asp-action="Edit" asp-area="Admin" asp-route-id="@voucher.id" class="btn btn-primary" role="button">
+                                <i class="fas fa-edit"></i>
+                            </a> |
+                            <a onclick="deleteVoucher(@voucher.id)" class="btn btn-danger" role="button">
+                                <i class="fas fa-trash"></i>
+                            </a>
+                            <a asp-controller="Vouchers" asp-action="Details" asp-area="Admin" asp-route-id="@voucher.id" class="btn btn-info">
+                                <i class="fas fa-eye"></i>
+                            </a>
                         </td>
                     </tr>
                 }

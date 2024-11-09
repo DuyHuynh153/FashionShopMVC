@@ -14,11 +14,11 @@ namespace FashionShopMVC.Areas.Admin.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetRevenueStatistic(DateTime fromDate, DateTime toDate)
+        public async Task<IActionResult> GetRevenueStatistic(DateTime fromDate, DateTime toDate)
         {
             try
             {
-                var revenueStatistics = _statisticRepository.GetRevenueStatistic(fromDate, toDate);
+                var revenueStatistics = await _statisticRepository.GetRevenueStatistic(fromDate, toDate);
 
                 return Ok(revenueStatistics);
             }

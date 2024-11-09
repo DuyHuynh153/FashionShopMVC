@@ -3,6 +3,8 @@ using FashionShopMVC.Models.Domain;
 using FashionShopMVC.Repositories.@interface;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using FashionShopMVC.Models;
+using System.Diagnostics;
 using FashionShopMVC.Areas.Admin.Models.UserDTO;
 using AspNetCoreHero.ToastNotification.Abstractions;
 
@@ -70,7 +72,6 @@ namespace FashionShopMVC.Areas.Admin.Controllers
 
         [HttpGet]
         [Route("Create")]
-
         public IActionResult Create()
         {
             return PartialView("_CreateUserPartial");
@@ -223,11 +224,54 @@ namespace FashionShopMVC.Areas.Admin.Controllers
                 ModelState.AddModelError(string.Empty, "Khóa tài khoản không thành công");
                 return RedirectToAction("Index");
             }
-
-
         }
 
-        
+        // CUSTOMERS
 
+        [HttpGet]
+        [Route("loadCustomersPartial")]
+        //[AuthorizeRoles("Quản trị viên", "Nhân viên")]
+        public async Task<IActionResult> loadCustomersPartial(int page, int pageSize, string? searchByName, string? phoneNumber, string? email)
+        {
+            try
+            {
+                string role = (await _roleRepository.GetByNameAsync("Khách Hàng")).ID.ToString();
+
+                var listCustomers = await _userRepository.GetAllCustomerAsync(page, pageSize, searchByName, role, phoneNumber, email);
+
+                return PartialView("_CustomerSearchResults", listCustomers);
+            }
+            catch
+            {
+                return PartialView("Error", new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            }
+        }
+
+        [HttpGet]
+        [Route("GetListCustomers")]
+        public IActionResult GetListCustomers()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [Route("LockCustomer")]
+        public async Task<IActionResult> LockCustomer(string id)
+        {
+            if (string.IsNullOrEmpty(id))
+            {
+                return NotFound();
+            }
+            var result = await _userRepository.AccountLock(id);
+            if (result)
+            {
+                return RedirectToAction("GetListCustomers");
+            }
+            else
+            {
+                ModelState.AddModelError(string.Empty, "Khóa tài khoản không thành công");
+                return RedirectToAction("GetListCustomers");
+            }
+        }
     }
 }

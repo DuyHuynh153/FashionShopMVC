@@ -137,7 +137,7 @@
                         </li>
 
                         <li class="nav-item">
-                            <a ui-sref="customer_list" class="nav-link">
+                            <a asp-area="Admin" asp-controller="User" asp-action="GetListCustomers" class="nav-link">
                                 <i class="nav-icon fas fa-users"></i>
                                 <p>Quản lý khách hàng</p>
                             </a>
@@ -170,7 +170,7 @@
                         </li>
 
                         <li class="nav-item">
-                            <a class="nav-link" asp-area="Admin" asp-controller="Vouchers">
+                            <a class="nav-link" asp-area="Admin" asp-controller="Vouchers" asp-action="Index">
                                 <i class="nav-icon fas fa-ticket-simple"></i>
                                 <p>
                                     Quản lý mã giảm giá
@@ -190,7 +190,7 @@
 
 
                         <li class="nav-item">
-                            <a class="nav-link" asp-area="Admin" asp-controller="Contacts">
+                            <a class="nav-link" asp-area="Admin" asp-controller="Contacts" asp-action="Index">
                                 <i class="nav-icon fas fa-address-card"></i>
                                 <p>
                                     Quản lý liên hệ
@@ -228,12 +228,7 @@
                 </div>
             </section>
         </div>
-
-      
     </div>
-
-
-    
     <!-- jQuery -->
     <script src="~/assets/admin/libs/jquery/jquery.min.js"></script>
     <!-- Bootstrap 4 -->
@@ -254,6 +249,13 @@
     <!-- Chart.js (standalone) -->
     <script src="~/assets/admin/libs/chart.js/chart.js"></script>
 
+    <script src="~/assets/admin/libs/jquery/toast.min.js"></script>
+
+    <script src="~/assets/admin/js/pages/Customer/CustomerModel.js"></script>
+
+    <script src="~/assets/admin/js/pages/Order/OrderModel.js"></script>
+
+    <script src="~/assets/admin/js/pages/Contact/ContactModel.js"></script>
 
     <script src="~/assets/admin/js/pages/user/UserModule.js"></script>
 
@@ -269,10 +271,5 @@
 
     <!-- Render the Scripts section -->
     @RenderSection("Scripts", required: false)
-    @await Component.InvokeAsync("Notyf")
-
-    
-
-    
 </body>
 </html>

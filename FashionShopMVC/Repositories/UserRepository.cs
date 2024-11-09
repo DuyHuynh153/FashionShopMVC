@@ -1,10 +1,11 @@
 ﻿using FashionShopMVC.Models.DTO.UserDTO;
 using FashionShopMVC.Data;
 using FashionShopMVC.Models.Domain;
-using FashionShopMVC.Models.DTO.UserDTO;
 using FashionShopMVC.Repositories.@interface;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using FashionShopMVC.Helper;
+using FashionShopMVC.Models.DTO.OrderDTO;
 
 namespace FashionShopMVC.Repositories
 {
@@ -93,7 +94,6 @@ namespace FashionShopMVC.Repositories
                     .Where(ur => ur.RoleId == filterRole)
                     .Select(ur => ur.UserId)
                     .ToListAsync();
-
                 listUserDomain = listUserDomain.Where(u => userIdsWithRole.Contains(u.Id));
             }
 
@@ -280,7 +280,61 @@ namespace FashionShopMVC.Repositories
             }
 
             return null;
+        }
 
+        public async Task<AdminPaginationSet<GetUserDTO>> GetAllCustomerAsync(int page, int pageSize, string? searchByName, string? filterRole, string? phoneNumber, string? email)
+        {
+            var listUserDomain = _context.Users.AsQueryable();
+
+            if (!string.IsNullOrEmpty(filterRole))
+            {
+                var userIdsWithRole = await _context.UserRoles
+                    .Where(ur => ur.RoleId == filterRole)
+                    .Select(ur => ur.UserId)
+                    .ToListAsync();
+                listUserDomain = listUserDomain.Where(u => userIdsWithRole.Contains(u.Id));
+            }
+
+            if (!string.IsNullOrEmpty(searchByName))
+            {
+                listUserDomain = listUserDomain.Where(c => c.FullName.Contains(searchByName));
+            }
+
+            if(!string.IsNullOrEmpty(phoneNumber))
+            {
+                listUserDomain = listUserDomain.Where(c => c.PhoneNumber.Contains(phoneNumber));
+            }
+
+            if (!string.IsNullOrEmpty(email))
+            {
+                listUserDomain = listUserDomain.Where(c => c.Email.Contains(email));
+            }
+
+            var listUserDTO = await listUserDomain.Select(user => new GetUserDTO()
+            {
+                ID = user.Id,
+                FullName = user.FullName,
+                Email = user.Email,
+                PhoneNumber = user.PhoneNumber,
+                Role = _context.UserRoles
+                    .Where(ur => ur.UserId == user.Id)
+                    .Join(_context.Roles, ur => ur.RoleId, r => r.Id, (ur, r) => r.Name)
+                    .FirstOrDefault(),
+                LockoutEnabled = user.LockoutEnabled
+            }).OrderByDescending(user => user.FullName).ToListAsync();
+
+            var totalCount = listUserDTO.Count();
+            var listUserPagination = listUserDTO.Skip(page * pageSize).Take(pageSize).ToList();
+
+            AdminPaginationSet<GetUserDTO> userPaginationSet = new AdminPaginationSet<GetUserDTO>
+            {
+                List = listUserPagination,
+                Page = page,
+                TotalCount = totalCount,
+                PagesCount = (int)Math.Ceiling((decimal)totalCount / pageSize),
+            };
+
+            return userPaginationSet;
         }
     }
 }

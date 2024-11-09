@@ -40,7 +40,6 @@
                                 <form asp-area="Admin" asp-controller="Contacts" asp-action="confirmContact" asp-route-id="@contact.ID" method="post" style="display:inline;">
                                     <button type="submit" class="btn btn-sm btn-success">Xác nhận</button>
                                 </form>
-
                             }
                             @if (contact.Status == true)
                             {
@@ -62,6 +61,18 @@
         </tbody>
     </table>
 </div>
-@*
-     <pagination-directive show-to="{{showTo}}" show-from="{{showFrom}}" show-end="{{showEnd}}" page="{{page}}" custom-path="{{customPath}}" pages-count="{{pagesCount}}" total-count="{{totalCount}}" search-func="getListProducts(page)"></pagination-directive>
-*@
+@if (Model != null && Model.PagesCount > 0)
+{
+    <nav class="mt-5">
+        <ul class="pagination">
+            @for (int i = 0; i < Model.PagesCount; i++)
+            {
+                <li class="page-item @(Model.Page == i ? "active" : "")">
+                    <a class="page-link" href="javascript:void(0);" onclick="loadContacts(@i)">
+                        @(i + 1)
+                    </a>
+                </li>
+            }
+        </ul>
+    </nav>
+}

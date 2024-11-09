@@ -56,8 +56,8 @@ namespace FashionShopMVC.Areas.Admin.Controllers
                         {
                             var claims = new List<Claim>
                             {
-                                new Claim(ClaimTypes.Name, checkUser.UserName),
-                                new Claim(ClaimTypes.Email, checkUser.Email)
+                                new Claim(ClaimTypes.Name, checkUser.FullName ?? checkUser.UserName),
+                                new Claim(ClaimTypes.Email, checkUser.Email),
                             };
 
                             foreach (var role in roles)

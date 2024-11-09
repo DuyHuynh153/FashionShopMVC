@@ -1,4 +1,5 @@
-﻿using FashionShopMVC.Models.DTO.UserDTO;
+﻿using FashionShopMVC.Helper;
+using FashionShopMVC.Models.DTO.UserDTO;
 
 
 namespace FashionShopMVC.Repositories.@interface
@@ -7,6 +8,7 @@ namespace FashionShopMVC.Repositories.@interface
     {
         public  Task<IEnumerable<GetUserDTO>> GetAllUserAsync(string? searchByName, string? filterRole);
         public Task<IEnumerable<GetUserDTO>> GetPagedUsersAdminAsync(string searchQuery,string role, int pageNumber, int pageSize);
+        public Task<AdminPaginationSet<GetUserDTO>> GetAllCustomerAsync(int page, int pageSize, string? searchByName, string? filterRole, string? phoneNumber, string? email);
         public  Task<GetUserDTO> GetUserByIdAsync(string id);
         public Task<bool> RegisterAccountAdminAsync(RegisterRequestDTO registerRequestDTO);
 

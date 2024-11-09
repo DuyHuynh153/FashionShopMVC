@@ -11,8 +11,6 @@ namespace FashionShopMVC.Repositories.@interface
         Category AddCategory(AddCategoryRequestDTO addCategoryRequestDTO);
         AddCategoryRequestDTO? UpdateCategoryById(int id, AddCategoryRequestDTO CategoryDTO);
         Category DeleteCategoryById(int id);
-
-
         Task<IEnumerable<GetCategoryDTO>> GetAllCategoryAsync();
         Task<GetCategoryDTO> GetByIdAsync(int id);
         Task<CreateCategoryDTO> AddCategoryAsync(CreateCategoryDTO createCategory);
