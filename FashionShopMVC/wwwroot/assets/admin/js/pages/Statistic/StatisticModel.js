@@ -29,7 +29,9 @@
 });
 $(document).ready(function () {
     loadRevenueChart(); // Default view on page load
-
+    $('#btnLoadStatistic').click(function () {
+        loadPage();
+    })
     //$('#revenueType').change(function () {
     //    var type = $(this).val();
     //    let fromDate = $('#fromDate').val();
@@ -51,7 +53,7 @@ function loadPage() {
             revenueType: revenueType
         },
         success: function (response) {
-            $('#statisticResult').html(response);
+            $('#statisticResults').html(response);
             loadRevenueChart();
             toastr.success("Load data thành công.", "Thông báo");
         },
@@ -84,7 +86,6 @@ function drawChart() {
         success: function (response) {
             if (response.listRevenueStatistic.length > 0) {
                 updateChart(response.listRevenueStatistic);
-                $('#statisticResult').html(response);
             } else {
                 toastr.success("Ngày chọn không có dữ liệu.", "Thông báo");
             }
