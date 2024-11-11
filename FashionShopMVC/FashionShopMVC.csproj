@@ -7,6 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="wwwroot\assets\admin\js\NewFolder\**" />
+    <Content Remove="wwwroot\assets\admin\js\NewFolder\**" />
+    <EmbeddedResource Remove="wwwroot\assets\admin\js\NewFolder\**" />
+    <None Remove="wwwroot\assets\admin\js\NewFolder\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Include="wwwroot\assets\admin\libs\ckeditor\.npm\assets\ckeditor4.png" />
   </ItemGroup>
 
@@ -20,8 +27,6 @@
     <Folder Include="Areas\Admin\Models\" />
     <Folder Include="UploadFiles\" />
     <Folder Include="Views\Contact\" />
-    <Folder Include="wwwroot\assets\admin\js\NewFolder\" />
-    <Folder Include="wwwroot\assets\admin\js\pages\Statistic\" />
     <Folder Include="wwwroot\assets\admin\libs\bootbox\" />
   </ItemGroup>
 

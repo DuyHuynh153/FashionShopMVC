@@ -1,0 +1,93 @@
+﻿@using FashionShopMVC.Models.ViewModel;
+@model StatisticViewModel;
+<section class="content-header">
+    <h1>Quản lý thống kê</h1>
+    <ol class="breadcrumb">
+    </ol>
+</section>
+@section Scripts {
+    <script src="~/assets/admin/libs/Chart/chart.js"></script>
+    <script src="~/assets/admin/js/pages/Statistic/StatisticModel.js"></script>
+}
+<section class="content">
+    <div class="card">
+        <div class="card-body">
+            <div class="container-fluid">
+                <!-- Small boxes (Stat box) -->
+                <div class="row">
+                    <div class="col-lg-3 col-6">
+                        <div class="info-box">
+                            <span class="info-box-icon bg-success"><i class="fas fa-shopping-cart"></i></span>
+                            <div class="info-box-content">
+                                <span class="info-box-text">Tổng số đơn hàng</span>
+                                <span class="info-box-number">@Model.CountOrder <small><a href="@Url.Action("Index", "Orders", new { area = "Admin" })" class="small-box-footer">(Chi tiết)</a></small></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-6">
+                        <div class="info-box">
+                            <span class="info-box-icon bg-green"><i class="fa fa-database"></i></span>
+                            <div class="info-box-content">
+                                <span class="info-box-text">Tổng Sản phẩm</span>
+                                <span class="info-box-number">@Model.CountProduct <small><a href="@Url.Action("Index", "Products", new { area = "Admin" })" class="small-box-footer">(Chi tiết)</a></small></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-6">
+                        <div class="info-box">
+                            <span class="info-box-icon bg-danger"><i class="fa fa-fw fa-user"></i></span>
+                            <div class="info-box-content">
+                                <span class="info-box-text">Tổng số Khách Hàng</span>
+                                <span class="info-box-number">@Model.CountCustomer <small><a href="@Url.Action("GetListCustomers", "User", new { area = "Admin" })" class="small-box-footer">(Chi tiết)</a></small></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-6">
+                        <div class="info-box">
+                            <span class="info-box-icon bg-green"><i class="fa-solid fa-ticket-simple"></i></span>
+                            <div class="info-box-content">
+                                <span class="info-box-text">Mã Giảm Giá</span>
+                                <span class="info-box-number">@Model.CountVoucher <small><a href="@Url.Action("Index", "Vouchers", new { area = "Admin" })" class="small-box-footer">(Chi tiết)</a></small></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-3">
+                        <label class="card-title">Biểu đồ Doanh thu</label>
+                        <select id="revenueType" class="form-control">
+                            <option value="day">Ngày</option>
+                            <option value="month">Tháng</option>
+                            <option value="quarter">Quý</option>
+                            <option value="year">Năm</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-3">
+                        <label for="StartDate">Ngày bắt đầu</label>
+                        <input type="datetime-local" class="form-control" id="fromDate" />
+                    </div>
+                    <div class="form-group col-3">
+                        <label for="endDate">Ngày kết thúc</label>
+                        <input type="datetime-local" class="form-control" id="toDate" />
+                    </div>
+                    <div class="form-group col-1">
+                        <label for="endDate"></label>
+                        <button class="btn btn-primary mt-2 form-control" onclick="loadPage()">Lấy dữ liệu</button>
+                    </div>
+                </div>
+                <div id="loading" style="display: none;">
+                    <img src="~/assets/admin/img/spinner.gif" alt="Đang tải..." />
+                    <p>Đang tải dữ liệu...</p>
+                </div>
+                <!-- Khu vực chứa bảng và phân trang -->
+                <div id="statisticResults">
+                        @await Html.PartialAsync("_RevenueStatistics", Model)
+                </div>
+                
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+

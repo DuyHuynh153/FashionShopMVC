@@ -31,7 +31,7 @@ namespace FashionShopMVC.Areas.Admin.Controllers
             ClaimsPrincipal claimUser = HttpContext.User;
 
             if (claimUser.Identity.IsAuthenticated)
-                return RedirectToAction("Index", "AdminHome", new { area = "Admin" });
+                return RedirectToAction("Index", "Statistic", new { area = "Admin" });
 
             ViewData["ReturnUrl"] = returnUrl;
             return View();
@@ -74,7 +74,7 @@ namespace FashionShopMVC.Areas.Admin.Controllers
 
                             await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity), authProperties);
 
-                            return RedirectToAction("Index", "AdminHome");
+                            return RedirectToAction("Index", "Statistics");
                         }
                     }
                 }
