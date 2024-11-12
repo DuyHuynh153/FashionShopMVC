@@ -22,6 +22,7 @@ public interface IProductRepository
     public Task<bool> ReduceQuantityOrder(List<ShoppingCartViewModel> listOrder);
     public Task<bool> IncreaseQuantityOrder(List<ShoppingCartViewModel> listOrder);
     public Task<int> Count();
+  
 }
 
 public class ProductRepository : IProductRepository
@@ -32,6 +33,7 @@ public class ProductRepository : IProductRepository
     {
         _fashionShopDBContext = fashionShopDBContext;
     }
+  
 
     public async Task<AdminPaginationSet<GetProductDTO>> GetAll(int page, int pageSize, int? searchByCategory, string? searchByName)
     {

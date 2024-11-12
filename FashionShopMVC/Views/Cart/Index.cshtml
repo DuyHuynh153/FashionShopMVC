@@ -1,38 +1,96 @@
-﻿
+﻿@using FashionShopMVC.Models.Domain
+@model List<Product>;
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"]   = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Index</h1>
-<div>
-    Cartviewer
+<div class="full-banner" style="height: 135px">
 </div>
 <div class="main-content">
     <div class="container">
-        <div class="row featured-block">
-            <div class="main-head-block">
-                Danh sách order
-                (view danh sách order)
-                <div class="button-block">thanh toán </div>
-                <div class="cart-container">
-                    <div class="cart-items">
-                        <h3>Sản phẩm đã mua</h3>
-                        <ul>
-                            <li>Product 1 - $10.00</li>
-                            <li>Product 2 - $15.00</li>
-                            <li>Product 3 - $20.00</li>
-                        </ul>
-                    </div>
-                    <div class="cart-actions">
-                        <button class="btn pay-btn">Thanh toán</button>
-                        <button class="btn cancel-btn">Hủy đơn</button>
-                    </div>
-                </div>
-            </div>
+        <h3 class="display-4">Sản phẩm đã mua</h3>
+        <ul>
 
-        </div>
+            @if (Model != null && Model.Any())
+            {
+                @foreach (var item in Model)
+                {
+                    <li class="Cart_Item_line" method="post" asp-action="SubmitData" style="border-style:solid;border-width: 2px;width: 80%;height: 100px; margin-bottom: 20px;">
+                        <input type="checkbox" class="delete-checkbox" name="selectedIds" value="@item.ID" />
+                       
+                        <td>@item.ID</td>
+
+                        <td>@item.Quantity</td>
+
+                        <td>@item.Price</td>
+                    </li>
+                }
+                <div class="cart-actions" style="display: flex;justify-content: space-between;">
+
+                    @using (Html.BeginForm("Index", "Checkout", FormMethod.Post))
+                    {
+                        <button style="float:left;display: flex;" type="submit" class="btn btn-primary">Thanh toán</button>
+                    }
+
+
+                    <button style="float:right;justify-content: flex-end" type="submit" class="btn btn-primary" id="DeleteButton" onclick="deleteSelected()">Xóa</button>
+                    
+                    
+                </div>
+
+            }
+            else
+            {
+                <p>Giỏ hàng của bạn hiện tại đang trống.</p>
+                <a href="~/Home">Quay về trang chủ</a>
+
+            }
+            @if (TempData["Message"] != null)
+            {
+                <div class="alert alert-success" style="display: flex">
+                    @TempData["Message"]
+                </div>
+            }
+        </ul>
+    
+        
     </div>
 
+
 </div>
+<script ">
+    function deleteSelected() {
+        var selectedIds = [];
+
+        // Lấy tất cả checkbox đã được chọn
+        $('input.delete-checkbox:checked').each(function () {
+            selectedIds.push($(this).val());
+        });
+
+        // Kiểm tra nếu có sản phẩm được chọn
+        if (selectedIds.length > 0) {
+            // Gửi yêu cầu AJAX để xóa sản phẩm
+            $.ajax({
+                url: '@Url.Action("DeleteSelectedProducts", "Cart")', // Đường dẫn đến Action trong Controller
+                type: 'POST',
+                data: { selectedIds: selectedIds.join(',') }, // Gửi danh sách ID sản phẩm
+                success: function (response) {
+                    // Nếu xóa thành công
+                    if (response.success) {
+                        alert('Sản phẩm đã được xóa!');
+                        location.reload(); // Tải lại trang để cập nhật lại danh sách sản phẩm
+                    } else {
+                        alert('Có lỗi xảy ra khi xóa sản phẩm.');
+                    }
+                },
+                error: function (xhr, status, error) {
+                    alert('Có lỗi xảy ra, vui lòng thử lại.');
+                }
+            });
+        } else {
+            alert('Vui lòng chọn ít nhất một sản phẩm để xóa!');
+        }
+    }
+</script>
 

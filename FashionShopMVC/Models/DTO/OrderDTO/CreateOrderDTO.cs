@@ -28,6 +28,6 @@ namespace FashionShopMVC.Models.DTO.OrderDTO
         public List<ShoppingCartViewModel>? shoppingCarts { get; set; }
 
         public int TypePayment { get; set; }
-        public int TypePaymentVN { get; set; }
+        public int TypePaymentVN { get; set; }  
     }
 }

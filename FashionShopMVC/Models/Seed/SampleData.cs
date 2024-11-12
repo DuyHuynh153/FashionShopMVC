@@ -44,6 +44,7 @@ namespace sportMVC.Models.Seed
                     SecurityStamp = Guid.NewGuid().ToString("D")
 
                 };
+                
                 if (!context.Users.Any(u => u.UserName == user.UserName))
                 {
                     var result = await userManager.CreateAsync(user, "secret");

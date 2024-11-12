@@ -121,9 +121,22 @@
                                 </button>
                             </div>
                             <div class="col-sm-9">
-                                <a class="margin-top btn btn-primary btn-lg btn-block btn-5 btn-5a icon-cart btnAddToCartInDetail" data-id="@Model.ID" id="button-cart">
+                              
+                                <form asp-action="AddToCart" asp-controller="Cart" method="post" style="display: inline;">
+                                    
+                                    <input type="hidden" name="id" value="@Model.ID" />
+                                    <input type="hidden" id="quantaty" name="quantaty" value="1" />
+
+                                   
+                                    <a href="void(0)"
+                                       class="margin-top btn btn-primary btn-lg btn-block btn-5 btn-5a icon-cart btnAddToCartInDetail"
+                                       onclick="updateQuantityAndSubmit();this.closest('form').submit();">
+                                        <span>Thêm vào giỏ hàng</span>
+                                    </a>
+                                </form>
+                              @* <a class="margin-top btn btn-primary btn-lg btn-block btn-5 btn-5a icon-cart btnAddToCartInDetail" data-id="@Model.ID" id="button-cart">
                                     <span>Thêm vào giỏ hàng</span>
-                                </a>
+                                </a>*@
                             </div>
                         </div>
                         <div class="clearfix margin-top"></div>
@@ -301,6 +314,16 @@
                 $(".changeimg").attr('src', src);
             });
         });
+
+        function updateQuantityAndSubmit() {
+           
+            var quantityValue = document.getElementById("input-quantity").value;
+                
+            
+            document.getElementById("quantaty").value = quantityValue;
+            
+        }
+   
     </script>
 
 }
