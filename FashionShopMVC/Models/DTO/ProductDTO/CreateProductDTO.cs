@@ -37,7 +37,7 @@ namespace FashionShopMVC.Models.DTO.ProductDTO
         [Range(0, 100, ErrorMessage = "Giảm giá phải nằm từ 0 đến 100")]
         public double Discount { get; set; }
 
-        public string CreatedBy { get; set; }
+        //public string CreatedBy { get; set; }
         public bool Status { get; set; }
         public DateTime CreatedDate { get; internal set; }
 

@@ -1,0 +1,113 @@
+﻿@using FashionShopMVC.Helper
+@model AdminPaginationSet<FashionShopMVC.Models.DTO.PostDTO.PostDTO>
+@{
+    ViewData["Title"] = "Danh sách bài viết";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title" style="font-size:30px">Danh sách bài viết</h3>
+        <a asp-action="Create" class="btn btn-info float-right">Thêm bài viết</a>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col col-md-5">
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" placeholder="Nhập tên bài viết..." id="searchByName" aria-label="Recipient's title" aria-describedby="basic-addon2">
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-secondary" id="searchButton" type="button">Tìm kiếm</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <table class="table table-bordered table-striped text-center">
+            <thead>
+                <tr>
+                    <th style="width: 3%">ID</th>
+                    <th style="width: 8%">Tên sản phẩm</th>
+                    <th style="width: 20%">Hình ảnh</th>
+                    <th style="width: 50%">Nội dung</th>
+                    <th style="width: 10%">Trạng thái</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var post in Model.List)
+                {
+                    <tr>
+                        <td class="align-middle">@post.ID</td>
+                        <td class="align-middle">@post.Title</td>
+                        <td class="align-middle p-0">
+                            <img src="/@post.Image" style="height: 100px" alt="Error Image" />
+                        </td>
+                        <td class="align-middle">@post.Content</td>
+                        <td class="align-middle text-center">
+                            <span class="badge @(post.Status ? "bg-gradient-green" : "bg-gradient-red")" style="font-size: 14px">
+                                @(post.Status ? "Hoạt động" : "Ngưng hoạt động")
+                            </span>
+                        </td>
+                        <td class="align-middle text-center">
+                            <a asp-area="Admin" asp-controller="Post" asp-action="Edit" asp-route-id="@post.ID" class="btn btn-sm btn-primary mr-2">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                            <button class="btn btn-sm btn-danger mr-2" onclick="deletePost(@post.ID)">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <nav aria-label="Page navigation">
+            <ul class="pagination justify-content-center">
+                @for (int i = 0; i < Model.PagesCount; i++)
+                {
+                    <li class="page-item @(i == Model.Page ? "active" : "")">
+                        <a class="page-link" href="@Url.Action("Index", "Post", new { area = "Admin", page = i + 1, pageSize = Model.PageSize, searchByName = ViewData["searchByName"] })">
+                            @((i + 1).ToString())
+                        </a>
+                    </li>
+                }
+            </ul>
+        </nav>
+
+    </div>
+
+</div>
+
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('#searchButton').click(function () {
+                var searchByName = $('#searchByName').val();
+                // Redirect to the Index action with the search parameter
+                window.location.href = '@Url.Action("Index")?searchByName=' + encodeURIComponent(searchByName);
+            });
+        });
+
+
+        function deletePost(id) {
+            if (confirm('Bạn có chắc chắn muốn xóa bài viết này?')) {
+                $.ajax({
+                    url: '/Admin/Post/Delete/' + id,
+                    type: 'DELETE',
+                    success: function (response) {
+                        if (response.success) {
+                            alert(response.message);
+                            location.reload();  // Gọi hàm tải lại danh sách bài viết
+                        } else {
+                            alert("Có lỗi xảy ra khi xóa bài viết.");
+                        }
+                    },
+                    error: function () {
+                        alert("Có lỗi xảy ra khi xóa bài viết.");
+                    }
+                });
+            }
+        }
+
+
+    </script>
+}

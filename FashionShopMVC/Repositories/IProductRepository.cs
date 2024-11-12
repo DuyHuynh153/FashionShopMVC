@@ -4,7 +4,8 @@ using FashionShopMVC.Models.Domain;
 using FashionShopMVC.Models.DTO.ProductDTO;
 using FashionShopMVC.Models.ViewModel;
 using Microsoft.EntityFrameworkCore;
-using System.Drawing.Printing;
+using System.Security.Claims;
+
 
 public interface IProductRepository
 {
@@ -22,15 +23,19 @@ public interface IProductRepository
     public Task<bool> ReduceQuantityOrder(List<ShoppingCartViewModel> listOrder);
     public Task<bool> IncreaseQuantityOrder(List<ShoppingCartViewModel> listOrder);
     public Task<int> Count();
+
 }
 
 public class ProductRepository : IProductRepository
 {
     private readonly FashionShopDBContext _fashionShopDBContext;
+    private readonly IHttpContextAccessor _httpContextAccessor;
 
-    public ProductRepository(FashionShopDBContext fashionShopDBContext)
+
+    public ProductRepository(FashionShopDBContext fashionShopDBContext, IHttpContextAccessor httpContextAccessor)
     {
         _fashionShopDBContext = fashionShopDBContext;
+        _httpContextAccessor = httpContextAccessor;
     }
 
     public async Task<AdminPaginationSet<GetProductDTO>> GetAll(int page, int pageSize, int? searchByCategory, string? searchByName)
@@ -72,7 +77,7 @@ public class ProductRepository : IProductRepository
         {
             List = listProductPagination,
             Page = page,
-            PageSize=pageSize,
+            PageSize = pageSize,
             TotalCount = totalCount,
             PagesCount = (int)Math.Ceiling((decimal)totalCount / pageSize),
         };
@@ -252,6 +257,8 @@ public class ProductRepository : IProductRepository
 
     public async Task<CreateProductDTO> Create(CreateProductDTO createProductDTO)
     {
+
+
         var productDomain = new Product
         {
             Name = createProductDTO.Name,
@@ -265,13 +272,16 @@ public class ProductRepository : IProductRepository
             Discount = createProductDTO.Discount,
             Status = createProductDTO.Status,
 
+
             CreatedDate = DateTime.Now,
-            CreatedBy = createProductDTO.CreatedBy,
+            CreatedBy = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.Name)?.Value,
+
         };
         await _fashionShopDBContext.Products.AddAsync(productDomain);
         await _fashionShopDBContext.SaveChangesAsync();
 
         return createProductDTO;
+
     }
 
     public async Task<UpdateProductDTO> Update(UpdateProductDTO updateProductDTO, int id)
@@ -292,7 +302,7 @@ public class ProductRepository : IProductRepository
             productDomain.Status = updateProductDTO.Status;
 
             productDomain.UpdatedDate = DateTime.Now;
-            productDomain.UpdatedBy = updateProductDTO.UpdatedBy;
+            productDomain.UpdatedBy = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.Name)?.Value;
 
             await _fashionShopDBContext.SaveChangesAsync();
             return updateProductDTO;
