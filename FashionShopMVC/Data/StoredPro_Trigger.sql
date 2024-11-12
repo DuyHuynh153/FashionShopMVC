@@ -75,6 +75,7 @@ ALTER PROCEDURE [dbo].[GetRevenueStatistic]
 
 
 --PHAN TRIGGER
+/*
 GO
 CREATE TRIGGER trg_AddRevenueOnOrderComplete
 ON Orders
@@ -189,3 +190,4 @@ BEGIN
         VALUES (source.AggregationType, source.PeriodStartDate, source.PeriodEndDate, source.TotalRevenues, source.TotalBenefit);
 
 END;
+*/
