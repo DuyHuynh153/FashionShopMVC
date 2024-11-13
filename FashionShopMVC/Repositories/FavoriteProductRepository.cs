@@ -2,6 +2,8 @@
 
 using FashionShopMVC.Data;
 using FashionShopMVC.Models.Domain;
+using FashionShopMVC.Models.DTO.FavoriteProductDTO;
+using FashionShopMVC.Models.DTO.ProductDTO;
 using Microsoft.EntityFrameworkCore;
 using FashionShopMVC.Models.DTO.FavoriteProductDTO;
 
@@ -21,13 +23,13 @@ namespace FashionShopMVC.Repositories
     {
         private readonly FashionShopDBContext _fashionShopDBContext;
 
-        public FavoriteProductRepository(FashionShopDBContext fashionShopDBContext) 
+        public FavoriteProductRepository(FashionShopDBContext fashionShopDBContext)
         {
             _fashionShopDBContext = fashionShopDBContext;
         }
         public async Task<List<GetFavoriteProductByUserIdDTO>> GetByUserID(string userID)
         {
-            var listFavoriteByUser = await _fashionShopDBContext.FavoriteProducts.Where(f => f.UserID == userID).Select( favoriteProduct => new GetFavoriteProductByUserIdDTO()
+            var listFavoriteByUser = await _fashionShopDBContext.FavoriteProducts.Where(f => f.UserID == userID).Select(favoriteProduct => new GetFavoriteProductByUserIdDTO()
             {
                 UserID = favoriteProduct.UserID,
                 ProductID = favoriteProduct.ProductID,
@@ -56,7 +58,7 @@ namespace FashionShopMVC.Repositories
         {
             var favoriteProduct = await _fashionShopDBContext.FavoriteProducts.SingleOrDefaultAsync(f => f.ProductID == productID && f.UserID == userID);
 
-            if(favoriteProduct != null)
+            if (favoriteProduct != null)
             {
                 _fashionShopDBContext.Remove(favoriteProduct);
                 await _fashionShopDBContext.SaveChangesAsync();

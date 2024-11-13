@@ -15,6 +15,8 @@ using FashionShopMVC.Models.DTO.UserDTO;
 using FashionShopMVC.Repositories.@interface;
 using FashionShop.Service.Model;
 using FashionShop.Service.Service;
+using FashionShopMVC.Repositories;
+using FashionShopMVC.Models.DTO.FavoriteProductDTO;
 
 namespace FashionShopMVC.Controllers
 {
@@ -23,6 +25,9 @@ namespace FashionShopMVC.Controllers
         private readonly UserManager<User> _userManager;
         private readonly IUserRepository _userRepository;
         private readonly INotyfService _notyfService;
+        private readonly IEmailSender _emailSender;
+        private readonly IProductRepository _productRepository;
+        private readonly IFavoriteProductRepository _favoriteProductRepository;
 
         // import emailService from class lib fashioShop.Service
 
@@ -33,6 +38,8 @@ namespace FashionShopMVC.Controllers
             _userRepository = userRepository;
             _notyfService = notyfService;
             _emailAuthService = emailAuthService;
+            _favoriteProductRepository = favoriteProductRepository;
+            _productRepository = productRepository;
         }
         public IActionResult Login()
         {
@@ -367,6 +374,76 @@ namespace FashionShopMVC.Controllers
             }
 
             return View(user);  // Trả về view nếu model không hợp lệ
+        }
+
+        public async Task<IActionResult> FavoriteList()
+        {
+            var userSession = HttpContext.Session.GetString(CommonConstants.SessionUser);
+            var user = JsonConvert.DeserializeObject<User>(userSession);
+
+            var listFavoriteProduct = await _favoriteProductRepository.GetByUserID(user.Id);
+
+            return View(listFavoriteProduct);
+        }
+
+        [HttpPost]
+        public async Task<JsonResult> AddFavoriteProduct(CreateFavoriteProductDTO createFavoriteProductDTO)
+        {
+            var userSession = HttpContext.Session.GetString(CommonConstants.SessionUser);
+
+            if (userSession != null)
+            {
+                var user = JsonConvert.DeserializeObject<User>(userSession);
+
+                createFavoriteProductDTO.UserID = user.Id;
+
+                var favoriteProduct = await _favoriteProductRepository.Create(createFavoriteProductDTO);
+
+                if (favoriteProduct != null)
+                {
+                    var product = await _productRepository.GetById(createFavoriteProductDTO.ProductID);
+
+                    _notyfService.Custom("<img style='height: 40px; padding-right: 10px;' src='" + product.Image + "'/> Đã thêm vào yêu thích", 2, "white");
+
+                    return Json(new
+                    {
+                        status = true
+                    });
+                }
+            }
+
+            _notyfService.Error("Vui lòng đăng nhập", 2);
+            return Json(new
+            {
+                status = false
+            });
+        }
+
+        [HttpPost]
+        public async Task<JsonResult> DeleteFavoriteProduct(int productID)
+        {
+            var userSession = HttpContext.Session.GetString(CommonConstants.SessionUser);
+
+            if (userSession != null)
+            {
+                var user = JsonConvert.DeserializeObject<User>(userSession);
+
+                var favoriteProduct = await _favoriteProductRepository.Delete(productID, user.Id);
+
+                if (favoriteProduct != null)
+                {
+                    _notyfService.Success("Đã xóa khỏi yêu thích", 2);
+                    return Json(new
+                    {
+                        status = true
+                    });
+                }
+            }
+
+            return Json(new
+            {
+                status = false
+            });
         }
     }
 }
