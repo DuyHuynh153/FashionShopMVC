@@ -49,25 +49,3 @@
         attachPaginationEventListeners();
     });
 </script>
-<script>
-    $(document).ready(function () {
-        $('.btnAddProductFavorite').click(function () {
-            var productId = $(this).data('id');
-            $.ajax({
-                url: '@Url.Action("AddToFavorite", "Home")',
-                type: 'POST',
-                data: { productId: productId },
-                success: function (response) {
-                    if (response.success) {
-                        alert('Product added to favorites!');
-                    } else {
-                        alert('Failed to add product to favorites.');
-                    }
-                },
-                error: function () {
-                    alert('Error occurred while adding product to favorites.');
-                }
-            });
-        });
-    });
-</script>

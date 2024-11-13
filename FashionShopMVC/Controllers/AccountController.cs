@@ -13,7 +13,6 @@ using Microsoft.CodeAnalysis;
 using AspNetCoreHero.ToastNotification.Abstractions;
 using FashionShopMVC.Models.DTO.UserDTO;
 using FashionShopMVC.Repositories.@interface;
-using FashionShopMVC.Services;
 using FashionShop.Service.Model;
 using FashionShop.Service.Service;
 
@@ -24,17 +23,15 @@ namespace FashionShopMVC.Controllers
         private readonly UserManager<User> _userManager;
         private readonly IUserRepository _userRepository;
         private readonly INotyfService _notyfService;
-        private readonly IEmailSender _emailSender;
 
         // import emailService from class lib fashioShop.Service
 
         private readonly IEmailAuthService _emailAuthService;
-        public AccountController(UserManager<User> userManager, IUserRepository userRepository, INotyfService notyfService, IEmailSender emailSender,   IEmailAuthService emailAuthService)
+        public AccountController(UserManager<User> userManager, IUserRepository userRepository, INotyfService notyfService,  IEmailAuthService emailAuthService)
         {
             _userManager = userManager;
             _userRepository = userRepository;
             _notyfService = notyfService;
-            _emailSender = emailSender;
             _emailAuthService = emailAuthService;
         }
         public IActionResult Login()

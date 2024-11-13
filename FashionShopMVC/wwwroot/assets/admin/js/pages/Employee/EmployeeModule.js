@@ -38,5 +38,8 @@ const EmployeeModule = (() => {
 })();
 
 $(document).ready(() => {
-    EmployeeModule.init();
+    if (window.location.href.endsWith("/Admin/Employee")) {
+        EmployeeModule.init();
+
+    }
 });

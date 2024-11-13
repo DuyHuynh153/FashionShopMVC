@@ -63,6 +63,7 @@ namespace FashionShopMVC.Areas.Admin.Controllers
             {
                 return PartialView("_UserListPartial", model);
             }
+            
             return View(model);
 
             // using ajax

@@ -121,13 +121,20 @@
                             </a>
                         </li>
 
-                        <li class="nav-item">
+                        @* <li class="nav-item">
                             <a class="nav-link" href="#"  data-url="@Url.Action("Index", "User")" data-module="UserModule">
                                 <i class="nav-icon fas fa-user"></i>
                                 <p>Quản lý quản trị viên</p>
                             </a>
+                        </li> *@
+                        <li class="nav-item">
+                            <a class="nav-link" asp-action="Index" asp-controller="User" asp-area="Admin">
+                                <i class="nav-icon fas fa-user"></i>
+                                <p>Quản lý quản trị viên</p>
+                            </a>
                         </li>
-                       
+
+                        
 
                         <li class="nav-item">
                             <a class="nav-link" href="#" data-url="@Url.Action("Index", "Employee")" data-module="EmployeeModule">
@@ -177,15 +184,15 @@
                         </li>
 
 
-                        <li class="nav-item">
-                            <a data-url = @Url.Action("Index", "Orders") class="nav-link" href="#">
+                         <li class="nav-item"> 
+                            <a class="nav-link" asp-area="Admin" asp-controller="Orders" asp-action="Index">
                                 <i class="nav-icon fas fa-cart-shopping"></i>
                                 <p>
                                     Quản lý đơn hàng
                                 </p>
                             </a>
                         </li>
-
+                        
 
                         <li class="nav-item">
                             <a class="nav-link" asp-area="Admin" asp-controller="Contacts" asp-action="Index">
@@ -259,11 +266,10 @@
 
     <script src="~/assets/admin/js/pages/Contact/ContactModel.js"></script>
 
-    <script src="~/assets/admin/js/pages/user/UserModule.js"></script>
+    <script src="~/assets/admin/js/pages/user/UserModuleV2.js"></script>
     <script src="~/assets/admin/js/pages/Employee/EmployeeModule.js"></script>
-    <script src="~/assets/admin/js/pages/Revenue/StatisticalModule.js"></script>
 
-
+    <script src="~/assets/admin/js/pages/Order/OrderModel.js"></script>
 
     @* <script src="~/assets/admin/js/AdminContentv2.js"></script> *@
     <!-- Custom Scripts (Optional) -->

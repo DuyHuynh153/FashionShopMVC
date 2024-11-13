@@ -48,7 +48,7 @@ namespace FashionShopMVC.Repositories
         private async Task<IEnumerable<RevenueStatisticViewModel>> GetRevenueStatistic(DateTime? fromDate, DateTime? toDate, string revenueType) 
         {
             var query = await _fashionShopDBContext.Set<RevenueStatisticViewModel>()
-                .FromSqlRaw("EXEC GetRevenueStatistic @fromDate, @toDate, @period",
+                .FromSqlRaw("EXEC GetRevenueStatisticv2 @fromDate, @toDate, @period",
                     new SqlParameter("@fromDate", fromDate),
                     new SqlParameter("@toDate", toDate),
                     new SqlParameter("@period", revenueType)).ToListAsync();

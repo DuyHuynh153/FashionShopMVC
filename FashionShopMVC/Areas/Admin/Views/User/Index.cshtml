@@ -1,4 +1,106 @@
-﻿@model IEnumerable<FashionShopMVC.Models.DTO.UserDTO.GetUserDTO>
+﻿@model FashionShopMVC.Areas.Admin.Models.UserDTO.PageUserListDTO
+
+@{
+    ViewData["Title"] = "Danh sách Quản trị viên";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<div class="card">
+    <div class="card-header d-flex align-items-center justify-content-between">
+        <h3 class="card-title" style="font-size: 30px">Danh sách quản trị viên</h3>
+        <a class="btn btn-info create-btn" data-url="@Url.Action("Create", "User", new { area = "Admin" })">Thêm quản trị viên</a>
+    </div>
+
+    <div class="card-body">
+        <div class="row mb-3">
+            <div class="col-md-5">
+                <div class="input-group">
+
+                    <input id="searchInput" type="text" class="form-control" placeholder="Nhập tên quản trị viên...">
+                    <div class="input-group-append">
+                        <button   class="btn btn-outline-secondary search-user-btn" >Tìm kiếm</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Employee Table -->
+        <table class="table table-bordered table-striped text-center">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Họ tên</th>
+                    <th>Email</th>
+                    <th>Số điện thoại</th>
+                    <th>Khóa</th>
+                    <th>Thao tác</th>
+                </tr>
+            </thead>
+            <tbody id="employeeTable">
+                @if (Model.Users != null && Model.Users.Any()) {
+                    @foreach (var user in Model.Users)
+                    {
+                        <tr id="row-@user.ID">
+                            <td>@user.ID</td>
+                            <td>@user.FullName</td>
+                            <td>@user.Email</td>
+                            <td>@user.PhoneNumber</td>
+                            <td>
+                                <span class="badge @(user.LockoutEnabled ? "badge-danger" : "badge-success")">
+                                    @(user.LockoutEnabled ? "Locked" : "Unlocked")
+                                </span>
+                            </td>
+                            <td>
+                                <button type="button" class="btn btn-sm btn-primary edit-btn" data-id="@user.ID">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button type="button" class="btn btn-sm btn-danger delete-btn" data-id="@user.ID">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                                <button type="button" class="btn btn-sm btn-warning toggle-lock-btn" data-id="@user.ID">
+                                    <i class="fas @(user.LockoutEnabled ? "fa-lock" : "fa-lock-open")"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="6">Không có dữ liệu</td>
+                    </tr>
+                }
+                
+            </tbody>
+        </table>
+
+        <!-- Pagination -->
+        <nav>
+            <ul class="pagination justify-content-center">
+                @for(var i = 1; i <=Model.TotalPages ; i++)
+                {
+                    <li class="page-item @(Model.CurrentPage == i ? "active" : "")">
+                        <a class="page-link" href="#" data-page="@i">@i</a>
+                    </li>
+                }
+            </ul>
+        </nav>
+
+
+        <div id="loading" style="display: none;">
+            <img src="~/assets/admin/img/spinner.gif" alt="Đang tải..." />
+            <p>Đang tải dữ liệu...</p>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+@* @model IEnumerable<FashionShopMVC.Models.DTO.UserDTO.GetUserDTO>
 @{
     ViewData["Title"] = "Danh sách Quản trị viên";
     Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
@@ -61,8 +163,9 @@
                             </form>
                         </td>
                     </tr>
-                } *@
+                } 
             </tbody>
         </table>
     </div>
 </div>
+ *@

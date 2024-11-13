@@ -23,7 +23,7 @@ var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
 // Add services to the container.
 builder.Services.AddControllers();
-builder.Services.AddTransient<FashionShopMVC.Services.IEmailSender, FashionShopMVC.Services.EmailSender>();
+// builder.Services.AddTransient<FashionShopMVC.Services.IEmailSender, FashionShopMVC.Services.EmailSender>();
 builder.Services.AddControllersWithViews();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -227,7 +227,7 @@ app.MapControllerRoute(
 app.MapAreaControllerRoute(
     name: "Admin",
     areaName: "Admin",
-    pattern: "Admin/{controller=AdminHome}/{action=Index}/{id?}");
+    pattern: "Admin/{controller=Statistic}/{action=Index}/{id?}");
 
 
 

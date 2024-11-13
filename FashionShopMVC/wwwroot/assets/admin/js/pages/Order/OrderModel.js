@@ -23,6 +23,7 @@ function loadOrders(page = 0) {
     var searchBySDT = $('#searchBySDT').val();
     var category = $('#category').val();
 
+    console.log("you click order: ", page)
     //$('#loading').show();
     // Gửi yêu cầu AJAX
     $.ajax({

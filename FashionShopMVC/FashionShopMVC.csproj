@@ -7,9 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Services\**" />
     <Compile Remove="wwwroot\assets\admin\js\NewFolder\**" />
+    <Content Remove="Services\**" />
     <Content Remove="wwwroot\assets\admin\js\NewFolder\**" />
+    <EmbeddedResource Remove="Services\**" />
     <EmbeddedResource Remove="wwwroot\assets\admin\js\NewFolder\**" />
+    <None Remove="Services\**" />
     <None Remove="wwwroot\assets\admin\js\NewFolder\**" />
   </ItemGroup>
 
@@ -74,6 +78,10 @@
 
   <ItemGroup>
     <Content Update="Areas\Admin\Views\Employee\IndexPartial.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Update="wwwroot\assets\admin\js\pages\user\UserModuleV2.js">
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
