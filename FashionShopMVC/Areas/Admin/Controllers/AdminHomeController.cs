@@ -11,9 +11,9 @@ namespace FashionShopMVC.Areas.Admin.Controllers
     public class AdminHomeController : Controller
     {
         [Route("")]
-        
-        
-        public IActionResult Index()
+
+        [HttpGet]
+        public async Task< IActionResult> Index()
         {
             if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
             {

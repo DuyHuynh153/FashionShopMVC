@@ -1,0 +1,24 @@
+﻿<div class="row">
+    <div class="col-md-12 text-center">
+        <ul class="pagination">
+            @if (ViewBag.CurrentPage > 1)
+            {
+                <li>
+                    <a class="pagination-link" href="@Url.Action("Index", new { page = ViewBag.CurrentPage - 1 })">Previous</a>
+                </li>
+            }
+            @for (int i = 1; i <= ViewBag.TotalPages; i++)
+            {
+                <li class="@(i == ViewBag.CurrentPage ? "active" : "")">
+                    <a class="pagination-link" href="@Url.Action("Index", new { page = i })">@i</a>
+                </li>
+            }
+            @if (ViewBag.CurrentPage < ViewBag.TotalPages)
+            {
+                <li>
+                    <a class="pagination-link" href="@Url.Action("Index", new { page = ViewBag.CurrentPage + 1 })">Next</a>
+                </li>
+            }
+        </ul>
+    </div>
+</div>

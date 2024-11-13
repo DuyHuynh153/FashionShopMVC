@@ -79,7 +79,7 @@ builder.Services.AddScoped<IVoucherRepository, VoucherRepository>();
 builder.Services.AddScoped<IPostRepository, PostRepository>();
 
 
-//builder.Services.AddScoped<IFavoriteProductRepository, FavoriteProductRepository>();
+builder.Services.AddScoped<IFavoriteProductRepository, FavoriteProductRepository>();
 builder.Services.AddScoped<ICommentRepository, CommentRepository>();
 //builder.Services.AddScoped<IProvinceRepository, ProvinceRepository>();
 //builder.Services.AddScoped<IDistrictRepository, DistrictRepository>();

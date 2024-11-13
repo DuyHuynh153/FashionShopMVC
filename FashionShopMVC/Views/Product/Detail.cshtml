@@ -35,19 +35,19 @@
                     <ul class="thumbnails main-front-image">
                         <li class="product_img">
                             <a class="thumbnail">
-                                <img src="@Model.Image" class="changeimg">
+                                <img src="@Url.Content($"~/{Model.Image}")" class="changeimg">
                             </a>
                         </li>
                         <li class="image-additional">
                             <a class="thumbnail">
-                                <img class="galleryimg" src="@Model.Image" width="93" height="133">
+                                <img class="galleryimg" src="@Url.Content($"~/{Model.Image}")" width="93" height="133">
                             </a>
                         </li>
                         @foreach (var img in @ViewBag.listImg)
                         {
                             <li class="image-additional">
                                 <a class="thumbnail">
-                                    <img class="galleryimg" src="@img" width="93" height="133">
+                                    <img class="galleryimg" src="/@img" width="93" height="133">
                                 </a>
                             </li>
 
@@ -251,7 +251,7 @@
                                 </span>
                             </div>
                             <div class="effect-shadow">
-                                <a href="~/Product/Detail/@pro.ID" style="display: block; width: 100%; height: 100%;"></a>
+                                <a href="@Url.Content($"~/{pro.Image}")" style="display: block; width: 100%; height: 100%;"></a>
                             </div>
                         </div>
                     </div>
