@@ -1,10 +1,54 @@
-﻿@using FashionShopMVC.Models.Domain
-@model List<Product>;
+﻿@using FashionShopMVC.Models.DTO.ProductDTO
+@using FashionShopMVC.Models.Domain
+@model List<GetProductByIdDTO>;
 @{
     ViewData["Title"]   = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+<style>
+    .cart-item {
+        display: flex;
+        align-items: center;
+        padding: 10px;
+        border: 1px solid #ddd;
+        margin-bottom: 10px;
+        background-color: #f9f9f9;
+        width: 60%%; /* Chiếm toàn bộ chiều ngang màn hình */
+        height: 130px;
+        box-sizing: border-box;
+    }
 
+    .product-image {
+        width: 50px;
+        height: 50px;
+        object-fit: cover;
+        margin-right: 10px;
+
+    }
+
+    .product-info {
+        display: flex;
+        align-items: center;
+    }
+
+    .product-name {
+        margin-right: 15px;
+        font-size: 16px;
+        flex-grow: 1;
+    }
+
+    .quantity {
+        width: 50px;
+        margin-right: 10px;
+    }
+    img {
+    display: block;  /* Đảm bảo ảnh không bị ẩn */
+}
+    .select-item {
+        margin-left: 10px;
+    }
+
+</style>
 <div class="full-banner" style="height: 135px">
 </div>
 <div class="main-content">
@@ -16,15 +60,23 @@
             {
                 @foreach (var item in Model)
                 {
-                    <li class="Cart_Item_line" method="post" asp-action="SubmitData" style="border-style:solid;border-width: 2px;width: 80%;height: 100px; margin-bottom: 20px;">
-                        <input type="checkbox" class="delete-checkbox" name="selectedIds" value="@item.ID" />
-                       
-                        <td>@item.ID</td>
 
-                        <td>@item.Quantity</td>
 
-                        <td>@item.Price</td>
-                    </li>
+                    <div class="cart-item" onload="updateTotal(@item.ID)">
+                        <img src="@item.ListImages" alt="Tên sản phẩm" class="product-image">
+                        <div class="product-info">
+                            <div style="display: none;" id="@item.ID">@item.ID</div>
+                            <p class="product-name">@item.Name</p>
+                            <div class="Price" id="@item.ID+price" >@item.Price</div>
+
+
+
+                            <input type="number" class="quantity" id="@item.ID+Quantaty" value="1" min="1" max="@item.Quantity" onchange="updateTotal(@item.ID)">
+                            <div class="Total_price" id="@item.ID+Total">555</div>
+                            <input type="checkbox" class="delete-checkbox" name="selectedIds" value="@item.ID" />
+                        </div>
+                    </div>
+                   
                 }
                 <div class="cart-actions" style="display: flex;justify-content: space-between;">
 
@@ -43,6 +95,10 @@
             else
             {
                 <p>Giỏ hàng của bạn hiện tại đang trống.</p>
+                <img src="~/img/Gif/Nothing_in_you_Cart.gif" alt="Funny GIF" height="700" width="600">
+
+               
+
                 <a href="~/Home">Quay về trang chủ</a>
 
             }
@@ -59,7 +115,29 @@
 
 
 </div>
-<script ">
+<script>
+    
+    function updateTotal(ID) {
+        var id = document.getElementById(ID).textContent;
+       
+        var price = parseFloat(document.getElementById(id + "+price").textContent) || 0;
+        var quantaty = parseInt(document.getElementById(id + "+Quantaty").value) || 0;
+        var max = parseInt(document.getElementById(id + "+Quantaty").getAttribute("max"))
+        if (quantaty <= max) {
+            var total = price * quantaty;
+
+            document.getElementById(id + "+Total").textContent = total;
+        }
+        else { 
+           document.getElementById(id + "+Quantaty").value = max;
+            var total = price * max;
+            document.getElementById(id + "+Total").textContent = total;
+
+        } 
+
+    }
+      
+       
     function deleteSelected() {
         var selectedIds = [];
 
@@ -92,5 +170,6 @@
             alert('Vui lòng chọn ít nhất một sản phẩm để xóa!');
         }
     }
+    
 </script>
 

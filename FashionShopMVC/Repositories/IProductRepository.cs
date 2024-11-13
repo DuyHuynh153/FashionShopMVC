@@ -4,6 +4,7 @@ using FashionShopMVC.Models.Domain;
 using FashionShopMVC.Models.DTO.ProductDTO;
 using FashionShopMVC.Models.ViewModel;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 using System.Drawing.Printing;
 
 public interface IProductRepository
@@ -22,7 +23,9 @@ public interface IProductRepository
     public Task<bool> ReduceQuantityOrder(List<ShoppingCartViewModel> listOrder);
     public Task<bool> IncreaseQuantityOrder(List<ShoppingCartViewModel> listOrder);
     public Task<int> Count();
-  
+
+    public Task<List<GetProductByIdDTO>> GetListById(List<Product> productList);
+
 }
 
 public class ProductRepository : IProductRepository
@@ -33,8 +36,36 @@ public class ProductRepository : IProductRepository
     {
         _fashionShopDBContext = fashionShopDBContext;
     }
-  
 
+    public async Task<List<GetProductByIdDTO>> GetListById(List<Product> productList)
+    {  List <GetProductByIdDTO> ProductIntelList = new List<GetProductByIdDTO>();
+        foreach (var item in productList)
+        {
+            var productDomain = await _fashionShopDBContext.Products.Select(product => new GetProductByIdDTO
+            {
+                ID = product.ID,
+                Name = product.Name,
+                CategoryID = product.CategoryID,
+                CategoryName = product.Category.Name,
+                Quantity = product.Quantity,
+                Describe = product.Describe,
+                Image = product.Image,
+                ListImages = product.ListImages,
+                Price = product.Price,
+                PurchasePrice = product.PurchasePrice,
+                Discount = product.Discount,
+                CreatedDate = product.CreatedDate,
+                CreatedBy = product.CreatedBy,
+                UpdatedDate = product.UpdatedDate,
+                UpdatedBy = product.UpdatedBy,
+                Status = product.Status,
+            }).FirstOrDefaultAsync(p => p.ID == item.ID);
+        ProductIntelList.Add(productDomain);
+        }
+
+
+        return ProductIntelList;
+    }
     public async Task<AdminPaginationSet<GetProductDTO>> GetAll(int page, int pageSize, int? searchByCategory, string? searchByName)
     {
         var listProductDomain = _fashionShopDBContext.Products.AsQueryable();

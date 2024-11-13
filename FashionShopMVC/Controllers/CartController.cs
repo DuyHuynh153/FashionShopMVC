@@ -14,8 +14,13 @@ namespace FashionShopMVC.Controllers
 {
     public class CartController : Controller
     {
-        
-            public IActionResult Index()
+        private readonly IProductRepository _productRepository;
+
+        public CartController (IProductRepository productRepository)
+        {
+                _productRepository = productRepository;
+        }
+            public async Task<IActionResult> IndexAsync()
             {
              
            
@@ -30,11 +35,14 @@ namespace FashionShopMVC.Controllers
             
             // Deserialize chuỗi JSON thành danh sách CartItem
             List<Product> cartItems = JsonConvert.DeserializeObject<List<Product>>(jsonCart);
+            var CartINtel = await _productRepository.GetListById(cartItems);
 
-            return View(cartItems);  // Truyền danh sách giỏ hàng vào view
+            return View(CartINtel);  // Truyền danh sách giỏ hàng vào view
            
             
             }
+        
+        
         [HttpPost]
         public JsonResult DeleteSelectedProducts(string selectedIds)
         {
@@ -62,7 +70,7 @@ namespace FashionShopMVC.Controllers
                 }
                 else HttpContext.Session.SetString("Cartlist", json);
                 // Trả về kết quả thành công
-                Index();
+                IndexAsync();
 
                 return Json(new { success = true });
             }
@@ -201,61 +209,7 @@ namespace FashionShopMVC.Controllers
         }
          
 
-       // public FashionShopContext db { get; }
-
-        private readonly IVnpayRespository _vnpayrespository;
-       // private readonly ProductRepository _producrespo;
-
-        public CartController( IVnpayRespository vnpayrespository)
-        {
-            //_paypalclient = paypalclient;
-
-            //  db = context;
-            _vnpayrespository = vnpayrespository;
-        }
-
-
-        [HttpGet]
-        public IActionResult CheckoutVNpay( string payment = "Thanh toán VNPay")
-        {
-            if (true)
-            {
-                if (true)
-                {
-                    var vnPaymodel = new VnpayMentRequestModel
-                    { // lay detail tu thanh toan
-
-                        Amount = 10300,
-                        CreatedDate = DateTime.Now,
-                        Description = "Thanh toan don hang test",
-                        fullname = "phu thinh test",
-                        OrderId = new Random().Next(1000, 10000),
-
-                    };
-
-                    return Redirect(_vnpayrespository.CreatPaymentUrl(HttpContext, vnPaymodel));
-                }
-
-            }
-
-            return View();
-        }
-        [Authorize]
-        public IActionResult PaymentFail()
-        { return View(); }
-        [Authorize]
-        public IActionResult PaymentCallBack()
-        {
-            var respone = _vnpayrespository.PaymentExecute(Request.Query);
-            if (respone == null || respone.VnPayResponseCode != "00")
-            {
-                TempData["Message"] = $"VNPay error !: {respone.VnPayResponseCode}";
-                return RedirectToAction("PaymentFail");
-            }
-            // lưu đơn hàng vào database.
-            TempData["Messgae"] = $"VNpay successfully";
-            return RedirectToAction("PaymentSuccess");
-        }
+      
 
         
     }
