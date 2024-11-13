@@ -7,6 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="wwwroot\assets\admin\js\NewFolder\**" />
+    <Content Remove="wwwroot\assets\admin\js\NewFolder\**" />
+    <EmbeddedResource Remove="wwwroot\assets\admin\js\NewFolder\**" />
+    <None Remove="wwwroot\assets\admin\js\NewFolder\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Remove="Areas\Admin\Data\**" />
     <Compile Remove="wwwroot\assets\admin\js\NewFolder\**" />
     <Content Remove="Areas\Admin\Data\**" />
