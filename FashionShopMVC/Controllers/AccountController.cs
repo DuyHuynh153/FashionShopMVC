@@ -25,14 +25,13 @@ namespace FashionShopMVC.Controllers
         private readonly UserManager<User> _userManager;
         private readonly IUserRepository _userRepository;
         private readonly INotyfService _notyfService;
-        private readonly IEmailSender _emailSender;
         private readonly IProductRepository _productRepository;
         private readonly IFavoriteProductRepository _favoriteProductRepository;
 
         // import emailService from class lib fashioShop.Service
 
         private readonly IEmailAuthService _emailAuthService;
-        public AccountController(UserManager<User> userManager, IUserRepository userRepository, INotyfService notyfService,  IEmailAuthService emailAuthService)
+        public AccountController(UserManager<User> userManager, IUserRepository userRepository, INotyfService notyfService,  IEmailAuthService emailAuthService, IProductRepository productRepository, IFavoriteProductRepository favoriteProductRepository) 
         {
             _userManager = userManager;
             _userRepository = userRepository;
