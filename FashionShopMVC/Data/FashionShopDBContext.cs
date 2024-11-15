@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using FashionShopMVC.Models.ViewModel;
+using FashionShopMVC.Models.DTO.OrderDTO;
 
 namespace FashionShopMVC.Data
 {
@@ -113,6 +114,9 @@ namespace FashionShopMVC.Data
 
             modelBuilder.Entity<IdentityRole>().HasData(roles);*/
         }
+        // public DbSet<RevenueStatisticViewModel> RevenueStatisticViewModel { get; set; }
+
+        public DbSet<FashionShopMVC.Models.DTO.OrderDTO.GetOrderByUserIdDTO>? GetOrderByUserIdDTO { get; set; }
 
     }
 }
