@@ -5,24 +5,21 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace FashionShopMVC.Controllers
 {
-
-
     public class CartController : Controller
     {
         [Authorize]
         public IActionResult Index()
-            {
-                return View();
-            }
-
-            public IActionResult Buy_action()
-            {
+        {
             return View();
-            }
-            public IActionResult Error() 
-            { 
-            return View();
-            }
+        }
+        public IActionResult Buy_action()
+        {
+        return View();
+        }
+        public IActionResult Error() 
+        { 
+        return View();
+        }
         //  private readonly PaypalClient _paypalclient;
 
         //public FashionShopContext db { get; }

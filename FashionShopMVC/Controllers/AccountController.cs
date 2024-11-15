@@ -16,6 +16,7 @@ using FashionShopMVC.Repositories.@interface;
 using FashionShopMVC.Services;
 using FashionShop.Service.Model;
 using FashionShop.Service.Service;
+using FashionShopMVC.Repositories;
 
 namespace FashionShopMVC.Controllers
 {
@@ -25,25 +26,79 @@ namespace FashionShopMVC.Controllers
         private readonly IUserRepository _userRepository;
         private readonly INotyfService _notyfService;
         private readonly IEmailSender _emailSender;
+        private readonly IOrderRepository _orderRepo;
+        private readonly IProductRepository _productRepository;
 
         // import emailService from class lib fashioShop.Service
 
         private readonly IEmailAuthService _emailAuthService;
-        public AccountController(UserManager<User> userManager, IUserRepository userRepository, INotyfService notyfService, IEmailSender emailSender,   IEmailAuthService emailAuthService)
+        public AccountController(UserManager<User> userManager, IUserRepository userRepository, INotyfService notyfService, IEmailSender emailSender,   IEmailAuthService emailAuthService, IOrderRepository orderResitory, IProductRepository productRepository)
         {
             _userManager = userManager;
             _userRepository = userRepository;
             _notyfService = notyfService;
             _emailSender = emailSender;
             _emailAuthService = emailAuthService;
+            _orderRepo = orderResitory;
+            _productRepository = productRepository;
         }
         public IActionResult Login()
         {
-            // Lấy đường dẫn của trang trước đó (referrer)
+            var userJson = HttpContext.Session.GetString(CommonConstants.SessionUser);
             string referrerUrl = HttpContext.Request.Headers["Referer"].ToString();
-
+            User user = null;
+            if (userJson != null)
+            {
+                return RedirectToAction("index", "home");
+            }
+            // Lấy đường dẫn của trang trước đó (referrer)
             ViewBag.ReturnUrl = referrerUrl;
             return View();
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> OrderList()
+        {
+            var currUser = HttpContext.Session.GetString(CommonConstants.SessionUser);
+            if(currUser != null)
+            {
+                User user = JsonConvert.DeserializeObject<User>(currUser);
+                var listOrder = await _orderRepo.GetByUserID(user.Id);
+
+                return View(listOrder); 
+            }
+            return View("error");
+        }
+
+        public async Task<IActionResult> OrderDetail(int id)
+        {
+            var orderDetail = await _orderRepo.GetOrderDetail(id);
+            return View(orderDetail);
+        }
+
+        public async Task<JsonResult> OrderCancel(int id)
+        {
+            var orderCancel = await _orderRepo.Cancel(id);
+
+            if (orderCancel != null)
+            {
+                // Tăng số lượng sản phẩm khi hủy hàng
+                var increaseQuantityProduct = await _productRepository.IncreaseQuantityOrder(orderCancel);
+
+                if (increaseQuantityProduct == true)
+                {
+                    _notyfService.Success("Đã hủy đơn hàng", 2);
+                    return Json(new
+                    {
+                        status = true
+                    });
+                }
+            }
+
+            return Json(new
+            {
+                status = false
+            });
         }
 
         [HttpPost]

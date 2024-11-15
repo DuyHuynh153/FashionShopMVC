@@ -2,7 +2,7 @@
 
 namespace FashionShopMVC.Models.DTO.OrderDTO
 {
-    public class GetOrderByUserIdDTO
+    public class GetOrderDetailDTO
     {
         public int ID { get; set; }
         public string FullName { get; set; }
@@ -18,7 +18,7 @@ namespace FashionShopMVC.Models.DTO.OrderDTO
         public int TypePayment { get; set; }
         public int Status { get; set; }
         public string UserID { get; set; }
-        public IEnumerable<OrderDetail> OrderDetails { get; set; }
+        public IEnumerable<OrderDetailDTO> OrderDetails { get; set; }
         public Voucher? Voucher { get; set; }
     }
 }
