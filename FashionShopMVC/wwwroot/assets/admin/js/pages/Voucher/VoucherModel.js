@@ -1,5 +1,5 @@
 ﻿$(document).ready(function () {
-    $('#    ').on('submit', function (e) {
+    $('#editVoucherForm').on('submit', function (e) {
         e.preventDefault();  // Ngừng việc submit form mặc định
 
         var formData = $(this).serialize();  // Lấy dữ liệu form
