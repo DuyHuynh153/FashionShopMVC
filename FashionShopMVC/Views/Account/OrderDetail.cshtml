@@ -1,5 +1,5 @@
 ﻿@using System.Globalization;
-@model FashionShopMVC.Models.DTO.OrderDTO.GetOrderDetailDTO
+@model FashionShopMVC.Models.DTO.OrderDTO.GetOrderByUserIdDTO
 @{
     ViewData["Title"] = "OrderDetail";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -83,8 +83,8 @@
                             @foreach (var item in Model.OrderDetails)
                             {
                                 <tr>
-                                    <td><img src="~/@item.ImageUrl" style="height: 80px" /></td>
-                                    <td>@item.ProductName</td>
+                                    <td><img src="~/@item.Product.Image" style="height: 80px" /></td>
+                                    <td>@item.Product.Name</td>
                                     <td>@item.Price.ToString("C0", new CultureInfo("vi-VN"))</td>
                                     <td>@item.Quantity</td>
 
@@ -113,7 +113,7 @@
                     </table>
                 </div>
 
-
+                
 
                 <div class="spacer" style="height: 20px"></div>
             </div>

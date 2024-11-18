@@ -13,5 +13,6 @@ namespace FashionShopMVC.Models.DTO.UserDTO
 
         [Required(ErrorMessage = "Vui lòng nhập số điện thoại")]
         public string PhoneNumber { get; set; }
+
     }
 }

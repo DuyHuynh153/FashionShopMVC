@@ -114,7 +114,7 @@
                         $('#tempTotalMoney').text(numeral(cart.getTempTotalMoney()).format('0,0') + '₫');
                     }
                 }
-            });        
+            });
         });
         $('#input-quantity').off('keyup').on('keyup', function () {
             var quantity = parseInt($(this).val());
@@ -180,6 +180,7 @@
             success: function (res) {
                 if (res.status) {
                     cart.loadData();
+                    toastr.success(res.message);
                 }
             }
         });
@@ -215,9 +216,9 @@
             type: 'POST',
             dataType: 'json',
             success: function (res) {
-                if (res.status) {
+                if (res.status) {   
                     cart.loadData();
-
+                    toastr.success(res.message);
                     $('.txtQuantity').trigger('keyup');
                 }
             }
@@ -288,5 +289,7 @@
     }
 
 }
-
-cart.init();
+$(document).ready(function () {
+    console.log("ok carrt")
+    cart.init();
+});

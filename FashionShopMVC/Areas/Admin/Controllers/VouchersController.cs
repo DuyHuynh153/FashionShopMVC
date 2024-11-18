@@ -1,6 +1,7 @@
 ﻿using FashionShopMVC.Models.Domain;
 using FashionShopMVC.Models.DTO.VoucherDTO;
 using FashionShopMVC.Repositories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,6 +9,7 @@ namespace FashionShopMVC.Areas.Admin.Controllers
 {
     [Area("Admin")]
     [Route("Admin/[controller]")]
+    [Authorize]
     public class VouchersController : Controller
     {
         private readonly IVoucherRepository _voucherRepository;
@@ -94,7 +96,7 @@ namespace FashionShopMVC.Areas.Admin.Controllers
         // GET: VouchersController/Edit/5
         [HttpGet]
         [Route("Edit/{id}")]
-        [AuthorizeRoles("Quản trị viên", "Nhân viên")]
+        // [AuthorizeRoles("Quản trị viên", "Nhân viên")]
         public async Task<ActionResult> Edit(int id)
         {
             // Giả sử bạn có phương thức để lấy voucher theo id
@@ -124,7 +126,7 @@ namespace FashionShopMVC.Areas.Admin.Controllers
         // PUT: VouchersController/Edit/5
         [HttpPost]
         [Route("Edit/{id}")]
-        [AuthorizeRoles("Quản trị viên", "Nhân viên")]
+        // [AuthorizeRoles("Quản trị viên", "Nhân viên")]
         public async Task<IActionResult> Edit(UpdateVoucherDTO updateVoucherDTO, int id)
         {
             // Kiểm tra ModelState

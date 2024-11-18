@@ -1,38 +1,175 @@
-﻿
+﻿@using FashionShopMVC.Models.DTO.ProductDTO
+@using FashionShopMVC.Models.Domain
+@model List<GetProductByIdDTO>;
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"]   = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+<style>
+    .cart-item {
+        display: flex;
+        align-items: center;
+        padding: 10px;
+        border: 1px solid #ddd;
+        margin-bottom: 10px;
+        background-color: #f9f9f9;
+        width: 60%%; /* Chiếm toàn bộ chiều ngang màn hình */
+        height: 130px;
+        box-sizing: border-box;
+    }
 
-<h1>Index</h1>
-<div>
-    Cartviewer
+    .product-image {
+        width: 50px;
+        height: 50px;
+        object-fit: cover;
+        margin-right: 10px;
+
+    }
+
+    .product-info {
+        display: flex;
+        align-items: center;
+    }
+
+    .product-name {
+        margin-right: 15px;
+        font-size: 16px;
+        flex-grow: 1;
+    }
+
+    .quantity {
+        width: 50px;
+        margin-right: 10px;
+    }
+    img {
+    display: block;  /* Đảm bảo ảnh không bị ẩn */
+}
+    .select-item {
+        margin-left: 10px;
+    }
+
+</style>
+<div class="full-banner" style="height: 135px">
 </div>
 <div class="main-content">
     <div class="container">
-        <div class="row featured-block">
-            <div class="main-head-block">
-                Danh sách order
-                (view danh sách order)
-                <div class="button-block">thanh toán </div>
-                <div class="cart-container">
-                    <div class="cart-items">
-                        <h3>Sản phẩm đã mua</h3>
-                        <ul>
-                            <li>Product 1 - $10.00</li>
-                            <li>Product 2 - $15.00</li>
-                            <li>Product 3 - $20.00</li>
-                        </ul>
-                    </div>
-                    <div class="cart-actions">
-                        <button class="btn pay-btn">Thanh toán</button>
-                        <button class="btn cancel-btn">Hủy đơn</button>
-                    </div>
-                </div>
-            </div>
+        <h3 class="display-4">Sản phẩm đã mua</h3>
+        <ul>
 
-        </div>
+            @if (Model != null && Model.Any())
+            {
+                @foreach (var item in Model)
+                {
+
+
+                    <div class="cart-item" onload="updateTotal(@item.ID)">
+                        <img src="@item.ListImages" alt="Tên sản phẩm" class="product-image">
+                        <div class="product-info">
+                            <div style="display: none;" id="@item.ID">@item.ID</div>
+                            <p class="product-name">@item.Name</p>
+                            <div class="Price" id="@item.ID+price" >@item.Price</div>
+
+
+
+                            <input type="number" class="quantity" id="@item.ID+Quantaty" value="1" min="1" max="@item.Quantity" onchange="updateTotal(@item.ID)">
+                            <div class="Total_price" id="@item.ID+Total">555</div>
+                            <input type="checkbox" class="delete-checkbox" name="selectedIds" value="@item.ID" />
+                        </div>
+                    </div>
+                   
+                }
+                <div class="cart-actions" style="display: flex;justify-content: space-between;">
+
+                    @using (Html.BeginForm("Index", "Checkout", FormMethod.Post))
+                    {
+                        <button style="float:left;display: flex;" type="submit" class="btn btn-primary">Thanh toán</button>
+                    }
+
+
+                    <button style="float:right;justify-content: flex-end" type="submit" class="btn btn-primary" id="DeleteButton" onclick="deleteSelected()">Xóa</button>
+                    
+                    
+                </div>
+
+            }
+            else
+            {
+                <p>Giỏ hàng của bạn hiện tại đang trống.</p>
+                <img src="~/img/Gif/Nothing_in_you_Cart.gif" alt="Funny GIF" height="700" width="600">
+
+               
+
+                <a href="~/Home">Quay về trang chủ</a>
+
+            }
+            @if (TempData["Message"] != null)
+            {
+                <div class="alert alert-success" style="display: flex">
+                    @TempData["Message"]
+                </div>
+            }
+        </ul>
+    
+        
     </div>
 
+
 </div>
+<script>
+    
+    function updateTotal(ID) {
+        var id = document.getElementById(ID).textContent;
+       
+        var price = parseFloat(document.getElementById(id + "+price").textContent) || 0;
+        var quantaty = parseInt(document.getElementById(id + "+Quantaty").value) || 0;
+        var max = parseInt(document.getElementById(id + "+Quantaty").getAttribute("max"))
+        if (quantaty <= max) {
+            var total = price * quantaty;
+
+            document.getElementById(id + "+Total").textContent = total;
+        }
+        else { 
+           document.getElementById(id + "+Quantaty").value = max;
+            var total = price * max;
+            document.getElementById(id + "+Total").textContent = total;
+
+        } 
+
+    }
+      
+       
+    function deleteSelected() {
+        var selectedIds = [];
+
+        // Lấy tất cả checkbox đã được chọn
+        $('input.delete-checkbox:checked').each(function () {
+            selectedIds.push($(this).val());
+        });
+
+        // Kiểm tra nếu có sản phẩm được chọn
+        if (selectedIds.length > 0) {
+            // Gửi yêu cầu AJAX để xóa sản phẩm
+            $.ajax({
+                url: '@Url.Action("DeleteSelectedProducts", "Cart")', // Đường dẫn đến Action trong Controller
+                type: 'POST',
+                data: { selectedIds: selectedIds.join(',') }, // Gửi danh sách ID sản phẩm
+                success: function (response) {
+                    // Nếu xóa thành công
+                    if (response.success) {
+                        alert('Sản phẩm đã được xóa!');
+                        location.reload(); // Tải lại trang để cập nhật lại danh sách sản phẩm
+                    } else {
+                        alert('Có lỗi xảy ra khi xóa sản phẩm.');
+                    }
+                },
+                error: function (xhr, status, error) {
+                    alert('Có lỗi xảy ra, vui lòng thử lại.');
+                }
+            });
+        } else {
+            alert('Vui lòng chọn ít nhất một sản phẩm để xóa!');
+        }
+    }
+    
+</script>
 

@@ -1,0 +1,95 @@
+﻿@model FashionShopMVC.Areas.Admin.Models.UserDTO.PageUserListDTO
+
+@{
+    ViewData["Title"] = "Danh sách Nhân Viên";
+   // Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title" style="font-size:30px">Danh sách nhân viên</h3>
+        <a  class="btn btn-info float-right create-employee-btn" data-url="@Url.Action("Create", "Employee", new { area = "Admin" })">Thêm nhân viên</a>
+    </div>
+    <!-- /.card-header -->
+    <div class="card-body">
+        <div class="row">
+            <div class="col col-md-5">
+                <div class="input-group mb-3">
+                    <input id="searchEmployee" type="text" class="form-control" placeholder="Nhập tên nhân viên..." aria-label="Recipient's title" aria-describedby="basic-addon2">
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-secondary search-employee-btn" type="button">Tìm kiếm</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <table class="table table-bordered table-striped text-center">
+            <thead>
+                <tr>
+                    <th style="width: 20%">ID</th>
+                    <th style="width: 15%">Họ tên</th>
+                    <th style="width: 20%">Email</th>
+                    <th style="width: 10%">Số điện thoại</th>
+                    <th style="width: 10%">Khóa</th>
+                    <th style="width: 18%">Thao tác</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.Users != null && Model.Users.Any() )
+                {
+                    @foreach (var employee in Model.Users)
+                    {
+                        <tr>
+                            <td>@employee.ID</td>
+                            <td>@employee.FullName</td>
+                            <td>@employee.Email</td>
+                            <td>@employee.PhoneNumber</td>
+                            <td>
+                                <span class="badge @(employee.LockoutEnabled ? "bg-gradient-red" : "bg-gradient-green")" style="font-size: 14px">
+                                    @(employee.LockoutEnabled ? "Locked" : "Unlocked")
+                                </span>
+                            </td>
+                            <td style="text-align: left">
+                                <button type="button" class="btn btn-sm btn-primary edit-employee-btn" data-id="@employee.ID">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button type="button" class="btn btn-sm btn-danger delete-employee-btn" data-id="@employee.ID">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                                <button type="button" class="btn btn-sm btn-warning toggle-lock-employee-btn" data-id="@employee.ID">
+                                    <i class="fas @(employee.LockoutEnabled ? "fa-lock" : "fa-lock-open")"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="6">Không có dữ liệu</td>
+                    </tr>
+                }
+                
+            </tbody>
+        </table>
+
+        <!-- Pagination -->
+        <nav>
+            <ul class="pagination justify-content-center">
+                @for (var i = 1; i <= Model.TotalPages; i++)
+                {
+                    <li class="page-item @(Model.CurrentPage == i ? "active" : "")">
+                        <a class="page-link" href="#" data-page="@i">@i</a>
+                    </li>
+                }
+            </ul>
+        </nav>
+
+        <div id="loading" style="display: none;">
+            <img src="~/assets/admin/img/spinner.gif" alt="Đang tải..." />
+            <p>Đang tải dữ liệu...</p>
+        </div>
+    </div>
+</div>
+
+

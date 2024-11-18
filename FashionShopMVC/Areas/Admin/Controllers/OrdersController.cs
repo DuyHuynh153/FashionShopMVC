@@ -1,5 +1,6 @@
 ﻿using FashionShopMVC.Models;
 using FashionShopMVC.Repositories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using OfficeOpenXml;
 using OfficeOpenXml.Style;
@@ -12,6 +13,7 @@ namespace FashionShopMVC.Areas.Admin.Controllers
 {
     [Area("Admin")]
     [Route("Admin/[controller]")]
+    [Authorize]
     public class OrdersController : Controller
     {
         private readonly IOrderRepository _orderRepository;

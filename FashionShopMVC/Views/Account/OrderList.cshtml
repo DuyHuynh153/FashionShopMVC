@@ -1,12 +1,10 @@
-﻿
-@using FashionShopMVC.Models.DTO.OrderDTO;
-@using System.Globalization
-@model List<GetOrderByUserIdDTO>;
-
+﻿@using System.Globalization;
+@model List<FashionShopMVC.Models.DTO.OrderDTO.GetOrderByUserIdDTO>
 @{
     ViewData["Title"] = "OrderList";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+
 <div class="full-banner" style="height: 135px">
 </div>
 
@@ -37,7 +35,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach (var item in Model)
+                        @foreach(var item in Model)
                         {
                             double totalPayment = 0;
                             foreach (var item2 in item.OrderDetails)
@@ -45,12 +43,12 @@
                                 totalPayment += item2.Price * item2.Quantity;
                             }
 
-                            if (item.Voucher != null)
+                            if(item.Voucher != null)
                             {
-                                if (item.Voucher.DiscountAmount == true)
+                                if(item.Voucher.DiscountAmount == true)
                                 {
                                     totalPayment -= item.Voucher.DiscountValue;
-                                }
+                                }     
                                 else
                                 {
                                     totalPayment = totalPayment - (totalPayment * item.Voucher.DiscountValue / 100);
@@ -107,3 +105,4 @@
         </div>
     </div>
 </div>
+

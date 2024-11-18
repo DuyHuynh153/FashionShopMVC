@@ -26,14 +26,14 @@ namespace FashionShopMVC.Areas.Admin.Controllers
         [HttpGet]
         [Route("Login")]
         [AllowAnonymous]
-        public IActionResult Login(string returnUrl = null)
+        public IActionResult Login()
         {
             ClaimsPrincipal claimUser = HttpContext.User;
 
             if (claimUser.Identity.IsAuthenticated)
-                return RedirectToAction("Index", "AdminHome", new { area = "Admin" });
+                return RedirectToAction("Index", "Statistics", new { area = "Admin" });
 
-            ViewData["ReturnUrl"] = returnUrl;
+            // ViewData["ReturnUrl"] = returnUrl;
             return View();
         }
 
@@ -46,14 +46,23 @@ namespace FashionShopMVC.Areas.Admin.Controllers
             if (ModelState.IsValid)
             {
                 var checkUser = await _userManager.FindByEmailAsync(loginRequestDTO.Email);
+
+                // Check if the user exists and is not locked
                 if (checkUser != null && !checkUser.LockoutEnabled)
                 {
                     var checkPassword = await _userManager.CheckPasswordAsync(checkUser, loginRequestDTO.Password);
+
                     if (checkPassword)
                     {
                         var roles = await _userManager.GetRolesAsync(checkUser);
-                        if (roles != null && !roles.Contains("Khách hàng"))
+
+                        // Allowed roles
+                        var allowedRoles = new List<string> { "Admin", "Quản trị viên" };
+
+                        // Check if the user has at least one allowed role
+                        if (roles.Any(role => allowedRoles.Contains(role)))
                         {
+                            // Create claims
                             var claims = new List<Claim>
                             {
                                 new Claim(ClaimTypes.Name, checkUser.FullName ?? checkUser.UserName),
@@ -65,6 +74,7 @@ namespace FashionShopMVC.Areas.Admin.Controllers
                                 claims.Add(new Claim(ClaimTypes.Role, role));
                             }
 
+                            // Create the identity and sign in
                             var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
                             var authProperties = new AuthenticationProperties
                             {
@@ -74,14 +84,21 @@ namespace FashionShopMVC.Areas.Admin.Controllers
 
                             await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity), authProperties);
 
-                            return RedirectToAction("Index", "AdminHome");
+                            return RedirectToAction("Index", "Statistics");
                         }
                     }
+
                 }
-                ModelState.AddModelError(string.Empty, "Tên đăng nhập hoặc mật khẩu không đúng");
+                
+
+
+                // If login fails, show an error
+                ModelState.AddModelError(string.Empty, "Tên đăng nhập không đúng hoặc bạn không có quyền truy cập.");
             }
+
             return View(loginRequestDTO);
         }
+
 
         [HttpGet]
         [HttpPost]

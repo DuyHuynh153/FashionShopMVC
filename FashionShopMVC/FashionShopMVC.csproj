@@ -7,6 +7,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Services\**" />
+    <Compile Remove="wwwroot\assets\admin\js\NewFolder\**" />
+    <Content Remove="Services\**" />
+    <Content Remove="wwwroot\assets\admin\js\NewFolder\**" />
+    <EmbeddedResource Remove="Services\**" />
+    <EmbeddedResource Remove="wwwroot\assets\admin\js\NewFolder\**" />
+    <None Remove="Services\**" />
+    <None Remove="wwwroot\assets\admin\js\NewFolder\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Remove="Areas\Admin\Data\**" />
     <Compile Remove="wwwroot\assets\admin\js\NewFolder\**" />
     <Content Remove="Areas\Admin\Data\**" />
@@ -28,7 +39,6 @@
 
   <ItemGroup>
     <Folder Include="UploadFiles\" />
-    <Folder Include="Areas\Admin\Data\" />
     <Folder Include="Areas\Admin\Models\" />
     <Folder Include="UploadFiles\" />
     <Folder Include="Views\Contact\" />
@@ -66,7 +76,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Update="Areas\Admin\Views\Employee\IndexPartial.cshtml">
+    <Content Update="wwwroot\assets\admin\js\pages\user\UserModuleV2.js">
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>

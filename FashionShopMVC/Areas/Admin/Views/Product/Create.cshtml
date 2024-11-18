@@ -1,4 +1,7 @@
-﻿@model FashionShopMVC.Models.DTO.ProductDTO.CreateProductDTO
+﻿
+@model FashionShopMVC.Models.DTO.ProductDTO.CreateProductDTO
+
+@using System.Security.Claims
 @{
     ViewData["Title"] = "Thêm sản phẩm mới";
     Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
@@ -23,7 +26,7 @@
             </div>
         }
         <form asp-action="Create" method="post" enctype="multipart/form-data">
-
+            <input type="hidden" name="CreatedBy" value="@User.FindFirstValue(ClaimTypes.Name)" />
             <div class="form-group">
                 <label asp-for="Name"></label>
                 <input asp-for="Name" class="form-control" />
@@ -92,3 +95,6 @@
     <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
     <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
 }
+
+
+

@@ -22,15 +22,16 @@
         });
 
         // Pagination click event handling
-        $(document).on('click', '.pagination a.page-link', function (e) {
+        /*$(document).on('click', '.pagination a.page-link', function (e) {
             e.preventDefault();
-
-            $('.pagination a.page-link').addClass('disabled').prop('disabled', true);
-
-            var page = $(this).data('page'); // Get page number from pagination link
-            var url = '/Admin/User'; // Get the URL from the pagination link
-            loadUserContent(url, page); // Load the user list for the selected page
-        });
+            if (window.location.href.endsWith('/Admin/User')) {
+                console.log("You click pagination link in user page. ");
+                var page = $(this).data('page'); // Get page number from pagination link
+                var url = '/Admin/User'; // Get the URL from the pagination link
+                loadUserContent(url, page); // Load the user list for the selected page
+            }
+            
+        });*/
 
         // Attach event for the toggle lock button
         $(document).on('click', '.toggle-lock-btn', function () {
@@ -60,7 +61,7 @@
         // e.preventDefault();
         $('#loading').show();
 
-        console.log("the page you select: ", page);
+        console.log("the user page you select: ", page);
 
         // var url = $(this).data('url');
         $.ajax({
@@ -245,5 +246,7 @@
 })();
 
 $(document).ready(function () {
-    UserModule.init();
+    if (window.location.href.endsWith("/Admin/User")) {
+        UserModule.init();
+    }
 });

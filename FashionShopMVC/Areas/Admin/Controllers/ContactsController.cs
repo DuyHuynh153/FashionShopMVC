@@ -1,5 +1,6 @@
 ﻿using FashionShopMVC.Helper;
 using FashionShopMVC.Repositories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -7,6 +8,7 @@ namespace FashionShopMVC.Areas.Admin.Controllers
 {
     [Area("Admin")]
     [Route("Admin/[controller]")]
+    [Authorize]
     public class ContactsController : Controller
     {
         private readonly IContactRepository _contactRepository;

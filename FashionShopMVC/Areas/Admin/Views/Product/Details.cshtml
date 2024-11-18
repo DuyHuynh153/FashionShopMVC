@@ -57,17 +57,15 @@
                 </div>
                 <div class="col-12 mb-3">
                     <strong>Mô tả:</strong>
-                    <p class="text-muted">@Model.Describe</p>
+                    <p class="text-muted">@Html.Raw(Model.Describe)</p>
                 </div>
 
     <!-- Hiển thị người tạo và người cập nhật -->
-    <div>
-        <strong>Người tạo:</strong> @Model.CreatedBy
-            </div>
-    <div>
-        <strong>Người cập nhật:</strong> @Model.UpdatedBy
-        </div>
-    </div>
+    
+               
+    
+   
+    
 
     <!-- Ảnh sản phẩm chính -->
     <div class="text-center mb-4">

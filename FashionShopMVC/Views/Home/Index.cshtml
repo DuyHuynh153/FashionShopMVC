@@ -3,105 +3,92 @@
 @model List<GetProductDTO>
 @{
     ViewData["Title"] = "Trang chủ";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    // Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <div class="full-banner">
-    <img src="~/assets/customer/images/imgTrangChu2.jpg" style="max-width: 100%" />
+     <img src="~/assets/customer/images/imgTrangChu2.jpg" style="max-width: 100%" /> 
+    
 </div>
+
 
 <div class="main-content">
     <div class="container">
         <div class="row featured-block">
             <div class="main-head-block">
-                <h2>Danh sách sản phẩm</h2>
-              
+                <h2 id="product-section">Danh sách sản phẩm</h2>
             </div>
-
-            @foreach (var pro in Model)
-            {
-                decimal price = Convert.ToDecimal(@pro.Price);
-                decimal discount = Convert.ToDecimal(@pro.Discount);
-                decimal discountedPrice = price - (price * discount / 100);
-                string formattedPrice = price.ToString("N0") + "đ";
-                string formattedPriceHasDiscount = discountedPrice.ToString("N0") + "đ";
-
-                if(pro.Discount > 0)
-                {
-                    <div class="col-md-2 col-sm-6 col-xs-6 mb-30 width-100">
-                        <div class="product-thumb effect-shadow">
-                            <div class="product-view-block">
-                                <div class="button-block">
-                                    <a class="btnAddProductFavorite" data-id="@pro.ID"> <i class="fa fa-heart"></i></a>
-                                    @*<a><i class="fa fa-random" aria-hidden="true"></i></a>*@
-                                    <a href="javascript:void(0);" class="btnAddToCart" data-id="@pro.ID"><i class="fa fa-shopping-cart"></i></a>
-                                </div>
-                                <div class="price-view-block">
-                                    <span class="price-left">@pro.Discount%</span>
-                                </div>
-
-                                <div class="image-block">
-                                    <a href="single-product.html" style="cursor: pointer">
-                                        <img class="img-responsive" alt="i" src="@pro.Image">
-                                    </a>
-                                </div>
-
-
-                                <div style="margin: 0px 5px;text-align: center;">
-                                    <p class="m-0 product-name-limit-line">
-                                        @pro.Name
-                                    </p>
-
-                                    <span style="text-decoration: line-through; font-size: 80%; margin-right: 5px">
-                                        @formattedPrice
-                                    </span>
-
-                                    <span>
-                                        @formattedPriceHasDiscount
-                                    </span>
-                                </div>
-                                <div class="effect-shadow">
-                                    <a href="~/Product/Detail/@pro.ID" style="display: block; width: 100%; height: 100%;"></a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                }
-                else
-                {
-                    <div class="col-md-2 col-sm-6 col-xs-6 mb-30 width-100">
-                        <div class="product-thumb effect-shadow">
-                            <div class="product-view-block">
-                                <div class="button-block">
-                                    <a class="btnAddProductFavorite" data-id="@pro.ID"> <i class="fa fa-heart"></i></a>
-                                    @*<a><i class="fa fa-random" aria-hidden="true"></i></a>*@
-                                    
-                                   
-
-                                    <a href="javascript:void(0);" class="btnAddToCart" data-id="@pro.ID"><i class="fa fa-shopping-cart"></i></a>
-                                </div>
-                                <div class="image-block">
-                                    <a href="single-product.html" style="cursor: pointer">
-                                        <img class="img-responsive" alt="i" src="@pro.Image">
-                                    </a>
-                                </div>
-                                <div style="margin: 0px 5px;text-align: center;">
-                                    <p class="m-0 product-name-limit-line">
-                                        @pro.Name
-                                    </p>
-                                    <span>
-                                        @formattedPrice
-                                    </span>
-                                </div>
-                                <div class="effect-shadow">
-                                    <a href="~/Product/Detail/@pro.ID" style="display: block; width: 100%; height: 100%;"></a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                }
-            }
+            <div id="product-list">
+                @Html.Partial("_ProductListPartial", Model)
+            </div>
         </div>
-
     </div>
 </div>
+
+<script>
+    // Define the favorite object before it's used
+    var favorite = {
+        registerEvents: function () {
+            $('.btnAddProductFavorite').off('click').on('click', function (e) {
+                e.preventDefault();
+                var productId = parseInt($(this).data('id'));
+                favorite.addFavoriteProduct(productId);
+            });
+        },
+        addFavoriteProduct: function (productID) {
+            console.log("You clicked the Add to Favorite button with ID: " + productID);
+            $.ajax({
+                url: '/Account/AddFavoriteProduct',
+                data: {
+                    ProductID: productID
+                },
+                type: 'POST',
+                dataType: 'json',
+                success: function (res) {
+                    if (res.status) {
+                        // Success notification (e.g., show a message or update button state)
+                        console.log("Product added to favorites!");
+                    } else {
+                        // Error notification (e.g., show an error message)
+                        console.log("Failed to add product to favorites.");
+                    }
+                },
+                error: function (xhr, status, error) {
+                    // AJAX error handling
+                    console.error("AJAX Error: " + status + " - " + error);
+                }
+            });
+        }
+    };
+
+    // Attach pagination event listeners and re-attach favorite button listeners
+    function attachPaginationEventListeners() {
+        const paginationLinks = document.querySelectorAll('.pagination-link');
+        paginationLinks.forEach(link => {
+            link.addEventListener('click', function (event) {
+                event.preventDefault();
+                const url = this.href;
+                fetch(url, {
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                })
+                    .then(response => response.text())
+                    .then(html => {
+                        document.getElementById('product-list').innerHTML = html;
+                        document.getElementById("product-section").scrollIntoView({ behavior: 'smooth' });
+                        attachPaginationEventListeners(); // Re-attach pagination listeners
+                        cart.init(); // Re-initialize cart event listeners
+                        favorite.registerEvents(); // Re-register favorite button events
+                    });
+            });
+        });
+    }
+
+    // Ensure DOM is fully loaded before attaching events
+    document.addEventListener("DOMContentLoaded", function () {
+        attachPaginationEventListeners();
+        cart.init(); // Initialize cart on initial load
+        favorite.registerEvents(); // Register favorite button events on page load
+    });
+</script>

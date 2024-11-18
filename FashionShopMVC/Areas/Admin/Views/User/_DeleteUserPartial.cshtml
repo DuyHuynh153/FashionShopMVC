@@ -51,6 +51,6 @@
     <form asp-action="DeleteConfirmed" asp-controller="User" asp-area="Admin" id="deleteUserForm">
         <input type="hidden" asp-for="ID" />
         <input type="submit" value="Delete" class="btn btn-danger" /> |
-        <a asp-action="Index">Back to List</a>
+        <a asp-action="Index" asp-controller="User" asp-area="Admin">Back to List</a>
     </form>
 </div>

@@ -90,7 +90,7 @@
                         <img src="/Assets/Admin/img/avatar5.png" class="img-circle elevation-2" alt="User Image">
                     </div>
                     <div class="info">
-                        <a href="javasript:void(0)" class="d-block">@User.FindFirstValue(ClaimTypes.Email)</a>
+                        <a href="" class="d-block">@User.FindFirstValue(ClaimTypes.Email)</a>
                     </div>
                 </div>
 
@@ -104,7 +104,7 @@
                         with font-awesome or any other icon font library -->
                         
                         <li class="nav-item">
-                            <a class="nav-link" href="#"  data-url="@Url.Action("Index", "AdminHome")" data-module ="AdminHome">
+                            <a asp-action="Index" asp-controller="Statistics" asp-area="Admin" class="nav-link">
                                 <i class="nav-icon fas fa-home"></i>
                                 <p>
                                     Bảng điều Khiển
@@ -121,16 +121,18 @@
                             </a>
                         </li>
 
+                     
                         <li class="nav-item">
-                            <a class="nav-link" href="#"  data-url="@Url.Action("Index", "User")" data-module="UserModule">
+                            <a class="nav-link" asp-action="Index" asp-controller="User" asp-area="Admin">
                                 <i class="nav-icon fas fa-user"></i>
                                 <p>Quản lý quản trị viên</p>
                             </a>
                         </li>
-                       
+
+                        
 
                         <li class="nav-item">
-                            <a class="nav-link" href="#" data-url="@Url.Action("Index", "Employee")" data-module="EmployeeModule">
+                            <a class="nav-link" asp-action="Index" asp-controller="Employee" asp-area="Admin">
                                 <i class="nav-icon fas fa-users"></i>
                                 <p>Quản lý nhân viên</p>
                             </a>
@@ -177,15 +179,15 @@
                         </li>
 
 
-                        <li class="nav-item">
-                            <a data-url = @Url.Action("Index", "Orders") class="nav-link" href="#">
+                         <li class="nav-item"> 
+                            <a class="nav-link" asp-area="Admin" asp-controller="Orders" asp-action="Index">
                                 <i class="nav-icon fas fa-cart-shopping"></i>
                                 <p>
                                     Quản lý đơn hàng
                                 </p>
                             </a>
                         </li>
-
+                        
 
                         <li class="nav-item">
                             <a class="nav-link" asp-area="Admin" asp-controller="Contacts" asp-action="Index">
@@ -196,12 +198,12 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" asp-action="Logout" asp-controller="Authen" asp-area="Admin" data-confirm="Are you sure you want to logout?">
-                                <i class="nav-icon fas fa-arrow-right-from-bracket"></i>
-                                <p>
-                                    Đăng Xuất
-                                </p>    
-                            </a>
+                            <form action="@Url.Action("Logout", "Authen", new { area = "Admin" })" method="post" onsubmit="return confirm('Are you sure you want to logout?');">
+                                <button type="submit" class="btn btn-link">
+                                    <i class="nav-icon fas fa-arrow-right-from-bracket"></i>
+                                    <p>Đăng Xuất</p>
+                                </button>
+                            </form>
                         </li>
 
                         
@@ -232,6 +234,10 @@
     <!-- Bootstrap 4 -->
     <script src="~/assets/admin/libs/bootstrap/js/bootstrap.bundle.min.js"></script>
 
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+
     <!-- adminLTE app -->
     <script src="~/assets/admin/js/adminlte.min.js"></script>
 
@@ -245,7 +251,7 @@
     <script src="~/assets/admin/libs/boot-box/bootbox.js"></script>
 
     <!-- Chart.js (standalone) -->
-    <script src="~/assets/admin/libs/chart.js/chart.js"></script>
+    <script src="~/assets/admin/libs/chart.js/Chart.js"></script>
 
     <script src="~/assets/admin/libs/jquery/toast.min.js"></script>
 
@@ -255,9 +261,10 @@
 
     <script src="~/assets/admin/js/pages/Contact/ContactModel.js"></script>
 
-    <script src="~/assets/admin/js/pages/user/UserModule.js"></script>
-    <script src="~/assets/admin/js/pages/Employee/EmployeeModule.js"></script>
+    <script src="~/assets/admin/js/pages/user/UserModuleV2.js"></script>
+    <script src="~/assets/admin/js/pages/Employee/EmployeeModuleV2.js"></script>
 
+    <script src="~/assets/admin/js/pages/Order/OrderModel.js"></script>
 
     @* <script src="~/assets/admin/js/AdminContentv2.js"></script> *@
     <!-- Custom Scripts (Optional) -->

@@ -1,13 +1,16 @@
 ﻿using FashionShopMVC.Models.DTO.ProductDTO;
 using FashionShopMVC.Repositories.@interface;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Diagnostics;
+using System.Security.Claims;
 
 namespace FashionShopMVC.Areas.Admin.Controllers
 {
     [Area("Admin")]
     [Route("Admin/[controller]")]
+    
     public class ProductController : Controller
     {
         private readonly IProductRepository _productRepository;
@@ -23,7 +26,7 @@ namespace FashionShopMVC.Areas.Admin.Controllers
 
         // GET: Admin/Product
         [HttpGet("")]
-        public async Task<IActionResult> Index(int page = 1, int pageSize = 10, string? searchByName = null)
+        public async Task<IActionResult> Index(int page = 1, int pageSize = 5, string? searchByName = null)
         {
             var productPaginationSet = await _productRepository.GetAll(page - 1, pageSize, null, searchByName);
             //ViewData["searchByName"] = searchByName ?? "";
@@ -45,91 +48,90 @@ namespace FashionShopMVC.Areas.Admin.Controllers
         [Route("Create")]
         public async Task<IActionResult> Create(CreateProductDTO model)
         {
+            // Fetch categories for the ViewBag (needed for the dropdown in case of an error)
             var categories = await _categoryRepository.GetAllCategoryAsync();
             ViewBag.Categories = categories;
-            //var userName = HttpContext.Session.GetString("UserName");
-            //string userName = HttpContext.User.FindFirst(ClaimTypes.Name)?.Value;
-            //return Json(new { success = true, message = userName });
-            // Kiểm tra tính hợp lệ của Model
+
+            
+
             if (!ModelState.IsValid)
             {
-                foreach (var error in ModelState.Values.SelectMany(v => v.Errors))
+                // If ModelState is invalid, log all errors
+                var errors = ModelState.Values.SelectMany(v => v.Errors);
+                foreach (var error in errors)
                 {
-                    // Ghi lỗi để kiểm tra chi tiết
-                    Debug.WriteLine(error.ErrorMessage);
+                    // Log each validation error message (or add to TempData to show on the view)
+                    TempData["ErrorMessage"] += $"{error.ErrorMessage}<br>";
                 }
-                TempData["ErrorMessage"] = "Dữ liệu nhập vào không hợp lệ.";
+
+                // Return the view with the model (to display the errors)
                 return View(model);
             }
+
             try
             {
-                // Xử lý ảnh chính
+                // Process the main image
                 if (model.ImageFile != null && model.ImageFile.Length > 0)
                 {
-                    var fileName = Path.GetFileName(model.ImageFile.FileName);
-                    var fileExtension = Path.GetExtension(fileName);
-                    var newFileName = Guid.NewGuid().ToString() + fileExtension;
-
-                    var filePath = Path.Combine(Directory.GetCurrentDirectory(), "UploadFiles/Images", newFileName);
-
-                    using (var stream = new FileStream(filePath, FileMode.Create))
-                    {
-                        await model.ImageFile.CopyToAsync(stream);
-                    }
-
-                    model.ImagePath = "UploadFiles/Images/" + newFileName;  // Đảm bảo rằng đường dẫn được gán
+                    model.ImagePath = await SaveFileAsync(model.ImageFile);
                 }
 
-                // Xử lý danh sách ảnh phụ
+                // Process the list of additional images
                 if (model.ListImageFiles != null && model.ListImageFiles.Any())
                 {
                     var imagePaths = new List<string>();
-
                     foreach (var file in model.ListImageFiles)
                     {
                         if (file != null && file.Length > 0)
                         {
-                            var fileName = Path.GetFileName(file.FileName);
-                            var fileExtension = Path.GetExtension(fileName);
-                            var newFileName = Guid.NewGuid().ToString() + fileExtension;
-
-                            var filePath = Path.Combine(Directory.GetCurrentDirectory(), "UploadFiles/Images", newFileName);
-
-                            using (var stream = new FileStream(filePath, FileMode.Create))
-                            {
-                                await file.CopyToAsync(stream);
-                            }
-
-                            imagePaths.Add("UploadFiles/Images/" + newFileName);
+                            var imagePath = await SaveFileAsync(file);
+                            imagePaths.Add(imagePath);
                         }
                     }
-
                     model.ListImagePaths = JsonConvert.SerializeObject(imagePaths);
+                }
 
+               
+
+                // Save the product using the repository
+                var result = await _productRepository.Create(model);
+
+                if (result != null)
+                {
+                    TempData["SuccessMessage"] = "Tạo sản phẩm thành công!";
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    TempData["ErrorMessage"] = "Đã xảy ra lỗi trong quá trình tạo sản phẩm.";
                 }
             }
             catch (Exception ex)
             {
-                TempData["ErrorMessage"] = "Đã xảy ra lỗi trong quá trình tạo sản phẩm: " + ex.Message;
+                // Log the exception and show an error message
+                TempData["ErrorMessage"] = $"Đã xảy ra lỗi: {ex.Message}";
             }
-
-            // Gọi hàm Create trong Repository để lưu sản phẩm
-
-            var result = await _productRepository.Create(model);
-
-            if (result != null)
-            {
-                TempData["SuccessMessage"] = "Tạo sản phẩm thành công!";
-                return RedirectToAction("Index");
-            }
-            else
-            {
-                TempData["ErrorMessage"] = "Đã xảy ra lỗi trong quá trình tạo sản phẩm.";
-            }
-
-
 
             return View(model);
+        }
+
+
+        private async Task<string> SaveFileAsync(IFormFile file)
+        {
+            // Generate a unique file name
+            var fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
+
+            // Define the file path
+            var filePath = Path.Combine(Directory.GetCurrentDirectory(), "UploadFiles/Images", fileName);
+
+            // Save the file to the server
+            using (var stream = new FileStream(filePath, FileMode.Create))
+            {
+                await file.CopyToAsync(stream);
+            }
+
+            // Return the relative file path
+            return "UploadFiles/Images/" + fileName;
         }
 
 

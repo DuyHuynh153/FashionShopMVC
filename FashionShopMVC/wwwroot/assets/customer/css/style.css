@@ -169,6 +169,7 @@ button {
     width: 94%;
     z-index: 888;
 }*/
+
 .top-row {
      height: 35px;
     line-height: 31px;
@@ -1146,6 +1147,8 @@ button {
     width: 0 !important;
 }
 
+
+
 @media (min-width: 768px) and (max-width: 1024px) {
     .main-nav-block .navbar-nav > li > a{
         padding:10px;
@@ -1155,14 +1158,16 @@ button {
         top: 50%;
     }
     .main-nav-block {
-/*        // top: 130px !important;*/
-    }
+/*        top: 130px !important;
+*/    }
+    
     .full-banner{
         height: 400px !important;
     }
     .carousel-inner .image1{
         height: 500px !important;
     }
+    
 }
 @media (min-width: 320px) and (max-width: 568px){
     .main-nav-block {
@@ -1170,6 +1175,9 @@ button {
     }
     .full-banner{
         height: 250px !important;
+    }
+    .middle-content {
+        margin-top: 200px;
     }
     .carousel-inner .image1{
         height: 320px !important;
@@ -1191,5 +1199,11 @@ button {
     }
     .product-desc{
         text-align: center;
+    }
+
+  /* Cart CSS build by Prosperity*/
+    .Cart_Item_line {
+        border-bottom: 2px solid black;
+        padding: 10px; 
     }
 }

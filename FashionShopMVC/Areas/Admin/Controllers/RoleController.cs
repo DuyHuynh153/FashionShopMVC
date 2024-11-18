@@ -1,4 +1,4 @@
-﻿using FashionShop.Repositories;
+﻿using FashionShopMVC.Repositories;
 using FashionShopMVC.Areas.Admin.Models.RolesDTO;
 using FashionShopMVC.Repositories.@interface;
 using Microsoft.AspNetCore.Mvc;
@@ -66,7 +66,7 @@ namespace FashionShopMVC.Areas.Admin.Controllers
             return View(role);
         }
 
-        [HttpPut]
+        [HttpPost]
         [Route("Edit/{id}")]
         public async Task<IActionResult> Edit(string id, EditRoleDTO role)
         {

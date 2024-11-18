@@ -10,9 +10,10 @@ namespace FashionShopMVC.Repositories
     public interface IOrderRepository
     {
         public AdminPaginationSet<AdminGetOrderDTO> GetAll(int page, int pageSize, int? typePayment, int? searchByID, string? searchByName, string? searchBySDT);
-        public Task<GetOrderDetailDTO> GetOrderDetail(int id);
         public Task<GetOrderByIdDTO> GetOrderById(int id);
-        public Task<IEnumerable<GetOrderByUserIdDTO>> GetByUserID(string userID);
+        public Task<GetOrderByUserIdDTO> GetById(int id);
+
+        public Task<List<GetOrderByUserIdDTO>> GetByUserID(string userID);
         public Task<GetOrderByUserIdDTO> GetNewByUserID(string userID);
         public Task<GetOrderDTO> Create(CreateOrderDTO createOrderDTO);
         public Task<List<ShoppingCartViewModel>> Cancel(int id);
@@ -69,7 +70,7 @@ namespace FashionShopMVC.Repositories
                 TypePayment = order.TypePayment,
                 Status = order.Status,
                 DeliveryFee = order.DeliveryFee,
-                Voucher = order.Voucher,
+                Voucher = _fashionShopDBContext.Vouchers.Where(v => v.ID == order.VoucherID).FirstOrDefault(),
                 TotalPayment = order.OrderDetails.Sum(item => item.Quantity * item.Price)
             }).OrderByDescending(u => u.ID).ToList();
 
@@ -88,43 +89,77 @@ namespace FashionShopMVC.Repositories
             return orderPaginationSet;
         }
 
-        public async Task<IEnumerable<GetOrderByUserIdDTO>> GetByUserID(string userID)
+        public async Task<List<GetOrderByUserIdDTO>> GetByUserID(string userID)
         {
-            var listOrderByUserIdDTO = await _fashionShopDBContext.Orders
-                .Where(order => order.UserID == userID)
-                .Select(order => new GetOrderByUserIdDTO
-                {
-                    ID = order.ID,
-                    FullName = order.FullName,
-                    PhoneNumber = order.PhoneNumber,
-                    ProvinceName = order.Province.Name,
-                    DistrictName = order.District.Name,
-                    WardName = order.Ward.Name,
-                    Address = order.Address,
-                    DeliveryFee = order.DeliveryFee,
-                    OrderDate = order.OrderDate,
-                    Note = order.Note,
-                    Status = order.Status,
-                    TypePayment = order.TypePayment,
+            var orderByUserIdDTO = await _fashionShopDBContext.Orders.Select(order => new GetOrderByUserIdDTO
+            {
+                ID = order.ID,
+                FullName = order.FullName,
+                PhoneNumber = order.PhoneNumber,
+                ProvinceName = order.Province.Name,
+                DistrictName = order.District.Name,
+                WardName = order.Ward.Name,
+                Address = order.Address,
+                DeliveryFee = order.DeliveryFee,
+                OrderDate = order.OrderDate,
+                Note = order.Note,
+                Status = order.Status,
+                TypePayment = order.TypePayment,
 
-                    Voucher = order.Voucher,
-                    UserID = order.UserID,
+                Voucher = order.Voucher,
+                UserID = order.UserID,
 
-                    //OrderDetails = order.OrderDetails.ToList()
-                    OrderDetails = order.OrderDetails.Select(detail => new OrderDetail
-                    {
-                        ProductID = detail.ProductID,
-                        //ProductName = detail.Product.Name,
-                        Quantity = detail.Quantity,
-                        Price = detail.Price
-                    }).ToList()
-                }).OrderByDescending(o => o.OrderDate).ToListAsync();
-            return listOrderByUserIdDTO;
+                OrderDetails = order.OrderDetails.ToList()
+            }).Where(order => order.UserID == userID).OrderByDescending(o => o.OrderDate).ToListAsync();
+
+
+            return orderByUserIdDTO;
+
         }
 
-        public async Task<GetOrderDetailDTO> GetOrderDetail(int id)
+        public async Task<GetOrderByIdDTO> GetOrderById(int id)
         {
-            var orderByIdDTO = await _fashionShopDBContext.Orders.Select(order => new GetOrderDetailDTO
+            // take voucher
+            var order = await _fashionShopDBContext.Orders.SingleOrDefaultAsync(o => o.ID == id);
+
+            var voucher  = await _fashionShopDBContext.Vouchers.SingleOrDefaultAsync(v => v.ID == order.VoucherID);
+
+            var orderByIdDTO = await _fashionShopDBContext.Orders.Select(order => new GetOrderByIdDTO
+            {
+                ID = order.ID,
+                Email = order.Email,
+                FullName = order.FullName,
+                PhoneNumber = order.PhoneNumber,
+                ProvinceName = order.Province.Name,
+                DistrictName = order.District.Name,
+                WardName = order.Ward.Name,
+                Address = order.Address,
+                DeliveryFee = order.DeliveryFee,
+                OrderDate = order.OrderDate,
+                Note = order.Note,
+                Status = order.Status,
+                TypePayment = order.TypePayment,
+
+                Voucher = voucher,
+                UserID = order.UserID,
+
+                OrderDetails = order.OrderDetails.Select(od => new OrderDetail()
+                {
+                    ProductID = od.ProductID,
+                    Product = _fashionShopDBContext.Products.SingleOrDefault(p => p.ID == od.ProductID),
+                    OrderID = od.OrderID,
+                    Price = od.Price,
+                    Quantity = od.Quantity
+
+                }).ToList(),
+            }).SingleOrDefaultAsync(o => o.ID == id);
+
+            return orderByIdDTO;
+        }
+
+        public async Task<GetOrderByUserIdDTO> GetById(int id)
+        {
+            var orderByIdDTO = await _fashionShopDBContext.Orders.Select(order => new GetOrderByUserIdDTO
             {
                 ID = order.ID,
                 Email = order.Email,
@@ -143,20 +178,19 @@ namespace FashionShopMVC.Repositories
                 Voucher = order.Voucher,
                 UserID = order.UserID,
 
-                OrderDetails = order.OrderDetails.Select(od => new OrderDetailDTO()
+                OrderDetails = order.OrderDetails.Select(od => new OrderDetail()
                 {
                     ProductID = od.ProductID,
-                    ProductName = od.Product.Name, // Truy cập trực tiếp từ navigation property
-                    ImageUrl = od.Product.Image,
+                    Product = _fashionShopDBContext.Products.SingleOrDefault(p => p.ID == od.ProductID),
                     OrderID = od.OrderID,
                     Price = od.Price,
                     Quantity = od.Quantity
-                }).ToList()
+
+                }).ToList(),
             }).SingleOrDefaultAsync(o => o.ID == id);
 
             return orderByIdDTO;
         }
-
         public async Task<GetOrderByUserIdDTO> GetNewByUserID(string id)
         {
             var orderByUserIdDTO = await _fashionShopDBContext.Orders.Select(order => new GetOrderByUserIdDTO
@@ -381,41 +415,6 @@ namespace FashionShopMVC.Repositories
         {
             var countOrder = await _fashionShopDBContext.Orders.CountAsync();
             return countOrder;
-        }
-
-        public async Task<GetOrderByIdDTO> GetOrderById(int id)
-        {
-            var orderByIdDTO = await _fashionShopDBContext.Orders.Select(order => new GetOrderByIdDTO
-            {
-                ID = order.ID,
-                Email = order.Email,
-                FullName = order.FullName,
-                PhoneNumber = order.PhoneNumber,
-                ProvinceName = order.Province.Name,
-                DistrictName = order.District.Name,
-                WardName = order.Ward.Name,
-                Address = order.Address,
-                DeliveryFee = order.DeliveryFee,
-                OrderDate = order.OrderDate,
-                Note = order.Note,
-                Status = order.Status,
-                TypePayment = order.TypePayment,
-
-                Voucher = order.Voucher,
-                UserID = order.UserID,
-
-                OrderDetails = order.OrderDetails.Select(od => new OrderDetail()
-                {
-                    ProductID = od.ProductID,
-                    Product = _fashionShopDBContext.Products.SingleOrDefault(p => p.ID == od.ProductID),
-                    OrderID = od.OrderID,
-                    Price = od.Price,
-                    Quantity = od.Quantity
-
-                }).ToList(),
-            }).SingleOrDefaultAsync(o => o.ID == id);
-
-            return orderByIdDTO;
         }
     }
 }

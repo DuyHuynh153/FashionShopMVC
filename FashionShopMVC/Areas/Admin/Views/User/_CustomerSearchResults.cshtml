@@ -61,7 +61,7 @@
 @if (Model != null && Model.PagesCount > 0)
 {
     <nav class="mt-5">
-        <ul class="pagination">
+        <ul class="pagination justify-content-center">
             @for (int i = 0; i < Model.PagesCount; i++)
             {
                 <li class="page-item @(Model.Page == i ? "active" : "")">
