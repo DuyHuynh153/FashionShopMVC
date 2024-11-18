@@ -1200,5 +1200,10 @@ button {
     .product-desc{
         text-align: center;
     }
-    
+
+  /* Cart CSS build by Prosperity*/
+    .Cart_Item_line {
+        border-bottom: 2px solid black;
+        padding: 10px; 
+    }
 }
