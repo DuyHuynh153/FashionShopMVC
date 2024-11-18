@@ -13,10 +13,10 @@ using Microsoft.CodeAnalysis;
 using AspNetCoreHero.ToastNotification.Abstractions;
 using FashionShopMVC.Models.DTO.UserDTO;
 using FashionShopMVC.Repositories.@interface;
-using FashionShop.Service.Model;
-using FashionShop.Service.Service;
+using FashionShopMVC.Service.Model;
 using FashionShopMVC.Repositories;
 using FashionShopMVC.Models.DTO.FavoriteProductDTO;
+using FashionShopMVC.Service.Service;
 
 namespace FashionShopMVC.Controllers
 {
@@ -27,11 +27,13 @@ namespace FashionShopMVC.Controllers
         private readonly INotyfService _notyfService;
         private readonly IProductRepository _productRepository;
         private readonly IFavoriteProductRepository _favoriteProductRepository;
+        private readonly IOrderRepository _orderRepository;
+
 
         // import emailService from class lib fashioShop.Service
 
         private readonly IEmailAuthService _emailAuthService;
-        public AccountController(UserManager<User> userManager, IUserRepository userRepository, INotyfService notyfService,  IEmailAuthService emailAuthService, IProductRepository productRepository, IFavoriteProductRepository favoriteProductRepository) 
+        public AccountController(UserManager<User> userManager, IUserRepository userRepository, INotyfService notyfService,  IEmailAuthService emailAuthService, IProductRepository productRepository, IFavoriteProductRepository favoriteProductRepository, IOrderRepository orderRepository)
         {
             _userManager = userManager;
             _userRepository = userRepository;
@@ -39,6 +41,7 @@ namespace FashionShopMVC.Controllers
             _emailAuthService = emailAuthService;
             _favoriteProductRepository = favoriteProductRepository;
             _productRepository = productRepository;
+            _orderRepository = orderRepository;
         }
         public IActionResult Login()
         {
@@ -388,35 +391,93 @@ namespace FashionShopMVC.Controllers
         [HttpPost]
         public async Task<JsonResult> AddFavoriteProduct(CreateFavoriteProductDTO createFavoriteProductDTO)
         {
+            // Get user session
             var userSession = HttpContext.Session.GetString(CommonConstants.SessionUser);
 
+            // Check if user is logged in (session contains user information)
             if (userSession != null)
             {
                 var user = JsonConvert.DeserializeObject<User>(userSession);
 
+                // Assign the logged-in user's ID to the DTO
                 createFavoriteProductDTO.UserID = user.Id;
 
+                // Check if the product is already in the user's favorites
+                var existingFavoriteProduct = await _favoriteProductRepository.GetByUserID(user.Id);
+
+
+                if (existingFavoriteProduct != null)
+                {
+                    foreach (var p in existingFavoriteProduct)
+                    {
+                        if (createFavoriteProductDTO.ProductID == p.ProductDTO.ID)
+                        {
+                            return Json(new
+                            {
+                                status = false,
+                                message = "Sản phẩm đã có trong yêu thích"  // Product already in favorites
+                            });
+                        }
+                    }
+                    // Product already exists in favorites, return a message
+                    
+                }
+
+                // Call repository method to create the favorite product record
                 var favoriteProduct = await _favoriteProductRepository.Create(createFavoriteProductDTO);
 
+                // Check if product is successfully added to the favorites
                 if (favoriteProduct != null)
                 {
+                    // Retrieve the product's details (e.g., image URL) from the product repository
                     var product = await _productRepository.GetById(createFavoriteProductDTO.ProductID);
 
-                    _notyfService.Custom("<img style='height: 40px; padding-right: 10px;' src='" + product.Image + "'/> Đã thêm vào yêu thích", 2, "white");
+                    if (product != null)
+                    {
+                        // Notify the user about the successful addition to favorites
+                        // _notyfService.Custom("<img style='height: 40px; padding-right: 10px;' src='" + product.Image + "'/> Đã thêm vào yêu thích", 2, "white");
 
+                        // Return a successful JSON response
+                        return Json(new
+                        {
+                            status = true,
+                            message = "Sản phẩm đã được thêm vào yêu thích"  // Optional success message
+                        });
+                    }
+                    else
+                    {
+                        // Handle the case where product is not found
+                        return Json(new
+                        {
+                            status = false,
+                            message = "Sản phẩm không tồn tại",
+                            imageUrl = product?.Image // Send image URL to use in the client-side notification
+                        });
+                    }
+                }
+                else
+                {
+                    // Handle failure when the favorite product creation fails
                     return Json(new
                     {
-                        status = true
+                        status = false,
+                        message = "Không thể thêm vào yêu thích, vui lòng thử lại"
                     });
                 }
             }
-
-            _notyfService.Error("Vui lòng đăng nhập", 2);
-            return Json(new
+            else
             {
-                status = false
-            });
+                // If the user is not logged in, return an error message
+                // _notyfService.Error("Vui lòng đăng nhập", 2);
+
+                return Json(new
+                {
+                    status = false,
+                    message = "Vui lòng đăng nhập để thêm sản phẩm vào yêu thích"
+                });
+            }
         }
+
 
         [HttpPost]
         public async Task<JsonResult> DeleteFavoriteProduct(int productID)
@@ -432,6 +493,48 @@ namespace FashionShopMVC.Controllers
                 if (favoriteProduct != null)
                 {
                     _notyfService.Success("Đã xóa khỏi yêu thích", 2);
+                    return Json(new
+                    {
+                        status = true
+                    });
+                }
+            }
+
+            return Json(new
+            {
+                status = false
+            });
+        }
+
+        public async Task<IActionResult> OrderList()
+        {
+            var userSession = HttpContext.Session.GetString(CommonConstants.SessionUser);
+            var user = JsonConvert.DeserializeObject<User>(userSession);
+
+            var order = await _orderRepository.GetByUserID(user.Id);
+
+            return View(order);
+        }
+
+        public async Task<IActionResult> OrderDetail(int id)
+        {
+            var orderDetail = await _orderRepository.GetById(id);
+
+            return View(orderDetail);
+        }
+
+        public async Task<JsonResult> OrderCancel(int id)
+        {
+            var orderCancel = await _orderRepository.Cancel(id);
+
+            if (orderCancel != null)
+            {
+                // Tăng số lượng sản phẩm khi hủy hàng
+                var increaseQuantityProduct = await _productRepository.IncreaseQuantityOrder(orderCancel);
+
+                if (increaseQuantityProduct == true)
+                {
+                    _notyfService.Success("Đã hủy đơn hàng", 2);
                     return Json(new
                     {
                         status = true

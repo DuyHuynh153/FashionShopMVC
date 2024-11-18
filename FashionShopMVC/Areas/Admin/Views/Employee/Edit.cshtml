@@ -35,8 +35,7 @@
 
             <div class="form-group">
                 <label asp-for="Role" class="control-label">Vai trò</label>
-                <input asp-for="Role" class="form-control" placeholder="Vui lòng nhập vai trò" />
-                <span asp-validation-for="Role" class="text-danger"></span>
+                <input asp-for="Role" disabled class="form-control" value="@Model.Role" />
             </div>
 
             <div class="form-group form-check">

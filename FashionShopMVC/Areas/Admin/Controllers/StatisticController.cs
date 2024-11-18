@@ -1,10 +1,12 @@
 ﻿using FashionShopMVC.Repositories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FashionShopMVC.Areas.Admin.Controllers
 {
     [Area("Admin")]
     [Route("Admin/[controller]")]
+    [Authorize]
     public class StatisticsController : Controller
     {
         private readonly IStatisticRepository _statisticRepository;
@@ -14,6 +16,7 @@ namespace FashionShopMVC.Areas.Admin.Controllers
             _statisticRepository = statisticRepository;
         }
         [HttpGet]
+        
         public async Task<IActionResult> Index(DateTime? fromDate, DateTime? toDate, string revenueType) {
             var revenueStatistics = await _statisticRepository.GetStatisticView(fromDate, toDate, revenueType);
             return View(revenueStatistics);

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FashionShop.Service.Model
+namespace FashionShopMVC.Service.Model
 {
     public class EmailConfig
     {

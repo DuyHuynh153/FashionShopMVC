@@ -17,6 +17,7 @@
         })
     },
     addFavoriteProduct: function (productID) {
+        console.log("you click the addEventListener with ID:" + productID);
         $.ajax({
             url: '/Account/AddFavoriteProduct',
             data: {
@@ -26,11 +27,19 @@
             dataType: 'json',
             success: function (res) {
                 if (res.status) {
-                    //alert('Đã thêm sản phẩm vào danh sách yêu thích');
+                    // Success notification using Noty (client-side)
+                    console.log("success")
+                   
+                } else {
+                    // Error notification using Noty (client-side)
+                    console.log("faile")
                 }
-                else {
-                    //alert('Vui lòng đăng nhập');
-                }
+            },
+            
+            error: function (xhr, status, error) {
+                // AJAX error handling
+                console.error("AJAX Error: " + status + " - " + error);
+                
             }
         });
     },
@@ -54,5 +63,7 @@
         });
     }
 }
-
-favorite.init();
+$(document).ready(function () {
+    console.log("ok favorite")
+    favorite.init();
+});

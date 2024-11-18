@@ -1,13 +1,17 @@
-﻿using FashionShopMVC.Models.Domain;
+﻿using FashionShopMVC.Areas.Admin.Models.UserDTO;
+using FashionShopMVC.Models.Domain;
 using FashionShopMVC.Models.DTO.UserDTO;
 using FashionShopMVC.Repositories.@interface;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+
 
 namespace FashionShopMVC.Areas.Admin.Controllers
 {
     [Area("Admin")]
     [Route("Admin/[controller]")]
+    [Authorize(Roles = "Quản trị viên, Admin")]
     public class EmployeeController:Controller
     {
         private readonly IUserRepository _userRepository;
@@ -21,17 +25,29 @@ namespace FashionShopMVC.Areas.Admin.Controllers
         }
 
         [HttpGet("")]
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string searchQuery = "", int page = 1, int pageSize = 2)
         {
-            string userName = "";
             string role = (await _roleRepository.GetByNameAsync("Nhân Viên")).ID.ToString();
-            var listUserEmployee = await _userRepository.GetAllUserAsync(userName, role);
+
+            var listUserEmployee = await _userRepository.GetPagedUsersAdminAsync(searchQuery, role, page, pageSize);
+
+            int totalUsers = (await _userRepository.GetAllUserAsync(searchQuery, role)).Count();
+
+            int totalpages = (int)Math.Ceiling((decimal)totalUsers / pageSize);
+
+            var model = new PageUserListDTO
+            {
+                Users = listUserEmployee,
+                CurrentPage = page,
+                PageSize = pageSize,
+                TotalPages = totalpages
+            };
 
             if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
             {
-                return PartialView("IndexPartial", listUserEmployee);
+                return PartialView("_IndexPartial", model);
             }
-            return View(listUserEmployee);
+            return View(model);
 
             // return View(listUserEmployee);
         }
@@ -40,7 +56,7 @@ namespace FashionShopMVC.Areas.Admin.Controllers
         [Route("Create")]
         public IActionResult Create()
         {
-            return View();
+            return PartialView("_CreatePartial");
         }
         [HttpPost]
         [Route("Create")]
@@ -53,21 +69,28 @@ namespace FashionShopMVC.Areas.Admin.Controllers
                 if (checkEmail != null)
                 {
                     ModelState.AddModelError("Email", "Email đã tồn tại");
-                    return View(registerRequestDTO);
+                    return PartialView("_CreatePartial", registerRequestDTO);
+                    // return View(registerRequestDTO);
                 }
                 var checkUserName = await _userManager.FindByNameAsync(registerRequestDTO.FullName);
                 if (checkUserName != null)
                 {
                     ModelState.AddModelError("UserName", "Tên đăng nhập đã tồn tại");
-                    return View(registerRequestDTO);
+                    return PartialView("_CreatePartial", registerRequestDTO);
+                    // return View(registerRequestDTO);
                 }
                 var result = await _userRepository.RegisterAccountEmployeeAsync(registerRequestDTO);
                 if (result)
                 {
                     return RedirectToAction(nameof(Index));
                 }
+                else
+                {
+                    ModelState.AddModelError(string.Empty, "Tạo Tài Khoản Nhân Viên thất bại");
+                    return PartialView("_CreatePartial", registerRequestDTO);
+                }
             }
-            return View(registerRequestDTO);
+            return PartialView("_CreatePartial", registerRequestDTO);
         }
 
         [HttpGet]
@@ -79,11 +102,11 @@ namespace FashionShopMVC.Areas.Admin.Controllers
             {
                 return NotFound();
             }
-            return View(user);
+            return PartialView("_EditPartial", user);
         }
         [HttpPost]
         [Route("Edit/{id}")]
-        public async Task<IActionResult> Edit(UpdateUserDTO updateUserDTO, string id)
+        public async Task<IActionResult> Edit(GetUserDTO updateUserDTO, string id)
         {
             if (ModelState.IsValid)
             {
@@ -91,6 +114,11 @@ namespace FashionShopMVC.Areas.Admin.Controllers
                 if (result != null)
                 {
                     return RedirectToAction(nameof(Index));
+                }
+                else
+                {
+                    ModelState.AddModelError(string.Empty, "Cập nhật Không thành công");
+                    return View(updateUserDTO);
                 }
             }
             return View(updateUserDTO);
@@ -105,7 +133,7 @@ namespace FashionShopMVC.Areas.Admin.Controllers
             {
                 return NotFound();  
             }
-            return View(user);
+            return PartialView("_DeletePartial", user);
         }
         [HttpPost]
         [Route("Delete/{id}")]
@@ -116,9 +144,28 @@ namespace FashionShopMVC.Areas.Admin.Controllers
             {
                 return RedirectToAction(nameof(Index));
             }
-            return View();
+            return PartialView("_DeletePartial");
         }
 
+        [HttpPost]
+        [Route("ToggleLockAccount/{id}")]
+        public async Task<IActionResult> ToggleLockingAccount(string id)
+        {
+            if (string.IsNullOrEmpty(id))
+            {
+                return NotFound();
+            }
+            var result = await _userRepository.AccountLock(id);
+            if (result)
+            {
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                ModelState.AddModelError(string.Empty, "Khóa tài khoản không thành công");
+                return RedirectToAction("Index");
+            }
+        }
 
     }
 }

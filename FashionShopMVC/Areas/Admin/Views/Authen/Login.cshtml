@@ -78,6 +78,15 @@
                                 </div>
                             </div>
                         </div>
+                        
+                        
+                            @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+                            {
+                            <div class="alert alert-danger">
+                                <p>@error.ErrorMessage</p>
+                            </div>
+                            }
+                        
                         <div class="row">
                             <div class="col-12">
                                 <button type="submit" class="btn btn-info btn-block col-6 m-auto">Đăng nhập</button>
@@ -90,9 +99,5 @@
     </div>
 </body>
 
-<script>
 
-    console.log("Heelow Duy");
-
-</script>
 </html>

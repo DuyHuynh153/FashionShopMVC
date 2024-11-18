@@ -71,7 +71,7 @@ namespace FashionShopMVC.Models.DTO.OrderDTO
                 }
                 else if (getVoucher.DiscountAmount)
                 {
-                    return getTotalMoney() - getVoucher.DiscountValue;
+                    return  getVoucher.DiscountValue;
                 }
             }
             return 0;

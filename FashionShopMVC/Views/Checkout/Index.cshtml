@@ -1,200 +1,87 @@
 ﻿@{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Cart";
     Layout = "~/Views/Shared/_Layout.cshtml";
-
 }
 
-<style>
-   
-    form {
-        background-color: #fff;
-        padding: 20px;
-        border-radius: 8px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        max-width: 400px;
-        width: 100%;
-    }
-    h2 {
-        text-align: center;
-    }
-    .form-group {
-        margin-bottom: 15px;
-    }
-    .form-group label {
-        display: block;
-        margin-bottom: 5px;
-        font-weight: bold;
-    }
-    .form-group input, .form-group select, .form-group textarea {
-        width: 100%;
-        padding: 10px;
-        border: 1px solid #ccc;
-        border-radius: 4px;
-    }
-    .form-group textarea {
-        resize: vertical;
-    }
-    .btn {
-        background-color: #28a745;
-        color: #fff;
-        padding: 10px;
-        width: 100%;
-        border: none;
-        border-radius: 4px;
-        font-size: 16px;
-        cursor: pointer;
-    }
-    .btn:hover {
-        background-color: #218838;
-    }
-
-    .totalwrapper {
-        display: flex; /* Use Flexbox to align items in a row */
-        align-items: center; /* Vertically center the items */
-    }
-    .total{
-        font-family: 'Merriweather', serif;
-        font-size: 3rem;
-        font-weight: bold;
-    }
-
-    .CRC {
-        font-size: 3.5rem;
-        color: #27ae60; /* Green for currency symbol */
-    }
-</style>
-<div class="full-banner" style="height:135px;width=100%">
-  
-
+<div class="full-banner" style="height: 135px">
 </div>
+
 <div class="main-content">
     <div class="container">
-        <div>
-            <form action="#" method="post">
-                <div class="form-group">
-                    <label for="fullname">Full Name</label>
-                    <input type="text" id="fullname" name="FullName" required />
-                </div>
+        <ul class="breadcrumb">
+            <li><a href="~/home"><i class="fa fa-home"></i></a></li>
+            <li><a>Giỏ hàng</a></li>
+        </ul>
+        <div class="row set_color cart-table">
+            <div id="content" class="col-sm-12 cartContent">
+                <h1>Giỏ hàng</h1>
+                <form>
+                    <div class="table-responsive  margin-top">
+                        <table class="table">
+                            <thead style="font-size: 18px; font-weight:bold">
+                                <tr>
+                                    <td style="width: 10%" class="text-center"></td>
+                                    <td style="width: 10%" class="text-center">Hình ảnh</td>
+                                    <td style="width: 35%" class="text-center">Tên sản phẩm</td>
+                                    <td style="width: 15%" class="text-right">Đơn giá</td>
+                                    <td style="width: 15%" class="text-right">Số lượng</td>
+                                    <td style="width: 15%" class="text-right">Tổng cộng</td>
+                                </tr>
+                            </thead>
+                            <tbody id="cartBody" style="font-size: 16px">
+                            </tbody>
+                        </table>
+                    </div>
+                </form>
 
-                <div class="form-group">
-                    <label for="email">Email</label>
-                    <input type="email" id="email" name="Email" required />
-                </div>
+                <div class="row">
+                    <div class="col-sm-4 col-sm-offset-8">
+                        <table class="table">
+                            <tbody>
+                                <tr style="font-size:16px">
+                                    <td class="text-right cart-table-total-label"><strong>Tạm tính: </strong></td>
+                                    <td id="tempTotalMoney" class="text-right cart-table-total"></td>
+                                </tr>
 
-                <div class="form-group">
-                    <label for="phonenumber">Phone Number</label>
-                    <input type="tel" id="phonenumber" name="PhoneNumber" required />
-                </div>
-
-                <div class="form-group">
-                    <label for="province">Province Name</label>
-                    <input type="text" id="province" name="ProvinceID" required />
-                </div>
-
-                <div class="form-group">
-                    <label for="district">District Name</label>
-                    <input type="text" id="district" name="DistrictID" required />
-                </div>
-
-                <div class="form-group">
-                    <label for="ward">Ward Name</label>
-                    <input type="text" id="ward" name="WardID" required />
-                </div>
-
-                <div class="form-group">
-                    <label for="address">Address</label>
-                    <input type="text" id="address" name="Address" required />
-                </div>
-
-                <div class="form-group">
-                    <label for="deliveryfee">Delivery Fee</label>
-                    <input type="number" id="deliveryfee" name="DeliveryFee" required />
-                </div>
-
-                <div class="form-group">
-                    <label for="note">Note</label>
-                    <textarea id="note" name="Note" rows="3"></textarea>
-                </div>
-
-                <div class="form-group">
-                    <label for="paymenttype">Type of Payment</label>
-                    <select id="paymenttype" name="TypePayment" required>
-                        <option value="0">VNpay</option>
-                        <option value="1">Cash on Delivery</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label for="voucher">Voucher</label>
-                    <input type="text" id="voucher" name="VoucherID" />
-                </div>
-
-                <div class="form-group">
-                    <label for="total">Total Amount</label>
-                    <div class="totalwrapper">
-                        <div class="total"></div>
-                        <div class="CRC">VND</div>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
-
-                <!-- Submit Button -->
-                <div class="form-group"> 
-                    <button class="btn" type="button" id="submitOrder">Submit Order</button>
-                    <button class="btn" type="button" id="Vnpaysub">VNpay</button> 
+                <div class="buttons">
+                    <div class="pull-left"><a href="~/home" class="btn btn-primary">Tiếp tục mua hàng</a></div>
+                    <div class="pull-right"><a href="~/ShoppingCart/CheckOut" class="btn btn-primary">Thanh toán</a></div>
                 </div>
-               
-            </form>
-
+            </div>
         </div>
-        
     </div>
 </div>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
-    $(document).ready(function () {
-        $('#submitOrder').on('click', function (e) {
-            e.preventDefault();
 
-            var orderData = {
-                FullName: $('#fullname').val(),
-                Email: $('#email').val(),
-                PhoneNumber: $('#phonenumber').val(),
-                ProvinceID: $('#province').val(),
-                DistrictID: $('#district').val(),
-                WardID: $('#ward').val(),
-                Address: $('#address').val(),
-                Note: $('#note').val(),
-                DeliveryFee: $('#deliveryfee').val(),
-                UserID: "0",  
-                VoucherID: $('#voucher').val(),
-                TypePayment: $('#paymenttype').val(),
-                TypePaymentVN: 0,  
-                shoppingCarts: []  
-            };
-            // Gửi dữ liệu AJAX đến controller
-            $.ajax({
-                url: '@Url.Action("CreateOrder", "Checkout")',  // Đường dẫn đến action controller
-                type: 'POST',
-                data: orderData,  // Dữ liệu gửi đi
-                success: function (response) {
-                    // Kiểm tra kết quả trả về từ controller
-                    if (response.success) {
-                        alert('Đơn hàng đã được tạo thành công!');
-                        // Có thể chuyển hướng hoặc làm gì đó sau khi gửi đơn hàng
-                    } else {
-                        alert('Có lỗi xảy ra khi tạo đơn hàng: ' + response.message);
-                    }
-                },
-                error: function (xhr, status, error) {
-                    alert('Có lỗi xảy ra: ' + error);
-                }
-            });
-        });
-    });
+@section script {
+    <script id="tplCart">
+        <tr>
+            <td class="text-center" style = "vertical-align: middle!important;" >
+                <button type="button" title = "" class="btn btn-primary btnDeleteItem" data - id="{{ProductId}}" style = "margin-left: 1px" >
+                    <i class="fa fa-times-circle" > </i></button >
+                        </td>
+                        < td class="text-center" style = "vertical-align: middle!important;" >
+                            <a href="/Product/Detail/{{ProductId}}" >
+                                <img style="width: 80px" src = "{{Image}}" class="img-thumbnail" >
+                                    </a>
+                                    < /td>
+                                    < td class="text-center" style = "vertical-align: middle!important;" >
+                                        <a href="/Product/Detail/{{ProductId}}" > {{ Name }}</a>
+                                            < /td>
+                                            < td class="text-right" style = "vertical-align: middle!important;" >
+                                                <span style="text-decoration: line-through; font-size: 80%" > {{ PriceInitial }}</span>
+                                                    < span > {{ PriceFormat }}₫</span>
+                                                        < /td>
+                                                        < td class="text-right" style = "vertical-align: middle!important;" >
+                                                            <div class="input-group btn-block" style = "max-width: 100px; float: right;" >
+                                                                <input type="number" id = "quantityProduct_{{ProductId}}" data - id="{{ProductId}}" data - price="{{Price}}" value = "{{Quantity}}" class="form-control txtQuantity" >
+                                                                    </div>
+                                                                    < /td>
+                                                                    < td id = "TotalMoney_{{ProductId}}" class="text-right" style = "vertical-align: middle!important;" > {{ TotalMoney }}₫</td>
+                                                                        < /tr>
+    </script>
+}
 
-    $(document).ready(function() {
-        $('#Vnpaysub').on('click', function() {
-            window.location.href = '@Url.Action("CheckoutVNpay", "VNPay")';
-        });
-    });
-</script>

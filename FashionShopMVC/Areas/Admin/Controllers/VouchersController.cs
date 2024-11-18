@@ -1,6 +1,7 @@
 ﻿using FashionShopMVC.Models.Domain;
 using FashionShopMVC.Models.DTO.VoucherDTO;
 using FashionShopMVC.Repositories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,6 +9,7 @@ namespace FashionShopMVC.Areas.Admin.Controllers
 {
     [Area("Admin")]
     [Route("Admin/[controller]")]
+    [Authorize]
     public class VouchersController : Controller
     {
         private readonly IVoucherRepository _voucherRepository;

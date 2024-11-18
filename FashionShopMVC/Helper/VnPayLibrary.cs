@@ -1,16 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Net;
-using System.Net.Sockets;
 using System.Security.Cryptography;
 using System.Text;
 using System.Web;
 
 namespace FashionShopMVC.Helper
 {
+    
     public class VnPayLibrary
-    {
+    {       
         public const string VERSION = "2.1.0";
         private SortedList<String, String> _requestData = new SortedList<String, String>(new VnPayCompare());
         private SortedList<String, String> _responseData = new SortedList<String, String>(new VnPayCompare());
@@ -57,21 +58,21 @@ namespace FashionShopMVC.Helper
                 }
             }
             string queryString = data.ToString();
-            
+
             baseUrl += "?" + queryString;
             String signData = queryString;
             if (signData.Length > 0)
             {
 
-                signData= signData.Remove(data.Length - 1, 1);
+                signData = signData.Remove(data.Length - 1, 1);
             }
-            string vnp_SecureHash = Utils.HmacSHA512(vnp_HashSecret , signData);
+            string vnp_SecureHash = Utils.HmacSHA512(vnp_HashSecret, signData);
             baseUrl += "vnp_SecureHash=" + vnp_SecureHash;
-           
+
             return baseUrl;
         }
 
-        
+
 
         #endregion
 
@@ -99,7 +100,7 @@ namespace FashionShopMVC.Helper
             {
                 if (!String.IsNullOrEmpty(kv.Value))
                 {
-                    data.Append(WebUtility.UrlEncode( kv.Key) + "=" + WebUtility.UrlEncode(kv.Value )+ "&");
+                    data.Append(WebUtility.UrlEncode(kv.Key) + "=" + WebUtility.UrlEncode(kv.Value) + "&");
                 }
             }
             //remove last '&'
@@ -113,10 +114,9 @@ namespace FashionShopMVC.Helper
         #endregion
     }
 
+
     public class Utils
     {
-
-
         public static String HmacSHA512(string key, String inputData)
         {
             var hash = new StringBuilder();
@@ -133,105 +133,22 @@ namespace FashionShopMVC.Helper
 
             return hash.ToString();
         }
-        public static string GetIpAddress(HttpContext context)
+        public static string GetIpAddress(IHttpContextAccessor httpContextAccessor)
         {
             string ipAddress = string.Empty;
 
             try
             {
-                var remoteIpAddress = context.Connection.RemoteIpAddress;
-
-                if (remoteIpAddress != null)
-                {
-                    if (remoteIpAddress.AddressFamily == AddressFamily.InterNetworkV6)
-                    {
-                        remoteIpAddress = Dns.GetHostEntry(remoteIpAddress).AddressList.FirstOrDefault(x => x.AddressFamily == AddressFamily.InterNetwork);
-                    }
-
-                    if (remoteIpAddress != null) ipAddress = remoteIpAddress.ToString();
-
-                    return ipAddress;
-                }
-            }
-            catch (Exception ex)
-            {
-                return "Invalid IP:" + ex.Message;
-            }
-
-            return ipAddress;
-            /* try
-             {
-                 ipAddress = HttpContext.Current.Request.ServerVariables["HTTP_X_FORWARDED_FOR"];
-
-                 if (string.IsNullOrEmpty(ipAddress) || (ipAddress.ToLower() == "unknown")|| ipAddress.Length>45)
-                     ipAddress = HttpContext.Current.Request.ServerVariables["REMOTE_ADDR"];
-             }
-             catch (Exception ex)
-             {
-                 ipAddress = "Invalid IP:" + ex.Message;
-             }*/
-        }
-    }
-
-        
-        /*public static string GetIpAddress(HttpContext context)
-        {
-            string ipAddress;
-            try
-            {
-                ipAddress = HttpContext.Current.Request.ServerVariables["HTTP_X_FORWARDED_FOR"];
-
-                 if (string.IsNullOrEmpty(ipAddress) || (ipAddress.ToLower() == "unknown")|| ipAddress.Length>45)
-                     ipAddress = HttpContext.Current.Request.ServerVariables["REMOTE_ADDR"];
-             }
-             catch (Exception ex)
-             {
-                 ipAddress = "Invalid IP:" + ex.Message;
-             }
-
-             return ipAddress;
-         }*/
-        public static string GetIpAddress(HttpContext context)
-        {
-            string ipAddress= string.Empty;
-
-            try
-            {
-                var remoteIpAddress = context.Connection.RemoteIpAddress;
-
-                if (remoteIpAddress != null)
-                {
-                    if (remoteIpAddress.AddressFamily == AddressFamily.InterNetworkV6)
-                    {
-                        remoteIpAddress = Dns.GetHostEntry(remoteIpAddress).AddressList.FirstOrDefault(x => x.AddressFamily == AddressFamily.InterNetwork);
-                    }
-
-                    if (remoteIpAddress != null) ipAddress = remoteIpAddress.ToString();
-
-                    return ipAddress;
-                }
-            }
-            catch (Exception ex)
-            {
-                return  "Invalid IP:" + ex.Message;
-            }
-
-            return ipAddress;
-           /* try
-            {
-                ipAddress = HttpContext.Current.Request.ServerVariables["HTTP_X_FORWARDED_FOR"];
-
-                if (string.IsNullOrEmpty(ipAddress) || (ipAddress.ToLower() == "unknown")|| ipAddress.Length>45)
-                    ipAddress = HttpContext.Current.Request.ServerVariables["REMOTE_ADDR"];
+                ipAddress = httpContextAccessor.HttpContext.Connection.RemoteIpAddress.ToString();
             }
             catch (Exception ex)
             {
                 ipAddress = "Invalid IP:" + ex.Message;
-            }*/
+            }
 
-            
+            return ipAddress;
         }
-    }*/
+    }
 
     public class VnPayCompare : IComparer<string>
     {

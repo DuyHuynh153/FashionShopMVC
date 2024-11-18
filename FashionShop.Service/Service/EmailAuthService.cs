@@ -1,9 +1,9 @@
-﻿using FashionShop.Service.Model;
+﻿using FashionShopMVC.Service.Model;
 using MailKit.Net.Smtp;
 using MailKit.Security;
 using MimeKit;
 
-namespace FashionShop.Service.Service
+namespace FashionShopMVC.Service.Service
 {
     public class EmailAuthService : IEmailAuthService
     {

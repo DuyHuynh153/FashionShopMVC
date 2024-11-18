@@ -38,7 +38,7 @@
             </thead>
             <tbody id="employeeTable">
                 @if (Model.Users != null && Model.Users.Any()) {
-                    @foreach (var user in Model.Users)
+                    @foreach (var user in Model.Users)  
                     {
                         <tr id="row-@user.ID">
                             <td>@user.ID</td>
@@ -49,7 +49,7 @@
                                 <span class="badge @(user.LockoutEnabled ? "badge-danger" : "badge-success")">
                                     @(user.LockoutEnabled ? "Locked" : "Unlocked")
                                 </span>
-                            </td>
+                            </td>   
                             <td>
                                 <button type="button" class="btn btn-sm btn-primary edit-btn" data-id="@user.ID">
                                     <i class="fas fa-edit"></i>

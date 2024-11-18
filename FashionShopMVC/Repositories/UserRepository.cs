@@ -23,6 +23,9 @@ namespace FashionShopMVC.Repositories
         public async Task<bool> AccountLock(string idAccount)
         {
             var existingUser = await _userManager.FindByIdAsync(idAccount);
+            
+            
+
             if (existingUser != null)
             {
                 existingUser.LockoutEnabled = !existingUser.LockoutEnabled;
@@ -40,6 +43,7 @@ namespace FashionShopMVC.Repositories
             return false;
 
         }
+        
 
         public async Task<bool> AccountUnlock(string idAccount)
         {
@@ -247,7 +251,7 @@ namespace FashionShopMVC.Repositories
             return false;
         }
 
-        public async Task<UpdateUserDTO> UpdateAsync(UpdateUserDTO updateUserDTO, string id)
+        public async Task<GetUserDTO> UpdateAsync(GetUserDTO updateUserDTO, string id)
         {
             var existingUser = await _userManager.FindByIdAsync(id);
             if (existingUser == null)
@@ -266,7 +270,6 @@ namespace FashionShopMVC.Repositories
             existingUser.FullName = updateUserDTO.FullName;
             existingUser.Email = updateUserDTO.Email;
             existingUser.PhoneNumber = updateUserDTO.PhoneNumber;
-
 
             var result = await _userManager.UpdateAsync(existingUser);
             if (result.Succeeded)
@@ -336,5 +339,9 @@ namespace FashionShopMVC.Repositories
 
             return userPaginationSet;
         }
+
+        
+
+       
     }
 }

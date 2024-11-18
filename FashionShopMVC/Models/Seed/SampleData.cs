@@ -15,7 +15,7 @@ namespace sportMVC.Models.Seed
                 var userManager = scope.ServiceProvider.GetRequiredService<UserManager<User>>();
                 var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
 
-                string[] roles = new string[] {  "Administrator", "Quản Trị Viên", "Khách Hàng" };
+                string[] roles = new string[] {  "Admin", "Quản Trị Viên","Nhân Viên", "Khách Hàng" };
                 try
                 {
                     foreach (string role in roles)
@@ -31,16 +31,16 @@ namespace sportMVC.Models.Seed
                 }
 
                 // Check if any users exist in the database
-                var existingUser = await userManager.FindByNameAsync("Owner");
+                var existingUser = await userManager.FindByNameAsync("Admin");
                 if (existingUser == null)
                 {
                     var user = new User
                     {
-                        FullName = "Admin User",
+                        FullName = "Admin",
                         Email = "Duy@gmail.com",
                         NormalizedEmail = "DUY@GMAIL.COM",
-                        UserName = "Owner",
-                        NormalizedUserName = "OWNER",
+                        UserName = "Admin",
+                        NormalizedUserName = "ADMIN",
                         PhoneNumber = "+111111111111",
                         EmailConfirmed = true,
                         PhoneNumberConfirmed = true,
@@ -53,13 +53,13 @@ namespace sportMVC.Models.Seed
                     if (result.Succeeded)
                     {
                         // Assign the "Quản Trị Viên" role to the new user
-                        await userManager.AddToRoleAsync(user, "Quản Trị Viên");
+                        await userManager.AddToRoleAsync(user, "Admin");
                     }
                 }
                 else
                 {
                     // Update existing user attributes
-                    existingUser.FullName = "Admin User";
+                    existingUser.FullName = "Admin";
                     existingUser.Email = "Duy@gmail.com";
                     existingUser.NormalizedEmail = "DUY@GMAIL.COM";
                     existingUser.PhoneNumber = "+111111111111";
@@ -71,9 +71,9 @@ namespace sportMVC.Models.Seed
                     await userManager.UpdateAsync(existingUser);
 
                     // Ensure the user has the "Quản Trị Viên" role
-                    if (!await userManager.IsInRoleAsync(existingUser, "Quản Trị Viên"))
+                    if (!await userManager.IsInRoleAsync(existingUser, "Admin"))
                     {
-                        await userManager.AddToRoleAsync(existingUser, "Quản Trị Viên");
+                        await userManager.AddToRoleAsync(existingUser, "Admin");
                     }
                 }
             }

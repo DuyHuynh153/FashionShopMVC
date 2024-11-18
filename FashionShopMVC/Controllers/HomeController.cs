@@ -1,5 +1,5 @@
 ﻿using AspNetCoreHero.ToastNotification.Abstractions;
-using FashionShop.Repositories;
+using FashionShopMVC.Repositories;
 using FashionShopMVC.Helper;
 using FashionShopMVC.Models.Domain;
 using FashionShopMVC.Models.DTO.FavoriteProductDTO;
@@ -18,7 +18,7 @@ namespace FashionShopMVC.Controllers
         private readonly IFavoriteProductRepository _favoriteProductRepository;
         private readonly INotyfService _notyfService;
 
-        private const int pageSize = 5;
+        private const int pageSize = 7;
         public HomeController(IProductRepository productRepository, ICategoryRepository categoryRepository, IFavoriteProductRepository favoriteProductRepository, INotyfService notyfService)
         {
             _productRepository = productRepository;

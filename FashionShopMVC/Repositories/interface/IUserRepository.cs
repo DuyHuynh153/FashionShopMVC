@@ -20,7 +20,7 @@ namespace FashionShopMVC.Repositories.@interface
 
         public Task<bool> AccountLock(string idAccount);
         // public Task<bool> AccountUnlock(string idAccount);
-        public Task<UpdateUserDTO> UpdateAsync(UpdateUserDTO updateUserDTO, string id);
+        public Task<GetUserDTO> UpdateAsync(GetUserDTO updateUserDTO, string id);
         public Task<bool> Delete(string id);
 
         public Task<int> Count();

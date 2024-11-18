@@ -50,7 +50,7 @@ namespace FashionShopMVC.Models.DTO.OrderDTO
             return string.Format("{0:C}", price);
         }
 
-        public double getVoucherDiscount()
+        public double getVoucherDiscount()  
         {
             var getVoucher = this.Voucher;
             if (getVoucher != null)
@@ -61,7 +61,7 @@ namespace FashionShopMVC.Models.DTO.OrderDTO
                 }
                 else if (getVoucher.DiscountAmount)
                 {
-                    return TotalPayment - getVoucher.DiscountValue;
+                    return getVoucher.DiscountValue;
                 }
             }
             return 0;

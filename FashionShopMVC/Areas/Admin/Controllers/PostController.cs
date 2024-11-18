@@ -2,6 +2,7 @@
 using FashionShopMVC.Models.DTO.ProductDTO;
 using FashionShopMVC.Repositories;
 using FashionShopMVC.Repositories.@interface;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Diagnostics;
@@ -10,6 +11,7 @@ namespace FashionShopMVC.Areas.Admin.Controllers
 {
     [Area("Admin")]
     [Route("Admin/[controller]")]
+    [Authorize]
     public class PostController : Controller
     {
         private readonly IPostRepository _postRepository;

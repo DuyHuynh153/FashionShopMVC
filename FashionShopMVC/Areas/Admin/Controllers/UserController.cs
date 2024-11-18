@@ -7,12 +7,14 @@ using FashionShopMVC.Models;
 using System.Diagnostics;
 using FashionShopMVC.Areas.Admin.Models.UserDTO;
 using AspNetCoreHero.ToastNotification.Abstractions;
+using Microsoft.AspNetCore.Authorization;
 
 
 namespace FashionShopMVC.Areas.Admin.Controllers
 {
     [Area("Admin")]
     [Route("Admin/[controller]")]
+    [Authorize]
     public class UserController : Controller
     {
 
@@ -22,15 +24,13 @@ namespace FashionShopMVC.Areas.Admin.Controllers
 
         private readonly ITokenRepository _tokenRepository;
 
-        private readonly INotyfService _notyfService;
 
-        public UserController(IUserRepository userRepository, UserManager<User> userManager, IRoleRepository roleRepository, ITokenRepository tokenRepository, INotyfService notyfService)
+        public UserController(IUserRepository userRepository, UserManager<User> userManager, IRoleRepository roleRepository, ITokenRepository tokenRepository)
         {
             _userManager = userManager;
             _userRepository = userRepository;
             _roleRepository = roleRepository;
             _tokenRepository = tokenRepository;
-            _notyfService = notyfService;
         }
 
 
@@ -57,7 +57,6 @@ namespace FashionShopMVC.Areas.Admin.Controllers
                 TotalPages = totalpages
             };
             
-            // var listUserAdmin = await _userRepository.GetAllUserAsync(userName, role);
 
             if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
             {
@@ -66,9 +65,6 @@ namespace FashionShopMVC.Areas.Admin.Controllers
             
             return View(model);
 
-            // using ajax
-
-            // return PartialView("_UserListPartial", listUserAdmin);
         }
 
         [HttpGet]
@@ -96,7 +92,6 @@ namespace FashionShopMVC.Areas.Admin.Controllers
                 if (checkEmail != null)
                 {
                     // ModelState.AddModelError("Email", "Email đã tồn tại");
-                    _notyfService.Error("Email đã tồn tại", 5);
 
                     return PartialView("_CreateUserPartial", registerRequestDTO);
                     // return View(registerRequestDTO);
@@ -106,7 +101,6 @@ namespace FashionShopMVC.Areas.Admin.Controllers
                 if (result)
                 {
 
-                    _notyfService.Success("Tạo tài khoản thành công", 5);
                     return RedirectToAction(nameof(Index));
                     /*string role = (await _roleRepository.GetByNameAsync("Quản Trị Viên")).ID.ToString();
 
@@ -155,14 +149,13 @@ namespace FashionShopMVC.Areas.Admin.Controllers
         [HttpPost]
         [Route("Edit/{id}")]
 
-        public async Task<IActionResult> Edit(UpdateUserDTO updateUserDTO, string id)
+        public async Task<IActionResult> Edit(GetUserDTO updateUserDTO, string id)
         {
             if (ModelState.IsValid)
             {
                 var result = await _userRepository.UpdateAsync(updateUserDTO, id);
                 if (result != null)
                 {
-                    _notyfService.Success("Chỉnh sửa thành công", 5);
                     return RedirectToAction("Index");
                 }
                 else
@@ -196,7 +189,6 @@ namespace FashionShopMVC.Areas.Admin.Controllers
 
             if (result)
             {
-                _notyfService.Success("Xóa thành công", 5);
                 return RedirectToAction("Index");
                 
             }

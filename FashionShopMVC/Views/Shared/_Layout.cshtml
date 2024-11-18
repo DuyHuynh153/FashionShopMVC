@@ -48,10 +48,13 @@
     <link href="~/assets/admin/libs/fontawesome-free-6.4.2-web/css/all.css" rel="stylesheet" />
 
     <!--custom css-->
-    <link href="~/assets/customer/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/assets/customer/css/bootstrap.min.css" rel="stylesheet" type="text/css" /> 
+
+
     <link href="~/assets/customer/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
     <link href="~/assets/customer/css/style.css" rel="stylesheet" type="text/css" />
     <link href="~/assets/customer/css/responsive.css" rel="stylesheet" type="text/css" />
+    <link href="~/assets/admin/libs/toastr/build/toastr.css" rel="stylesheet" />
 
     <!--jquery-ui css-->
     <link href="~/assets/customer/lib/jquery-ui/themes/smoothness/jquery-ui.css" rel="stylesheet" />
@@ -66,7 +69,7 @@
         </span>
     </a>
     <div id="page">
-        <a href="@Url.Action("Checkout", "Cart")">vnpay</a>
+        
         <header class="header-container">
             <div class="container">
                 <div class="top-row">
@@ -112,7 +115,7 @@
                          }
                         <div class="col-md-2 col-sm-1 col-xs-12" style="padding-top: 3px; text-align: end">
                             <div class="shopping-cart">
-                                <a href="@Url.Action("Index", "Cart")">
+                                <a href="~/ShoppingCart">
                                   
                                     <i class="fa-solid fa-cart-shopping fa-2xl" aria-hidden="true">
                                         <span class="cartLength" style="margin-left: 3px"></span>
@@ -192,7 +195,7 @@
                         </div>
 
                         <div class="col-md-1 col-sm-1 col-xs-3">
-                            <a href="@Url.Action("Index", "CartController")">
+                            <a href="~/ShoppingCart">
                             
                                 <span class="cart-fix">
                                     <i class="fa-solid fa-cart-shopping fa-2xl" aria-hidden="true">
@@ -271,21 +274,25 @@
     <!--end--->
     <!--js --->
     <script src="~/assets/customer/js/jquery.min.js" type="text/javascript"></script>
-    <script src="~/assets/customer/js/bootstrap.min.js" type="text/javascript"></script>
+
+    <script src="~/assets/customer/js/bootstrap.min.js" type="text/javascript"></script> 
+
+
     <script src="~/assets/customer/js/custom.js" type="text/javascript"></script>
    
     <script src="~/assets/customer/lib/jquery-ui/jquery-ui.js"></script>
     <script src="~/assets/customer/lib/numeral/numeral.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/2.0.0/mustache.min.js" integrity="sha512-ILe+2LfkNmkbAHLz7DrbdJZLhqUY+SGK+CnM5IrXl6WoMTQcWIx5slRmiOCsXwnA61pNeJJb0aoF6UNDWjQRbw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     
-    <script src="~/assets/customer/js/controller/favoriteproductcontroller.js"></script>
+    <script src="~/assets/customer/js/controller/favoriteproductcontrollerV2.js"></script>
     <script src="~/assets/customer/js/controller/accountcontroller.js"></script>
     <script src="~/assets/customer/js/controller/common.js"></script>
     <script src="~/assets/customer/js/controller/productcontroller.js"></script>
     <script src="~/assets/customer/js/controller/commentcontroller.js"></script>
+    <script src="~/assets/customer/js/controller/cartShoppingController.js"></script>
+    <script src="~/assets/admin/libs/toastr/toastr.js"></script>
 
     @RenderSection("script", false)
-    <script src="~/assets/customer/js/controller/cartshoppingcontroller.js"></script>
 
     @await Component.InvokeAsync("Notyf")
 
